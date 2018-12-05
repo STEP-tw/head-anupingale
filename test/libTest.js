@@ -112,8 +112,8 @@ describe('fetchData', function() {
 
 describe('head', function() {
   const file1 = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
-  const file2 = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
-  const readContent = filename => file1; 
+  let readContent = filename => file1; 
+  let expectedOutput;
 
   it('should return specified number of lines or bytes from file depends upon option', function() { 
     deepEqual(head([,,"-n1","file1"], readContent),"There are 5 types of lines:");
@@ -121,11 +121,26 @@ describe('head', function() {
     deepEqual(head([,,"-1","file1"], readContent),"There are 5 types of lines:");
     deepEqual(head([,,"-c1","file1"], readContent),"T");
     deepEqual(head([,,"-c","1","file1"], readContent),"T");
-    let expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
+
+    expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
     deepEqual(head([,,"-n3","file1"], readContent),expectedOutput);
     deepEqual(head([,,"-n","3","file1"], readContent),expectedOutput);
     deepEqual(head([,,"-3","file1"], readContent),expectedOutput);
     deepEqual(head([,,"-c3","file1"], readContent),"The");
     deepEqual(head([,,"-c","3","file1"], readContent),"The");
+  });
+
+  it('should return formatted fileName with their contents for multiple files', function() {
+    expectedOutput = "==> file1 <==\nThere are 5 types of lines:\n\n==> file1 <==\nThere are 5 types of lines:"
+    deepEqual(head([,,"-n1","file1","file1"], readContent),expectedOutput); 
+    deepEqual(head([,,"-n","1","file1","file1"], readContent),expectedOutput); 
+    deepEqual(head([,,"-1","file1","file1"], readContent),expectedOutput); 
+  });
+
+  it('should return 10 lines By default if option and count is not specified', function() {
+    let numbers = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"; 
+    expectedOutput = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen" 
+    readContent = filename => numbers;
+    deepEqual(head([,,"numbers"], readContent),expectedOutput);
   });
 });
