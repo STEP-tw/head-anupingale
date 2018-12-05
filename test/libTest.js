@@ -149,4 +149,10 @@ describe('head', function() {
     expectedOutput = 'head: illegal line count -- 0';
     deepEqual(head([,,"-n0","file1"],readContent),expectedOutput);
   });
+
+  it('should return erroe when -0 is given as count', function() {
+    readContent = filename => file1; 
+    expectedOutput = 'head: illegal line count -- 0';
+    deepEqual(head([,,"-0","file1"],readContent),expectedOutput);
+  });
 });

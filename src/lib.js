@@ -34,7 +34,7 @@ const fetchData = function(details, fileName){
 
 const head = function(fileDetails,readContent){
   let {option,count,files} = organizeInput(fileDetails);
-  if(!count) {
+  if(!count || fileDetails[2]=="-0") {
     return 'head: illegal line count -- 0';
   }
 
