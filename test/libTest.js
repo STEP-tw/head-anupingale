@@ -5,7 +5,7 @@ describe('extractLines', function() {
   const file = ["There are 5 types of lines:","Horizontal line.","Vertical line.","Skew Lines.","Parallel Lines.","Perpendicular Lines."]
   let output;
 
-  it('should return empty array when file is empty', function() {
+  it('should return empty string when file is empty', function() {
     deepEqual(extractLines([],2),'');
   });
 
@@ -27,3 +27,5 @@ describe('extractLines', function() {
     deepEqual(extractLines(file),output); 
   });
 });
+
+
