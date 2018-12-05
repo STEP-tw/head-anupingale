@@ -13,13 +13,14 @@ const organizeInput = function(args) {
     organizedInput = {option : args[2][1], count : parseInt(args[3]), files : args.slice(4)};
   }
 
+  if(args[2].length>2 && args[2].includes('-')){
+    organizedInput = { option : args[2].slice(1,2), count : parseInt(args[2].slice(2,args[2].length)), files : args.slice(3)};
+  }
+
   if(parseInt(args[2])){
     organizedInput = { option : "n", count : Math.abs(args[2]), files : args.slice(3)};
   }
 
-  if(args[2].length>2 && args[2].includes('-')){
-    organizedInput = { option : args[2].slice(1,2), count : parseInt(args[2].slice(2,args[2].length)), files : args.slice(3)};
-  }
   return organizedInput;
 }
 
