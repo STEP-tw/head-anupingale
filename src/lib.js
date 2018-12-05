@@ -33,11 +33,7 @@ const fetchData = function(details, fileName){
 }
 
 const head = function(fileDetails,readContent){
-  if(!fileDetails[2].includes("-c") && !fileDetails[2].includes("-n") && isNaN(fileDetails[2])){
-    return 'head: illegal option -- '+fileDetails[2][1]+'\nusage: head [-n lines | -c bytes] [file ...]'; 
-  }
   let {option,count,files} = organizeInput(fileDetails);
-
   if(!count) {
     return 'head: illegal line count -- 0';
   }
