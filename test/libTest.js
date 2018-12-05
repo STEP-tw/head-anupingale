@@ -2,7 +2,8 @@ const { deepEqual } = require("assert");
 const { extractLines,
   extractCharacters,
   organizeInput,
-  fetchData} = require("../src/lib.js");
+  fetchData,
+  head} = require("../src/lib.js");
 
 describe('extractLines', function() {
   const file = ["There are 5 types of lines:","Horizontal line.","Vertical line.","Skew Lines.","Parallel Lines.","Perpendicular Lines."]
@@ -106,5 +107,25 @@ describe('fetchData', function() {
     inputData = {delimeter : '', readContent, funcRef : truthy, output : [], value : 2};
     expectedOutput = {delimeter : '\n', readContent, funcRef : truthy, output : ['==> data <==', true], value : 2};
     deepEqual(fetchData(inputData, "data"), expectedOutput); 
+  });
+});
+
+describe('head', function() {
+  const file1 = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
+  const file2 = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
+  const readContent = filename => file1; 
+
+  it('should return specified number of lines or bytes from file depends upon option', function() { 
+    deepEqual(head([,,"-n1","file1"], readContent),"There are 5 types of lines:");
+    deepEqual(head([,,"-n","1","file1"], readContent),"There are 5 types of lines:");
+    deepEqual(head([,,"-1","file1"], readContent),"There are 5 types of lines:");
+    deepEqual(head([,,"-c1","file1"], readContent),"T");
+    deepEqual(head([,,"-c","1","file1"], readContent),"T");
+    let expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
+    deepEqual(head([,,"-n3","file1"], readContent),expectedOutput);
+    deepEqual(head([,,"-n","3","file1"], readContent),expectedOutput);
+    deepEqual(head([,,"-3","file1"], readContent),expectedOutput);
+    deepEqual(head([,,"-c3","file1"], readContent),"The");
+    deepEqual(head([,,"-c","3","file1"], readContent),"The");
   });
 });
