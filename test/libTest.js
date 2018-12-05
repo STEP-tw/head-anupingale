@@ -1,6 +1,7 @@
 const { deepEqual } = require("assert");
 const { extractLines,
-  extractCharacters} = require("../src/lib.js");
+  extractCharacters,
+  organizeInput} = require("../src/lib.js");
 
 describe('extractLines', function() {
   const file = ["There are 5 types of lines:","Horizontal line.","Vertical line.","Skew Lines.","Parallel Lines.","Perpendicular Lines."]
@@ -24,7 +25,7 @@ describe('extractLines', function() {
   });
 
   it('should return whole file if length is not specified', function() {
-  output = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
+    output = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
     deepEqual(extractLines(file),output); 
   });
 });
@@ -46,8 +47,44 @@ describe('extractCharacters', function() {
   });
 
   it('should return whole file if number of characters is not specified', function() {
-  output = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
+    output = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
     deepEqual(extractCharacters(file),output);
   });
 });
 
+describe('organizeInput', function () {
+  let inputData;
+  let expectedOutput;
+
+  it('should separate all arguments and give default option -n and count 10', function () {
+    inputData = ['','','file1.txt','file2.txt']
+    expectedOutput = {option : 'n' , count : 10 , files:['file1.txt','file2.txt']}
+    deepEqual(organizeInput(inputData),expectedOutput);
+  });
+
+  it('should separate all arguments and give default option -n and count as given', function () {
+    inputData = ['','',-5,'file1.txt','file2.txt']
+    expectedOutput = {option : 'n' , count : 5 , files:['file1.txt','file2.txt']}
+    deepEqual(organizeInput(inputData),expectedOutput);
+  });
+
+  it('should seperate option and count', function () {
+    inputData = ['','',"-n10",'file1.txt','file2.txt']
+    expectedOutput = {option : 'n' , count : 10 , files:['file1.txt','file2.txt']}
+    deepEqual(organizeInput(inputData),expectedOutput);
+
+    inputData = ['','',"-c10",'file1.txt','file2.txt']
+    expectedOutput = {option : 'c' , count : 10 , files:['file1.txt','file2.txt']}
+    deepEqual(organizeInput(inputData),expectedOutput);
+  });
+
+  it('should give seperated option and count', function () {
+    inputData = [,,"-n",10, 'file1.txt','file2.txt']
+    expectedOutput = {option : 'n' , count : 10 , files:['file1.txt','file2.txt']}
+    deepEqual(organizeInput(inputData),expectedOutput);
+
+    inputData = ['','',"-c",10,'file1.txt','file2.txt']
+    expectedOutput = {option : 'c' , count : 10 , files:['file1.txt','file2.txt']}
+    deepEqual(organizeInput(inputData),expectedOutput);
+  });
+});
