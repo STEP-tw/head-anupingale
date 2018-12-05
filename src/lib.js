@@ -32,13 +32,13 @@ const fetchData = function(details, fileName){
   return details;
 }
 
-const head = function(inputDetails,readContent){
-  let {option,count,files} = organizeInput(inputDetails);
-  let getOutput = {'n': extractLines , 'c': extractCharacters};
-  let funcRef = getOutput[option];
+const head = function(fileDetails,readContent){
+  let {option,count,files} = organizeInput(fileDetails);
+  let getReference = {'n': extractLines , 'c': extractCharacters};
+  let funcRef = getReference[option];
   let details = {output : [], count , funcRef, readContent, delimeter:''}; 
   if(files.length == 1){
-    return (funcRef(readContent(files[0],'utf8').split('\n'),count));
+    return funcRef(readContent(files[0],'utf8').split('\n'),count);
   }
   return files.reduce(fetchData, details).output.join("\n");
 }
