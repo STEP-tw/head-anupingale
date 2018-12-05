@@ -24,9 +24,9 @@ const organizeInput = function(args) {
 }
 
 const fetchData = function(details, fileName){
-  let {delimeter, readContent, output, funcRef, value} = details;
+  let {delimeter, readContent, output, funcRef, count} = details;
   output.push(delimeter + '==> '+ fileName +' <==')
-  output.push(funcRef(readContent(fileName,'utf8').split('\n'),value));
+  output.push(funcRef(readContent(fileName,'utf8').split('\n'),count));
   details.delimeter = "\n";
   return details;
 }
