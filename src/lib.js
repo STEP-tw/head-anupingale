@@ -34,6 +34,10 @@ const fetchData = function(details, fileName){
 
 const head = function(fileDetails,readContent){
   let {option,count,files} = organizeInput(fileDetails);
+  if(!count) {
+    return 'head: illegal line count -- 0';
+  }
+
   let getReference = {'n': extractLines , 'c': extractCharacters};
   let funcRef = getReference[option];
   let details = {output : [], count , funcRef, readContent, delimeter:''}; 

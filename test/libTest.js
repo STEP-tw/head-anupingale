@@ -143,4 +143,10 @@ describe('head', function() {
     readContent = filename => numbers;
     deepEqual(head([,,"numbers"], readContent),expectedOutput);
   });
+
+  it('should return error when invalid option is specified', function() {
+    readContent = filename => file1; 
+    expectedOutput = 'head: illegal line count -- 0';
+    deepEqual(head([,,"-n0","file1"],readContent),expectedOutput);
+  });
 });
