@@ -22,10 +22,18 @@ const organizeInput = function(args) {
   }
   return organizedInput;
 }
- 
+
+const fetchData = function(details, fileName){
+  let {delimeter, readContent, output, funcRef, value} = details;
+  output.push(delimeter + '==> '+ fileName +' <==')
+  output.push(funcRef(readContent(fileName,'utf8').split('\n'),value));
+  details.delimeter = "\n";
+  return details;
+}
 
 module.exports = {
   extractLines,
   extractCharacters,
-  organizeInput
+  organizeInput,
+  fetchData
 };

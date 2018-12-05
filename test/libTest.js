@@ -1,7 +1,8 @@
 const { deepEqual } = require("assert");
 const { extractLines,
   extractCharacters,
-  organizeInput} = require("../src/lib.js");
+  organizeInput,
+  fetchData} = require("../src/lib.js");
 
 describe('extractLines', function() {
   const file = ["There are 5 types of lines:","Horizontal line.","Vertical line.","Skew Lines.","Parallel Lines.","Perpendicular Lines."]
@@ -86,5 +87,24 @@ describe('organizeInput', function () {
     inputData = ['','',"-c",10,'file1.txt','file2.txt']
     expectedOutput = {option : 'c' , count : 10 , files:['file1.txt','file2.txt']}
     deepEqual(organizeInput(inputData),expectedOutput);
+  });
+});
+
+describe('fetchData', function() { 
+  let inputData;
+  let expectedOutput;
+  const readContent = filename => "dummy content"; 
+  const truthy = value => true;
+
+  it('should keep function references as it is', function() {
+    inputData = {delimeter : '', readContent, funcRef : truthy, output : [], value : 2};
+    expectedOutput = {delimeter : '\n', readContent, funcRef : truthy, output : ['==> data <==', true], value : 2};
+    deepEqual(fetchData(inputData,"data"),expectedOutput); 
+  });
+
+  it('should return fetched data in output key and change delimeter to \\n', function() {
+    inputData = {delimeter : '', readContent, funcRef : truthy, output : [], value : 2};
+    expectedOutput = {delimeter : '\n', readContent, funcRef : truthy, output : ['==> data <==', true], value : 2};
+    deepEqual(fetchData(inputData, "data"), expectedOutput); 
   });
 });
