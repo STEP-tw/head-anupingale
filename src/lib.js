@@ -1,7 +1,8 @@
-const illegalOption = 'head: illegal option -- ';
-const usageMessage = 'usage: head [-n lines | -c bytes] [file ...]';
-const invalidLineCount = 'head: illegal line count -- ';
-const invalidByteCount = 'head: illegal byte count -- ';
+const errorMessages = {illegalOption :'head: illegal option -- ',
+  usageMessage : 'usage: head [-n lines | -c bytes] [file ...]',
+  invalidLineCount : 'head: illegal line count -- ',
+  invalidByteCount : 'head: illegal byte count -- '
+}
 
 const extractLines = function(file, numberOfLines) {
   return file.slice(0,numberOfLines).join("\n"); 
@@ -11,7 +12,7 @@ const extractCharacters = function(file, numberOfCharacters) {
   return file.join('\n').slice(0,numberOfCharacters);
 }
 
-const organizeInput = function(args) {
+const parseInput = function(args) {
   let organizedInput = {option:"n", count:10, files:args.slice(2)};
   if(args[2] == "-c" || args[2] == "-n") {
     organizedInput = {option : args[2][1], count : parseInt(args[3]), files : args.slice(4)};
@@ -38,7 +39,7 @@ const fetchData = function(details, fileName){
 }
 
 const getContent = function(fileDetails, validater, readContent) {
-  let {option,count,files} = organizeInput(fileDetails);
+  let {option,count,files} = parseInput(fileDetails);
   let getReference = {'n': extractLines , 'c': extractCharacters};
   let funcRef = getReference[option];
   let details = {output : [],validater, count , funcRef, readContent, delimeter:''}; 
@@ -50,15 +51,15 @@ const getContent = function(fileDetails, validater, readContent) {
 }
 
 const head = function(fileDetails,validater,readContent){
-  let {option,count,files} = organizeInput(fileDetails);
+  let {option,count,files} = parseInput(fileDetails);
   if(fileDetails[2] == 0 || count == 0){
-    return invalidLineCount + "0";
+    return errorMessages.invalidLineCount + "0";
   }
   if (isNaN(count - 0) || count < 1) {
-    return (option == 'n') ? invalidLineCount + count : invalidByteCount + count;
+    return (option == 'n') ? errorMessages.invalidLineCount + count : errorMessages.invalidByteCount + count;
   } 
   if (fileDetails[2][0] == '-' && fileDetails[2][1] != 'c' && fileDetails[2][1] != 'n' && !parseInt(fileDetails[2])) {
-    return illegalOption + fileDetails[2][1] + '\n' + usageMessage;
+    return errorMessages.illegalOption + fileDetails[2][1] + '\n' + errorMessages.usageMessage;
   }
   return getContent(fileDetails, validater, readContent);
 }
@@ -66,7 +67,7 @@ const head = function(fileDetails,validater,readContent){
 module.exports = {
   extractLines,
   extractCharacters,
-  organizeInput,
+  parseInput,
   fetchData,
   head,
   getContent};

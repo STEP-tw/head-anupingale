@@ -1,7 +1,7 @@
 const { deepEqual } = require("assert");
 const { extractLines,
   extractCharacters,
-  organizeInput,
+  parseInput,
   fetchData,
   getContent,
   head} = require("../src/lib.js");
@@ -55,40 +55,40 @@ describe('extractCharacters', function() {
   });
 });
 
-describe('organizeInput', function () {
+describe('parseInput', function () {
   let inputData;
   let expectedOutput;
 
   it('should separate all arguments and give default option -n and count 10', function () {
     inputData = ['','','file1.txt','file2.txt']
     expectedOutput = {option : 'n' , count : 10 , files:['file1.txt','file2.txt']}
-    deepEqual(organizeInput(inputData),expectedOutput);
+    deepEqual(parseInput(inputData),expectedOutput);
   });
 
   it('should separate all arguments and give default option -n and count as given', function () {
     inputData = ['','',-5,'file1.txt','file2.txt']
     expectedOutput = {option : 'n' , count : 5 , files:['file1.txt','file2.txt']}
-    deepEqual(organizeInput(inputData),expectedOutput);
+    deepEqual(parseInput(inputData),expectedOutput);
   });
 
   it('should seperate option and count', function () {
     inputData = ['','',"-n10",'file1.txt','file2.txt']
     expectedOutput = {option : 'n' , count : 10 , files:['file1.txt','file2.txt']}
-    deepEqual(organizeInput(inputData),expectedOutput);
+    deepEqual(parseInput(inputData),expectedOutput);
 
     inputData = ['','',"-c10",'file1.txt','file2.txt']
     expectedOutput = {option : 'c' , count : 10 , files:['file1.txt','file2.txt']}
-    deepEqual(organizeInput(inputData),expectedOutput);
+    deepEqual(parseInput(inputData),expectedOutput);
   });
 
   it('should give seperated option and count', function () {
     inputData = [,,"-n",10, 'file1.txt','file2.txt']
     expectedOutput = {option : 'n' , count : 10 , files:['file1.txt','file2.txt']}
-    deepEqual(organizeInput(inputData),expectedOutput);
+    deepEqual(parseInput(inputData),expectedOutput);
 
     inputData = ['','',"-c",10,'file1.txt','file2.txt']
     expectedOutput = {option : 'c' , count : 10 , files:['file1.txt','file2.txt']}
-    deepEqual(organizeInput(inputData),expectedOutput);
+    deepEqual(parseInput(inputData),expectedOutput);
   });
 });
 
