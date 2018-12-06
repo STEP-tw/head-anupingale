@@ -97,8 +97,8 @@ describe('retrieveData', function() {
   let expectedOutput;
   const contentReader = filename => "dummy content"; 
   const truthy = value => true;
-  const doesExist = file => true;
-
+  let doesExist = file => true;
+  
   it('should keep function references as it is', function() {
     inputData = {delimeter : '', contentReader, doesExist, funcRef : truthy, contents : [], count : 2};
     expectedOutput = {delimeter : "\n", contentReader, doesExist, funcRef : truthy, contents : ['==> data <==', true], count : 2};
@@ -110,6 +110,15 @@ describe('retrieveData', function() {
     expectedOutput = {delimeter : '\n', contentReader, doesExist, funcRef : truthy, contents : ['==> data <==', true], count : 2};
     deepEqual(retrieveData(inputData, "data"), expectedOutput); 
   });
+
+  it('should return error if file not exit', function() {
+    doesExist = x => false;
+    inputData = {delimeter : '', contentReader, doesExist, funcRef : truthy, contents : [], count : 2};
+    expectedOutput = "head: abc: No such file or directory\nhead: abc: No such file or directory";
+    deepEqual(head([,,"-c10","abc","abc"],doesExist ,getContent),expectedOutput);
+  });
+
+
 });
 
 describe('head', function() {
@@ -178,6 +187,12 @@ describe('head', function() {
     deepEqual(head([,,"-c10u","file1"],doesExist, contentReader),expectedOutput);
   });
 
+  it('should return error if file not exit', function() {
+    falsy = x => false;
+    expectedOutput = "head: abc: No such file or directory";
+    deepEqual(head([,,"-c10","abc"],falsy ,getContent),expectedOutput); 
+  });
+
   it('should return error if file name is invalid', function() {
     let falsy = x => false;
     let getContent = x => file2;
@@ -220,4 +235,5 @@ describe('getContent', function() {
     let readFile = filename => numbers;
     deepEqual(getContent([,,"numbers"],doesExist, readFile),expectedOutput);
   });
+
 });
