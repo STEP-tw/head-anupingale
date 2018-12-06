@@ -177,6 +177,13 @@ describe('head', function() {
     expectedOutput = "head: illegal byte count -- 10u";
     deepEqual(head([,,"-c10u","file1"],validater, readContent),expectedOutput);
   });
+
+  it('should return error if file name is invalid', function() {
+    let falsy = x => false;
+    let getContent = x => file2;
+    expectedOutput = "head: illegal byte count -- 10u";
+    deepEqual(head([,,"-c10u","file2"],falsy, getContent),expectedOutput);
+  });
 });
 
 describe('getContent', function() {

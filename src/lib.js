@@ -43,7 +43,7 @@ const getContent = function(fileDetails, validater, readContent) {
   let funcRef = getReference[option];
   let details = {output : [],validater, count , funcRef, readContent, delimeter:''}; 
   if(files.length == 1){
-    if(!validater(files[0])){ return 'head: '+files[0]+': No such file or directory'};
+    if(!validater(files[0])){ return 'head: '+ files[0] +': No such file or directory'};
     return funcRef(readContent(files[0],'utf8').split('\n'),count);
   }
   return files.reduce(fetchData, details).output.join("\n");
