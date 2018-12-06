@@ -2,7 +2,7 @@ const { deepEqual } = require("assert");
 const { extractLines,
   extractCharacters,
   parseInput,
-  fetchData,
+  retrieveData,
   getContent,
   head} = require("../src/lib.js");
 
@@ -92,7 +92,7 @@ describe('parseInput', function () {
   });
 });
 
-describe('fetchData', function() { 
+describe('retrieveData', function() { 
   let inputData;
   let expectedOutput;
   const readContent = filename => "dummy content"; 
@@ -102,13 +102,13 @@ describe('fetchData', function() {
   it('should keep function references as it is', function() {
     inputData = {delimeter : '', readContent, validater, funcRef : truthy, output : [], count : 2};
     expectedOutput = {delimeter : "\n", readContent, validater, funcRef : truthy, output : ['==> data <==', true], count : 2};
-    deepEqual(fetchData(inputData,"data"),expectedOutput); 
+    deepEqual(retrieveData(inputData,"data"),expectedOutput); 
   });
 
   it('should return fetched data in output key and change delimeter to \\n', function() {
     inputData = {delimeter : '', readContent, validater, funcRef : truthy, output : [], count : 2};
     expectedOutput = {delimeter : '\n', readContent, validater, funcRef : truthy, output : ['==> data <==', true], count : 2};
-    deepEqual(fetchData(inputData, "data"), expectedOutput); 
+    deepEqual(retrieveData(inputData, "data"), expectedOutput); 
   });
 });
 

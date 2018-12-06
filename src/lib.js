@@ -26,7 +26,7 @@ const parseInput = function(args) {
   return organizedInput;
 }
 
-const fetchData = function(details, fileName){
+const retrieveData = function(details, fileName){
   let {delimeter, readContent, output, validater, funcRef, count} = details;
   if (!validater(fileName)) {
     output.push('head: '+fileName+': No such file or directory');
@@ -47,7 +47,7 @@ const getContent = function(fileDetails, validater, readContent) {
     if(!validater(files[0])){ return 'head: '+ files[0] +': No such file or directory'};
     return funcRef(readContent(files[0],'utf8').split('\n'),count);
   }
-  return files.reduce(fetchData, details).output.join("\n");
+  return files.reduce(retrieveData, details).output.join("\n");
 }
 
 const head = function(fileDetails,validater,readContent){
@@ -68,6 +68,6 @@ module.exports = {
   extractLines,
   extractCharacters,
   parseInput,
-  fetchData,
+  retrieveData,
   head,
   getContent};
