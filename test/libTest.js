@@ -100,14 +100,14 @@ describe('retrieveData', function() {
   const validater = file => true;
 
   it('should keep function references as it is', function() {
-    inputData = {delimeter : '', contentReader, validater, funcRef : truthy, output : [], count : 2};
-    expectedOutput = {delimeter : "\n", contentReader, validater, funcRef : truthy, output : ['==> data <==', true], count : 2};
+    inputData = {delimeter : '', contentReader, validater, funcRef : truthy, contents : [], count : 2};
+    expectedOutput = {delimeter : "\n", contentReader, validater, funcRef : truthy, contents : ['==> data <==', true], count : 2};
     deepEqual(retrieveData(inputData,"data"),expectedOutput); 
   });
 
-  it('should return fetched data in output key and change delimeter to \\n', function() {
-    inputData = {delimeter : '', contentReader, validater, funcRef : truthy, output : [], count : 2};
-    expectedOutput = {delimeter : '\n', contentReader, validater, funcRef : truthy, output : ['==> data <==', true], count : 2};
+  it('should return fetched data in contents key and change delimeter to \\n', function() {
+    inputData = {delimeter : '', contentReader, validater, funcRef : truthy, contents : [], count : 2};
+    expectedOutput = {delimeter : '\n', contentReader, validater, funcRef : truthy, contents : ['==> data <==', true], count : 2};
     deepEqual(retrieveData(inputData, "data"), expectedOutput); 
   });
 });

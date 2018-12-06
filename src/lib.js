@@ -27,13 +27,13 @@ const parseInput = function(args) {
 }
 
 const retrieveData = function(details, fileName){
-  let {delimeter, contentReader, output, validater, funcRef, count} = details;
+  let {delimeter, contentReader, contents, validater, funcRef, count} = details;
   if (!validater(fileName)) {
-    output.push('head: '+fileName+': No such file or directory');
+    contents.push('head: '+fileName+': No such file or directory');
     return details;
   }
-  output.push(delimeter + '==> '+ fileName +' <==');
-  output.push(funcRef(contentReader(fileName,'utf8').split('\n'),count));
+  contents.push(delimeter + '==> '+ fileName +' <==');
+  contents.push(funcRef(contentReader(fileName,'utf8').split('\n'),count));
   details.delimeter = "\n";
   return details;
 }
@@ -42,12 +42,12 @@ const getContent = function(fileDetails, validater, contentReader) {
   let {option,count,files} = parseInput(fileDetails);
   let getReference = {'n': extractLines , 'c': extractCharacters};
   let funcRef = getReference[option];
-  let details = {output : [],validater, count , funcRef, contentReader, delimeter:''}; 
+  let details = {contents : [],validater, count , funcRef, contentReader, delimeter:''}; 
   if(files.length == 1){
     if(!validater(files[0])){ return 'head: '+ files[0] +': No such file or directory'};
     return funcRef(contentReader(files[0],'utf8').split('\n'),count);
   }
-  return files.reduce(retrieveData, details).output.join("\n");
+  return files.reduce(retrieveData, details).contents.join("\n");
 }
 
 const head = function(fileDetails,validater,contentReader){
