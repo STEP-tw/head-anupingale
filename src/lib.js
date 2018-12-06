@@ -13,10 +13,10 @@ const extractCharacters = function(file, numberOfCharacters) {
 
 const organizeInput = function(args) {
   let organizedInput = {option:"n", count:10, files:args.slice(2)};
-  if(args[2]=="-c" || args[2]=="-n") {
+  if(args[2] == "-c" || args[2] == "-n") {
     organizedInput = {option : args[2][1], count : parseInt(args[3]), files : args.slice(4)};
   }
-  if(args[2].length>2 && args[2].includes('-')){
+  if(args[2].length > 2 && args[2].includes('-')){
     organizedInput = { option : args[2].slice(1,2), count : args[2].slice(2), files : args.slice(3)};
   }
   if(parseInt(args[2])){
@@ -31,7 +31,7 @@ const fetchData = function(details, fileName){
     output.push('head: '+fileName+': No such file or directory');
     return details;
   }
-  output.push(delimeter + '==> '+ fileName +' <==')
+  output.push(delimeter + '==> '+ fileName +' <==');
   output.push(funcRef(readContent(fileName,'utf8').split('\n'),count));
   details.delimeter = "\n";
   return details;
@@ -51,13 +51,13 @@ const getContent = function(fileDetails, validater, readContent) {
 
 const head = function(fileDetails,validater,readContent){
   let {option,count,files} = organizeInput(fileDetails);
-  if(fileDetails[2]== 0 || count==0){
+  if(fileDetails[2] == 0 || count == 0){
     return invalidLineCount + "0";
   }
   if (isNaN(count - 0) || count < 1) {
     return (option == 'n') ? invalidLineCount + count : invalidByteCount + count;
   } 
-  if (fileDetails[2][0]=='-' && fileDetails[2][1] != 'c' && fileDetails[2][1] != 'n' && !parseInt(fileDetails[2])) {
+  if (fileDetails[2][0] == '-' && fileDetails[2][1] != 'c' && fileDetails[2][1] != 'n' && !parseInt(fileDetails[2])) {
     return errorMessage + fileDetails[2][1] + '\n' + usageMessage;
   }
   return getContent(fileDetails, validater, readContent);
@@ -69,5 +69,4 @@ module.exports = {
   organizeInput,
   fetchData,
   head,
-  getContent
-};
+  getContent};
