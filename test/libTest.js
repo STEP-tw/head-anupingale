@@ -168,7 +168,14 @@ describe('head', function() {
   it('should return error when invalid option is speciified', function() {
     expectedOutput = 'head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]' 
     deepEqual(head([,,"-z","file1"],validater, readContent),expectedOutput);
+  });
 
+  it('should return error when count is invalid and having characters in it', function() {
+    expectedOutput = "head: illegal line count -- 10u";
+    deepEqual(head([,,"-n10u","file1"],validater, readContent),expectedOutput);
+
+    expectedOutput = "head: illegal byte count -- 10u";
+    deepEqual(head([,,"-c10u","file1"],validater, readContent),expectedOutput);
   });
 });
 
