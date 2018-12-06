@@ -1,3 +1,11 @@
+const errorMessage = 'head: illegal option -- ';
+
+const usageMessage = 'usage: head [-n lines | -c bytes] [file ...]';
+
+const invalidLineCount = 'head: illegal line count -- ';
+
+const invalidByteCount = 'head: illegal byte count -- ';
+
 const extractLines = function(file, numberOfLines) {
   return file.slice(0,numberOfLines).join("\n"); 
 }
@@ -25,26 +33,42 @@ const organizeInput = function(args) {
 }
 
 const fetchData = function(details, fileName){
-  let {delimeter, readContent, output, funcRef, count} = details;
+  let {delimeter, readContent, output, validater, funcRef, count} = details;
+  if (!validater(fileName)) {
+    output.push('head: '+fileName+': No such file or directory');
+    return details;
+  }
   output.push(delimeter + '==> '+ fileName +' <==')
   output.push(funcRef(readContent(fileName,'utf8').split('\n'),count));
   details.delimeter = "\n";
   return details;
 }
 
-const head = function(fileDetails,readContent){
+const getContent = function(fileDetails, validater, readContent) {
   let {option,count,files} = organizeInput(fileDetails);
-  if(!count || fileDetails[2]=="-0") {
-    return 'head: illegal line count -- 0';
-  }
-
   let getReference = {'n': extractLines , 'c': extractCharacters};
   let funcRef = getReference[option];
-  let details = {output : [], count , funcRef, readContent, delimeter:''}; 
+  let details = {output : [],validater, count , funcRef, readContent, delimeter:''}; 
   if(files.length == 1){
+    if(!validater(files[0])){ return 'head: '+files[0]+': No such file or directory'};
     return funcRef(readContent(files[0],'utf8').split('\n'),count);
   }
   return files.reduce(fetchData, details).output.join("\n");
+
+}
+
+const head = function(fileDetails,validater,readContent){
+  let {option,count,files} = organizeInput(fileDetails);
+  if(fileDetails[2]=="-0"){
+    return invalidLineCount +fileDetails[2][1];
+  }
+  if (fileDetails[2][0]=='-' && fileDetails[2][1] != 'c' && fileDetails[2][1] != 'n' && !parseInt(fileDetails[2])) {
+    return errorMessage + fileDetails[2][1] + '\n' + usageMessage;
+  }
+  if (isNaN(count - 0) || count < 1) {
+    return (option == 'n') ? invalidLineCount + count : invalidByteCount + count;
+  } 
+  return getContent(fileDetails, validater, readContent);
 }
 
 module.exports = {
@@ -52,5 +76,6 @@ module.exports = {
   extractCharacters,
   organizeInput,
   fetchData,
-  head
+  head,
+  getContent
 };
