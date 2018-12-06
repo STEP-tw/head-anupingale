@@ -27,8 +27,8 @@ const parseInput = function(args) {
 }
 
 const retrieveData = function(details, fileName){
-  let {delimeter, contentReader, contents, validater, funcRef, count} = details;
-  if (!validater(fileName)) {
+  let {delimeter, contentReader, contents, doesExist, funcRef, count} = details;
+  if (!doesExist(fileName)) {
     contents.push('head: '+fileName+': No such file or directory');
     return details;
   }
@@ -38,19 +38,19 @@ const retrieveData = function(details, fileName){
   return details;
 }
 
-const getContent = function(fileDetails, validater, contentReader) {
+const getContent = function(fileDetails, doesExist, contentReader) {
   let {option,count,files} = parseInput(fileDetails);
   let getReference = {'n': extractLines , 'c': extractCharacters};
   let funcRef = getReference[option];
-  let details = {contents : [],validater, count , funcRef, contentReader, delimeter:''}; 
+  let details = {contents : [],doesExist, count , funcRef, contentReader, delimeter:''}; 
   if(files.length == 1){
-    if(!validater(files[0])){ return 'head: '+ files[0] +': No such file or directory'};
+    if(!doesExist(files[0])){ return 'head: '+ files[0] +': No such file or directory'};
     return funcRef(contentReader(files[0],'utf8').split('\n'),count);
   }
   return files.reduce(retrieveData, details).contents.join("\n");
 }
 
-const head = function(fileDetails,validater,contentReader){
+const head = function(fileDetails,doesExist,contentReader){
   let {option,count,files} = parseInput(fileDetails);
   if(fileDetails[2] == 0 || count == 0){
     return errorMessages.invalidLineCount + "0";
@@ -61,7 +61,7 @@ const head = function(fileDetails,validater,contentReader){
   if (fileDetails[2][0] == '-' && fileDetails[2][1] != 'c' && fileDetails[2][1] != 'n' && !parseInt(fileDetails[2])) {
     return errorMessages.illegalOption + fileDetails[2][1] + '\n' + errorMessages.usageMessage;
   }
-  return getContent(fileDetails, validater, contentReader);
+  return getContent(fileDetails, doesExist, contentReader);
 }
 
 module.exports = {

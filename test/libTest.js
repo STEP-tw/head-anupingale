@@ -97,85 +97,85 @@ describe('retrieveData', function() {
   let expectedOutput;
   const contentReader = filename => "dummy content"; 
   const truthy = value => true;
-  const validater = file => true;
+  const doesExist = file => true;
 
   it('should keep function references as it is', function() {
-    inputData = {delimeter : '', contentReader, validater, funcRef : truthy, contents : [], count : 2};
-    expectedOutput = {delimeter : "\n", contentReader, validater, funcRef : truthy, contents : ['==> data <==', true], count : 2};
+    inputData = {delimeter : '', contentReader, doesExist, funcRef : truthy, contents : [], count : 2};
+    expectedOutput = {delimeter : "\n", contentReader, doesExist, funcRef : truthy, contents : ['==> data <==', true], count : 2};
     deepEqual(retrieveData(inputData,"data"),expectedOutput); 
   });
 
   it('should return fetched data in contents key and change delimeter to \\n', function() {
-    inputData = {delimeter : '', contentReader, validater, funcRef : truthy, contents : [], count : 2};
-    expectedOutput = {delimeter : '\n', contentReader, validater, funcRef : truthy, contents : ['==> data <==', true], count : 2};
+    inputData = {delimeter : '', contentReader, doesExist, funcRef : truthy, contents : [], count : 2};
+    expectedOutput = {delimeter : '\n', contentReader, doesExist, funcRef : truthy, contents : ['==> data <==', true], count : 2};
     deepEqual(retrieveData(inputData, "data"), expectedOutput); 
   });
 });
 
 describe('head', function() {
-  const validater = file => true;
+  const doesExist = file => true;
   const file1 = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
   const contentReader = filename => file1; 
   let expectedOutput;
 
   it('should return specified number of lines or bytes from file depends upon option', function() { 
-    deepEqual(head([,,"-n1","file1"],validater, contentReader),"There are 5 types of lines:");
-    deepEqual(head([,,"-n","1","file1"],validater, contentReader),"There are 5 types of lines:");
-    deepEqual(head([,,"-1","file1"],validater, contentReader),"There are 5 types of lines:");
-    deepEqual(head([,,"-c1","file1"],validater, contentReader),"T");
-    deepEqual(head([,,"-c","1","file1"],validater, contentReader),"T");
+    deepEqual(head([,,"-n1","file1"],doesExist, contentReader),"There are 5 types of lines:");
+    deepEqual(head([,,"-n","1","file1"],doesExist, contentReader),"There are 5 types of lines:");
+    deepEqual(head([,,"-1","file1"],doesExist, contentReader),"There are 5 types of lines:");
+    deepEqual(head([,,"-c1","file1"],doesExist, contentReader),"T");
+    deepEqual(head([,,"-c","1","file1"],doesExist, contentReader),"T");
 
     expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-    deepEqual(head([,,"-n3","file1"],validater, contentReader),expectedOutput);
-    deepEqual(head([,,"-n","3","file1"],validater, contentReader),expectedOutput);
-    deepEqual(head([,,"-3","file1"],validater, contentReader),expectedOutput);
-    deepEqual(head([,,"-c3","file1"],validater, contentReader),"The");
-    deepEqual(head([,,"-c","3","file1"],validater, contentReader),"The");
+    deepEqual(head([,,"-n3","file1"],doesExist, contentReader),expectedOutput);
+    deepEqual(head([,,"-n","3","file1"],doesExist, contentReader),expectedOutput);
+    deepEqual(head([,,"-3","file1"],doesExist, contentReader),expectedOutput);
+    deepEqual(head([,,"-c3","file1"],doesExist, contentReader),"The");
+    deepEqual(head([,,"-c","3","file1"],doesExist, contentReader),"The");
   });
 
   it('should return formatted fileName with their contents for multiple files', function() {
     expectedOutput = "==> file1 <==\nThere are 5 types of lines:\n\n==> file1 <==\nThere are 5 types of lines:"
-    deepEqual(head([,,"-n1","file1","file1"],validater, contentReader),expectedOutput); 
-    deepEqual(head([,,"-n","1","file1","file1"],validater, contentReader),expectedOutput); 
-    deepEqual(head([,,"-1","file1","file1"],validater, contentReader),expectedOutput); 
+    deepEqual(head([,,"-n1","file1","file1"],doesExist, contentReader),expectedOutput); 
+    deepEqual(head([,,"-n","1","file1","file1"],doesExist, contentReader),expectedOutput); 
+    deepEqual(head([,,"-1","file1","file1"],doesExist, contentReader),expectedOutput); 
   });
 
   it('should return 10 lines By default if option and count is not specified', function() {
     let numbers = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"; 
     expectedOutput = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"; 
     let readFile = filename => numbers;
-    deepEqual(head([,,"numbers"],validater, readFile),expectedOutput);
+    deepEqual(head([,,"numbers"],doesExist, readFile),expectedOutput);
   });
 
   it('should return error when invalid option is specified', function() {
     expectedOutput = 'head: illegal line count -- 0';
-    deepEqual(head([,,"-n0","file1"],validater, contentReader),expectedOutput);
+    deepEqual(head([,,"-n0","file1"],doesExist, contentReader),expectedOutput);
   });
 
   it('should return error when -0 is given as count', function() {
     expectedOutput = 'head: illegal line count -- 0';
-    deepEqual(head([,,"-0","file1"],validater, contentReader),expectedOutput);
+    deepEqual(head([,,"-0","file1"],doesExist, contentReader),expectedOutput);
   });
 
   it('should return error when count is invalid', function() {
     expectedOutput = 'head: illegal line count -- -10';
-    deepEqual(head([,,"-n-10","file1"],validater, contentReader),expectedOutput);
+    deepEqual(head([,,"-n-10","file1"],doesExist, contentReader),expectedOutput);
 
     expectedOutput = 'head: illegal byte count -- -10';
-    deepEqual(head([,,"-c-10","file1"],validater, contentReader),expectedOutput);
+    deepEqual(head([,,"-c-10","file1"],doesExist, contentReader),expectedOutput);
   });
 
   it('should return error when invalid option is speciified', function() {
     expectedOutput = 'head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]' 
-    deepEqual(head([,,"-z","file1"],validater, contentReader),expectedOutput);
+    deepEqual(head([,,"-z","file1"],doesExist, contentReader),expectedOutput);
   });
 
   it('should return error when count is invalid and having characters in it', function() {
     expectedOutput = "head: illegal line count -- 10u";
-    deepEqual(head([,,"-n10u","file1"],validater, contentReader),expectedOutput);
+    deepEqual(head([,,"-n10u","file1"],doesExist, contentReader),expectedOutput);
 
     expectedOutput = "head: illegal byte count -- 10u";
-    deepEqual(head([,,"-c10u","file1"],validater, contentReader),expectedOutput);
+    deepEqual(head([,,"-c10u","file1"],doesExist, contentReader),expectedOutput);
   });
 
   it('should return error if file name is invalid', function() {
@@ -187,37 +187,37 @@ describe('head', function() {
 });
 
 describe('getContent', function() {
-  const validater = file => true;
+  const doesExist = file => true;
   const file1 = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
   const contentReader = filename => file1; 
   let expectedOutput;
 
   it('should return specified number of lines or bytes from file depends upon option', function() { 
-    deepEqual(getContent([,,"-n1","file1"],validater, contentReader),"There are 5 types of lines:");
-    deepEqual(getContent([,,"-n","1","file1"],validater, contentReader),"There are 5 types of lines:");
-    deepEqual(getContent([,,"-1","file1"],validater, contentReader),"There are 5 types of lines:");
-    deepEqual(getContent([,,"-c1","file1"],validater, contentReader),"T");
-    deepEqual(getContent([,,"-c","1","file1"],validater, contentReader),"T");
+    deepEqual(getContent([,,"-n1","file1"],doesExist, contentReader),"There are 5 types of lines:");
+    deepEqual(getContent([,,"-n","1","file1"],doesExist, contentReader),"There are 5 types of lines:");
+    deepEqual(getContent([,,"-1","file1"],doesExist, contentReader),"There are 5 types of lines:");
+    deepEqual(getContent([,,"-c1","file1"],doesExist, contentReader),"T");
+    deepEqual(getContent([,,"-c","1","file1"],doesExist, contentReader),"T");
 
     expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-    deepEqual(getContent([,,"-n3","file1"],validater, contentReader),expectedOutput);
-    deepEqual(getContent([,,"-n","3","file1"],validater, contentReader),expectedOutput);
-    deepEqual(getContent([,,"-3","file1"],validater, contentReader),expectedOutput);
-    deepEqual(getContent([,,"-c3","file1"],validater, contentReader),"The");
-    deepEqual(getContent([,,"-c","3","file1"],validater, contentReader),"The");
+    deepEqual(getContent([,,"-n3","file1"],doesExist, contentReader),expectedOutput);
+    deepEqual(getContent([,,"-n","3","file1"],doesExist, contentReader),expectedOutput);
+    deepEqual(getContent([,,"-3","file1"],doesExist, contentReader),expectedOutput);
+    deepEqual(getContent([,,"-c3","file1"],doesExist, contentReader),"The");
+    deepEqual(getContent([,,"-c","3","file1"],doesExist, contentReader),"The");
   });
 
   it('should return formatted fileName with their contents for multiple files', function() {
     expectedOutput = "==> file1 <==\nThere are 5 types of lines:\n\n==> file1 <==\nThere are 5 types of lines:"
-    deepEqual(getContent([,,"-n1","file1","file1"],validater, contentReader),expectedOutput); 
-    deepEqual(getContent([,,"-n","1","file1","file1"],validater, contentReader),expectedOutput); 
-    deepEqual(getContent([,,"-1","file1","file1"],validater, contentReader),expectedOutput); 
+    deepEqual(getContent([,,"-n1","file1","file1"],doesExist, contentReader),expectedOutput); 
+    deepEqual(getContent([,,"-n","1","file1","file1"],doesExist, contentReader),expectedOutput); 
+    deepEqual(getContent([,,"-1","file1","file1"],doesExist, contentReader),expectedOutput); 
   });
 
   it('should return 10 lines By default if option and count is not specified', function() {
     let numbers = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"; 
     expectedOutput = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"; 
     let readFile = filename => numbers;
-    deepEqual(getContent([,,"numbers"],validater, readFile),expectedOutput);
+    deepEqual(getContent([,,"numbers"],doesExist, readFile),expectedOutput);
   });
 });
