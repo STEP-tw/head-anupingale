@@ -1,4 +1,4 @@
-const errorMessage = 'head: illegal option -- ';
+const illegalOption = 'head: illegal option -- ';
 const usageMessage = 'usage: head [-n lines | -c bytes] [file ...]';
 const invalidLineCount = 'head: illegal line count -- ';
 const invalidByteCount = 'head: illegal byte count -- ';
@@ -58,7 +58,7 @@ const head = function(fileDetails,validater,readContent){
     return (option == 'n') ? invalidLineCount + count : invalidByteCount + count;
   } 
   if (fileDetails[2][0] == '-' && fileDetails[2][1] != 'c' && fileDetails[2][1] != 'n' && !parseInt(fileDetails[2])) {
-    return errorMessage + fileDetails[2][1] + '\n' + usageMessage;
+    return illegalOption + fileDetails[2][1] + '\n' + usageMessage;
   }
   return getContent(fileDetails, validater, readContent);
 }
