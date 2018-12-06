@@ -27,30 +27,30 @@ const parseInput = function(args) {
 }
 
 const retrieveData = function(details, fileName){
-  let {delimeter, readContent, output, validater, funcRef, count} = details;
+  let {delimeter, contentReader, output, validater, funcRef, count} = details;
   if (!validater(fileName)) {
     output.push('head: '+fileName+': No such file or directory');
     return details;
   }
   output.push(delimeter + '==> '+ fileName +' <==');
-  output.push(funcRef(readContent(fileName,'utf8').split('\n'),count));
+  output.push(funcRef(contentReader(fileName,'utf8').split('\n'),count));
   details.delimeter = "\n";
   return details;
 }
 
-const getContent = function(fileDetails, validater, readContent) {
+const getContent = function(fileDetails, validater, contentReader) {
   let {option,count,files} = parseInput(fileDetails);
   let getReference = {'n': extractLines , 'c': extractCharacters};
   let funcRef = getReference[option];
-  let details = {output : [],validater, count , funcRef, readContent, delimeter:''}; 
+  let details = {output : [],validater, count , funcRef, contentReader, delimeter:''}; 
   if(files.length == 1){
     if(!validater(files[0])){ return 'head: '+ files[0] +': No such file or directory'};
-    return funcRef(readContent(files[0],'utf8').split('\n'),count);
+    return funcRef(contentReader(files[0],'utf8').split('\n'),count);
   }
   return files.reduce(retrieveData, details).output.join("\n");
 }
 
-const head = function(fileDetails,validater,readContent){
+const head = function(fileDetails,validater,contentReader){
   let {option,count,files} = parseInput(fileDetails);
   if(fileDetails[2] == 0 || count == 0){
     return errorMessages.invalidLineCount + "0";
@@ -61,7 +61,7 @@ const head = function(fileDetails,validater,readContent){
   if (fileDetails[2][0] == '-' && fileDetails[2][1] != 'c' && fileDetails[2][1] != 'n' && !parseInt(fileDetails[2])) {
     return errorMessages.illegalOption + fileDetails[2][1] + '\n' + errorMessages.usageMessage;
   }
-  return getContent(fileDetails, validater, readContent);
+  return getContent(fileDetails, validater, contentReader);
 }
 
 module.exports = {
