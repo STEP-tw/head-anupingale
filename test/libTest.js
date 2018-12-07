@@ -7,7 +7,7 @@ const { extractLines,
   head} = require("../src/lib.js");
 
 const typesOfLines = ["There are 5 types of lines:","Horizontal line.","Vertical line.","Skew Lines.","Parallel Lines.","Perpendicular Lines."]
-const contentReader = (filename) => {return filename}; 
+const contentReader = filename => filename; 
 let numbers = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"; 
 const falsy = x => false;
 const truthy = value => true;
@@ -182,12 +182,12 @@ describe('head', function() {
 
   it('should return error if file not exit', function() {
     expectedOutput = "head: abc: No such file or directory";
-    deepEqual(head([,,"-c10","abc"],falsy ,getContent),expectedOutput); 
+    deepEqual(head([,,"-c10","abc"],falsy , contentReader),expectedOutput); 
   });
 
   it('should return error if file name is invalid', function() {
     expectedOutput = "head: illegal byte count -- 10u";
-    deepEqual(head([,,"-c10u","file2"],falsy, getContent),expectedOutput);
+    deepEqual(head([,,"-c10u","file2"],falsy , contentReader),expectedOutput);
   });
 });
 
