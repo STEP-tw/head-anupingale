@@ -42,44 +42,45 @@ const parseInput = function(args) {
 const retrieveData = function(details, fileName) {
   let {
     delimeter,
-    contentReader,
+    readFileSync,
     contents,
-    doesExist,
+    existsSync,
     funcRef,
     count
   } = details;
-  if (!doesExist(fileName)) {
+  if (!existsSync(fileName)) {
     contents.push("head: " + fileName + ": No such file or directory");
     return details;
   }
   contents.push(delimeter + "==> " + fileName + " <==");
-  contents.push(funcRef(contentReader(fileName, "utf8").split("\n"), count));
+  contents.push(funcRef(readFileSync(fileName, "utf8").split("\n"), count));
   details.delimeter = "\n";
   return details;
 };
 
-const getContent = function(fileDetails, doesExist, contentReader) {
+const getContent = function(fileDetails, existsSync, readFileSync) {
   let { option, count, files } = parseInput(fileDetails);
   let getReference = { n: extractLines, c: extractCharacters };
   let funcRef = getReference[option];
   let details = {
     contents: [],
-    doesExist,
+    existsSync,
     count,
     funcRef,
-    contentReader,
+    readFileSync,
     delimeter: ""
   };
   if (files.length == 1) {
-    if (!doesExist(files[0])) {
+    if (!existsSync(files[0])) {
       return "head: " + files[0] + ": No such file or directory";
     }
-    return funcRef(contentReader(files[0], "utf8").split("\n"), count);
+    return funcRef(readFileSync(files[0], "utf8").split("\n"), count);
   }
   return files.reduce(retrieveData, details).contents.join("\n");
 };
 
-const head = function(fileDetails, doesExist, contentReader) {
+const head = function(fileDetails, fs) {
+  const {existsSync, readFileSync} = fs;
   let { option, count, files } = parseInput(fileDetails);
   if (fileDetails[0] == 0 || count == 0) {
     return errorMessages.invalidLineCount + "0";
@@ -102,7 +103,7 @@ const head = function(fileDetails, doesExist, contentReader) {
       errorMessages.usageMessage
     );
   }
-  return getContent(fileDetails, doesExist, contentReader);
+  return getContent(fileDetails, existsSync, readFileSync);
 };
 
 module.exports = {
