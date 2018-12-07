@@ -80,7 +80,7 @@ const getContent = function(fileDetails, existsSync, readFileSync) {
 };
 
 const head = function(fileDetails, fs) {
-  const {existsSync, readFileSync} = fs;
+  const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
   if (fileDetails[0] == 0 || count == 0) {
     return errorMessages.invalidLineCount + "0";
