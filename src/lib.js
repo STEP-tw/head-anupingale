@@ -14,26 +14,26 @@ const extractCharacters = function(file, numberOfCharacters) {
 };
 
 const parseInput = function(args) {
-  let organizedInput = { option: "n", count: 10, files: args.slice(2) };
-  if (args[2] == "-c" || args[2] == "-n") {
+  let organizedInput = { option: "n", count: 10, files: args.slice(0) };
+  if (args[0] == "-c" || args[0] == "-n") {
     organizedInput = {
-      option: args[2][1],
-      count: parseInt(args[3]),
-      files: args.slice(4)
+      option: args[0][1],
+      count: parseInt(args[1]),
+      files: args.slice(2)
     };
   }
-  if (args[2].length > 2 && args[2].includes("-")) {
+  if (args[0].length > 2 && args[0].includes("-")) {
     organizedInput = {
-      option: args[2].slice(1, 2),
-      count: args[2].slice(2),
-      files: args.slice(3)
+      option: args[0].slice(1, 2),
+      count: args[0].slice(2),
+      files: args.slice(1)
     };
   }
-  if (parseInt(args[2])) {
+  if (parseInt(args[0])) {
     organizedInput = {
       option: "n",
-      count: Math.abs(args[2]),
-      files: args.slice(3)
+      count: Math.abs(args[0]),
+      files: args.slice(1)
     };
   }
   return organizedInput;
@@ -81,7 +81,7 @@ const getContent = function(fileDetails, doesExist, contentReader) {
 
 const head = function(fileDetails, doesExist, contentReader) {
   let { option, count, files } = parseInput(fileDetails);
-  if (fileDetails[2] == 0 || count == 0) {
+  if (fileDetails[0] == 0 || count == 0) {
     return errorMessages.invalidLineCount + "0";
   }
   if (isNaN(count - 0) || count < 1) {
@@ -90,14 +90,14 @@ const head = function(fileDetails, doesExist, contentReader) {
       : errorMessages.invalidByteCount + count;
   }
   if (
-    fileDetails[2][0] == "-" &&
-    fileDetails[2][1] != "c" &&
-    fileDetails[2][1] != "n" &&
-    !parseInt(fileDetails[2])
+    fileDetails[0][0] == "-" &&
+    fileDetails[0][1] != "c" &&
+    fileDetails[0][1] != "n" &&
+    !parseInt(fileDetails[0])
   ) {
     return (
       errorMessages.illegalOption +
-      fileDetails[2][1] +
+      fileDetails[0][1] +
       "\n" +
       errorMessages.usageMessage
     );
