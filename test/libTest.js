@@ -385,4 +385,10 @@ describe("getContent", function() {
       expectedOutput
     );
   });
+
+  it("should return error if file not exit", function() {
+    existsSync = x => false;
+    expectedOutput = "head: abc: No such file or directory";
+    deepEqual(getContent(["-c10", "abc"], existsSync, readLines), expectedOutput);
+  });
 });
