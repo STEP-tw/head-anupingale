@@ -70,60 +70,62 @@ describe("extractCharacters", function() {
 });
 
 describe("parseInput", function() {
-  it("should separate all arguments and give default option -n and count 10", function() {
-    inputData = ["typesOfLines", "numbers"];
-    expectedOutput = {
-      option: "n",
-      count: 10,
-      files: ["typesOfLines", "numbers"]
-    };
-    deepEqual(parseInput(inputData), expectedOutput);
-  });
+  describe('should seperate all arguments', function () {
+    it("should give default option -n and count 10 when both are not specified", function() {
+      inputData = ["typesOfLines", "numbers"];
+      expectedOutput = {
+        option: "n",
+        count: 10,
+        files: ["typesOfLines", "numbers"]
+      };
+      deepEqual(parseInput(inputData), expectedOutput);
+    });
 
-  it("should separate all arguments and give default option -n and count as given", function() {
-    inputData = [-5, "typesOfLines", "numbers"];
-    expectedOutput = {
-      option: "n",
-      count: 5,
-      files: ["typesOfLines", "numbers"]
-    };
-    deepEqual(parseInput(inputData), expectedOutput);
-  });
+    it("should give default option -n if option is not specified", function() {
+      inputData = [-5, "typesOfLines", "numbers"];
+      expectedOutput = {
+        option: "n",
+        count: 5,
+        files: ["typesOfLines", "numbers"]
+      };
+      deepEqual(parseInput(inputData), expectedOutput);
+    });
 
-  it("should seperate option and count", function() {
-    inputData = ["-n10", "typesOfLines", "numbers"];
-    expectedOutput = {
-      option: "n",
-      count: 10,
-      files: ["typesOfLines", "numbers"]
-    };
-    deepEqual(parseInput(inputData), expectedOutput);
+    it("should seperate option and count when taken as single argument", function() {
+      inputData = ["-n10", "typesOfLines", "numbers"];
+      expectedOutput = {
+        option: "n",
+        count: 10,
+        files: ["typesOfLines", "numbers"]
+      };
+      deepEqual(parseInput(inputData), expectedOutput);
 
-    inputData = ["-c10", "typesOfLines", "numbers"];
-    expectedOutput = {
-      option: "c",
-      count: 10,
-      files: ["typesOfLines", "numbers"]
-    };
-    deepEqual(parseInput(inputData), expectedOutput);
-  });
+      inputData = ["-c10", "typesOfLines", "numbers"];
+      expectedOutput = {
+        option: "c",
+        count: 10,
+        files: ["typesOfLines", "numbers"]
+      };
+      deepEqual(parseInput(inputData), expectedOutput);
+    });
 
-  it("should give seperated option and count", function() {
-    inputData = ["-n", 10, "typesOfLines", "numbers"];
-    expectedOutput = {
-      option: "n",
-      count: 10,
-      files: ["typesOfLines", "numbers"]
-    };
-    deepEqual(parseInput(inputData), expectedOutput);
+    it("should return option and count when seperated with spaces", function() {
+      inputData = ["-n", 10, "typesOfLines", "numbers"];
+      expectedOutput = {
+        option: "n",
+        count: 10,
+        files: ["typesOfLines", "numbers"]
+      };
+      deepEqual(parseInput(inputData), expectedOutput);
 
-    inputData = ["-c", 10, "typesOfLines", "numbers"];
-    expectedOutput = {
-      option: "c",
-      count: 10,
-      files: ["typesOfLines", "numbers"]
-    };
-    deepEqual(parseInput(inputData), expectedOutput);
+      inputData = ["-c", 10, "typesOfLines", "numbers"];
+      expectedOutput = {
+        option: "c",
+        count: 10,
+        files: ["typesOfLines", "numbers"]
+      };
+      deepEqual(parseInput(inputData), expectedOutput);
+    });
   });
 });
 
