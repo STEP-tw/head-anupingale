@@ -38,6 +38,7 @@ const retrieveData = function(details, fileName){
   return details;
 }
 
+
 const getContent = function(fileDetails, doesExist, contentReader) {
   let {option,count,files} = parseInput(fileDetails);
   let getReference = {'n': extractLines , 'c': extractCharacters};
