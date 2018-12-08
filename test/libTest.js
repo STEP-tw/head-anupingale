@@ -16,9 +16,22 @@ const typesOfLines = [
   "Parallel Lines.",
   "Perpendicular Lines."
 ];
-const lines = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.";
-let numbers = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
-const readFileSync = fileName => fileName;
+
+const readFileSync = function(fileName) {
+  let files = { "lines" : "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+    "numbers" : "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
+    "lineData" : "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
+  }
+  return files[fileName];
+}
+
+const existsSync = function(fileName) {
+  let files = ["lines" ,"numbers", "typesOfLines","lineData"];
+  return files.includes(fileName);
+}
+
+const fs = {existsSync, readFileSync};
+
 let expectedOutput;
 let inputData;
 
@@ -131,7 +144,6 @@ describe("parseInput", function() {
 describe("retrieveData", function() {
   let truthy = x => true;
   let falsy = x => false;
-  let existsSync = file => true;
 
   it("should keep function references as it is", function() {
     inputData = {
@@ -147,10 +159,10 @@ describe("retrieveData", function() {
       readFileSync,
       existsSync,
       funcRef: truthy,
-      contents: ["==> typesOfLines <==", true],
+      contents: ["==> lineData <==", true],
       count: 2
     };
-    deepEqual(retrieveData(inputData, "typesOfLines"), expectedOutput);
+    deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
   });
 
   it("should return fetched typesOfLines in contents key and change delimeter to \\n", function() {
@@ -167,10 +179,10 @@ describe("retrieveData", function() {
       readFileSync,
       existsSync,
       funcRef: truthy,
-      contents: ["==> typesOfLines <==", true],
+      contents: ["==> lineData <==", true],
       count: 2
     };
-    deepEqual(retrieveData(inputData, "typesOfLines"), expectedOutput);
+    deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
   });
 
   it("should return error if file not exit", function() {
@@ -186,51 +198,44 @@ describe("retrieveData", function() {
 });
 
 describe("head", function() {
-  existsSync = x => true;
-  let fs = { existsSync, readFileSync };
 
   describe("should return specified number of lines or bytes from file depends upon option", function() {
-    existsSync = x => true;
-    let fs = { existsSync, readFileSync };
 
     it('should return lines when option(-n) and count are not seperated by space', function() {
-      deepEqual(head(["-n1", lines], fs), "There are 5 types of lines:");
+      deepEqual(head(["-n1", "lines"], fs), "There are 5 types of lines:");
 
       expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-      deepEqual(head(["-n3", lines], fs), expectedOutput);
+      deepEqual(head(["-n3", "lines"], fs), expectedOutput);
     });
 
     it('should return lines when option(-n) and count is seperated by spaces', function() {
-      deepEqual(head(["-n", "1", lines], fs), "There are 5 types of lines:");
+      deepEqual(head(["-n", "1", "lines"], fs), "There are 5 types of lines:");
 
       expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-      deepEqual(head(["-n", "3", lines], fs), expectedOutput);
+      deepEqual(head(["-n", "3", "lines"], fs), expectedOutput);
     });
 
     it('should return lines when only count is specified', function() {
-      deepEqual(head(["-1", lines], fs), "There are 5 types of lines:");
+      deepEqual(head(["-1", "lines"], fs), "There are 5 types of lines:");
 
       expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-      deepEqual(head(["-3", lines], fs), expectedOutput);
+      deepEqual(head(["-3", "lines"], fs), expectedOutput);
     });
 
     it('should return characters when option(-c) and count is specified', function() {
-      deepEqual(head(["-c1", lines], fs), "T");
+      deepEqual(head(["-c1", "lines"], fs), "T");
 
       expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-      deepEqual(head(["-c3", lines], fs), "The");
+      deepEqual(head(["-c3", "lines"], fs), "The");
     });
 
     it('should return characters when option(-c) and count is seperated by spaces', function() {
-      deepEqual(head(["-c", "1", lines], fs), "T");
-      deepEqual(head(["-c", "3", lines], fs), "The");
+      deepEqual(head(["-c", "1", "lines"], fs), "T");
+      deepEqual(head(["-c", "3", "lines"], fs), "The");
     });
   });
 
   describe("should return formatted fileName with their contents for multiple files", function() {
-    existsSync = x => true;
-    let fs = { existsSync, readFileSync };
-    fs.readFileSync = x => lines;
 
     it('should return when option(-n) and count is specified', function() {
       expectedOutput = "==> lines <==\nThere are 5 types of lines:\n\n==> lines <==\nThere are 5 types of lines:";
@@ -245,7 +250,6 @@ describe("head", function() {
 
   describe('Default option and count', function() {
     it("should return 10 lines By default if option and count is not specified", function() {
-      fs.readFileSync = x => numbers;
       fs.existsSync = x => true;
       expectedOutput =
         "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
@@ -295,13 +299,13 @@ describe("head", function() {
       });
     });
 
-    it("should return error if file not exit", function() {
+    it("should return error if file not exits", function() {
       fs.existsSync = x => false;
       expectedOutput = "head: abc: No such file or directory";
       deepEqual(head(["-c10", "abc"], fs), expectedOutput);
     });
 
-    it("should return error if file name is invalid", function() {
+    it("should return illegal byte count when count is not a number", function() {
       expectedOutput = "head: illegal byte count -- 10u";
       deepEqual(head(["-c10u", "file2"], fs), expectedOutput);
     });
@@ -309,70 +313,67 @@ describe("head", function() {
 });
 
 describe("getContent", function() {
-  existsSync = x => true;
   it("should return specified number of lines or bytes from file depends upon option", function() {
     deepEqual(
-      getContent(["-n1", lines], existsSync, readFileSync),
+      getContent(["-n1", "lines"], existsSync, readFileSync),
       "There are 5 types of lines:"
     );
     deepEqual(
-      getContent(["-n", "1", lines], existsSync, readFileSync),
+      getContent(["-n", "1", "lines"], existsSync, readFileSync),
       "There are 5 types of lines:"
     );
     deepEqual(
-      getContent(["-1", lines], existsSync, readFileSync),
+      getContent(["-1", "lines"], existsSync, readFileSync),
       "There are 5 types of lines:"
     );
-    deepEqual(getContent(["-c1", lines], existsSync, readFileSync), "T");
-    deepEqual(getContent(["-c", "1", lines], existsSync, readFileSync), "T");
+    deepEqual(getContent(["-c1", "lines"], existsSync, readFileSync), "T");
+    deepEqual(getContent(["-c", "1", "lines"], existsSync, readFileSync), "T");
 
     expectedOutput =
       "There are 5 types of lines:\nHorizontal line.\nVertical line.";
     deepEqual(
-      getContent(["-n3", lines], existsSync, readFileSync),
+      getContent(["-n3", "lines"], existsSync, readFileSync),
       expectedOutput
     );
     deepEqual(
-      getContent(["-n", "3", lines], existsSync, readFileSync),
+      getContent(["-n", "3", "lines"], existsSync, readFileSync),
       expectedOutput
     );
     deepEqual(
-      getContent(["-3", lines], existsSync, readFileSync),
+      getContent(["-3", "lines"], existsSync, readFileSync),
       expectedOutput
     );
-    deepEqual(getContent(["-c3", lines], existsSync, readFileSync), "The");
-    deepEqual(getContent(["-c", "3", lines], existsSync, readFileSync), "The");
+    deepEqual(getContent(["-c3", "lines"], existsSync, readFileSync), "The");
+    deepEqual(getContent(["-c", "3", "lines"], existsSync, readFileSync), "The");
   });
 
   it("should return 10 lines By default if option and count is not specified", function() {
     expectedOutput =
       "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
-    deepEqual(getContent([numbers], existsSync, readFileSync), expectedOutput);
+    deepEqual(getContent(["numbers"], existsSync, readFileSync), expectedOutput);
   });
 
   it("should return formatted fileName with their contents for multiple files", function() {
-    readLines = file => lines;
     expectedOutput =
       "==> lines <==\nThere are 5 types of lines:\n\n==> lines <==\nThere are 5 types of lines:";
     deepEqual(
-      getContent(["-n1", "lines", "lines"], existsSync, readLines),
+      getContent(["-n1", "lines", "lines"], existsSync, readFileSync),
       expectedOutput
     );
     deepEqual(
-      getContent(["-n", "1", "lines", "lines"], existsSync, readLines),
+      getContent(["-n", "1", "lines", "lines"], existsSync, readFileSync),
       expectedOutput
     );
     deepEqual(
-      getContent(["-1", "lines", "lines"], existsSync, readLines),
+      getContent(["-1", "lines", "lines"], existsSync, readFileSync),
       expectedOutput
     );
   });
 
   it("should return error if file not exit", function() {
-    existsSync = x => false;
     expectedOutput = "head: abc: No such file or directory";
     deepEqual(
-      getContent(["-c10", "abc"], existsSync, readLines),
+      getContent(["-c10", "abc"], existsSync, readFileSync),
       expectedOutput
     );
   });
