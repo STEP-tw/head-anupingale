@@ -16,8 +16,7 @@ const typesOfLines = [
   "Parallel Lines.",
   "Perpendicular Lines."
 ];
-const lines =
-  "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.";
+const lines = "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.";
 let numbers = "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
 const readFileSync = fileName => fileName;
 let expectedOutput;
@@ -190,80 +189,122 @@ describe("head", function() {
   existsSync = x => true;
   let fs = { existsSync, readFileSync };
 
-  it("should return specified number of lines or bytes from file depends upon option", function() {
-    deepEqual(head(["-n1", lines], fs), "There are 5 types of lines:");
-    deepEqual(head(["-n", "1", lines], fs), "There are 5 types of lines:");
-    deepEqual(head(["-1", lines], fs), "There are 5 types of lines:");
-    deepEqual(head(["-c1", lines], fs), "T");
-    deepEqual(head(["-c", "1", lines], fs), "T");
+  describe("should return specified number of lines or bytes from file depends upon option", function() {
+    existsSync = x => true;
+    let fs = { existsSync, readFileSync };
 
-    expectedOutput =
-      "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-    deepEqual(head(["-n3", lines], fs), expectedOutput);
-    deepEqual(head(["-n", "3", lines], fs), expectedOutput);
-    deepEqual(head(["-3", lines], fs), expectedOutput);
-    deepEqual(head(["-c3", lines], fs), "The");
-    deepEqual(head(["-c", "3", lines], fs), "The");
+    it('should return lines when option(-n) and count are not seperated by space', function() {
+      deepEqual(head(["-n1", lines], fs), "There are 5 types of lines:");
+
+      expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
+      deepEqual(head(["-n3", lines], fs), expectedOutput);
+    });
+
+    it('should return lines when option(-n) and count is seperated by spaces', function() {
+      deepEqual(head(["-n", "1", lines], fs), "There are 5 types of lines:");
+
+      expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
+      deepEqual(head(["-n", "3", lines], fs), expectedOutput);
+    });
+
+    it('should return lines when only count is specified', function() {
+      deepEqual(head(["-1", lines], fs), "There are 5 types of lines:");
+
+      expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
+      deepEqual(head(["-3", lines], fs), expectedOutput);
+    });
+
+    it('should return characters when option(-c) and count is specified', function() {
+      deepEqual(head(["-c1", lines], fs), "T");
+
+      expectedOutput = "There are 5 types of lines:\nHorizontal line.\nVertical line.";
+      deepEqual(head(["-c3", lines], fs), "The");
+    });
+
+    it('should return characters when option(-c) and count is seperated by spaces', function() {
+      deepEqual(head(["-c", "1", lines], fs), "T");
+      deepEqual(head(["-c", "3", lines], fs), "The");
+    });
   });
 
-  it("should return formatted fileName with their contents for multiple files", function() {
+  describe("should return formatted fileName with their contents for multiple files", function() {
+    existsSync = x => true;
+    let fs = { existsSync, readFileSync };
     fs.readFileSync = x => lines;
-    expectedOutput =
-      "==> lines <==\nThere are 5 types of lines:\n\n==> lines <==\nThere are 5 types of lines:";
-    deepEqual(head(["-n1", "lines", "lines"], fs), expectedOutput);
-    deepEqual(head(["-n", "1", "lines", "lines"], fs), expectedOutput);
-    deepEqual(head(["-1", "lines", "lines"], fs), expectedOutput);
+
+    it('should return when option(-n) and count is specified', function() {
+      expectedOutput = "==> lines <==\nThere are 5 types of lines:\n\n==> lines <==\nThere are 5 types of lines:";
+      deepEqual(head(["-n1", "lines", "lines"], fs), expectedOutput);
+    });
+
+    it('should return when option(-c) and count is specified', function() {
+      expectedOutput = "==> lines <==\nThe\n\n==> lines <==\nThe";
+      deepEqual(head(["-c", "3", "lines", "lines"], fs), expectedOutput);
+    });
   });
 
-  it("should return 10 lines By default if option and count is not specified", function() {
-    fs.readFileSync = x => numbers;
-    fs.existsSync = x => true;
-    expectedOutput =
-      "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
-    deepEqual(head(["numbers"], fs), expectedOutput);
+  describe('Default option and count', function() {
+    it("should return 10 lines By default if option and count is not specified", function() {
+      fs.readFileSync = x => numbers;
+      fs.existsSync = x => true;
+      expectedOutput =
+        "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
+      deepEqual(head(["numbers"], fs), expectedOutput);
+    });
   });
 
-  it("should return error when invalid option is specified", function() {
-    expectedOutput = "head: illegal line count -- 0";
-    deepEqual(head(["-n0", "lines"], fs), expectedOutput);
-  });
+  describe('error messages', function() {
 
-  it("should return error when -0 is given as count", function() {
-    expectedOutput = "head: illegal line count -- 0";
-    deepEqual(head(["-0", "lines"], fs), expectedOutput);
-  });
+    it("should return error when invalid option is specified", function() {
+      expectedOutput = "head: illegal line count -- 0";
+      deepEqual(head(["-n0", "lines"], fs), expectedOutput);
+    });
 
-  it("should return error when count is invalid", function() {
-    expectedOutput = "head: illegal line count -- -10";
-    deepEqual(head(["-n-10", "lines"], fs), expectedOutput);
+    it("should return error when -0 is given as count", function() {
+      expectedOutput = "head: illegal line count -- 0";
+      deepEqual(head(["-0", "lines"], fs), expectedOutput);
+    });
 
-    expectedOutput = "head: illegal byte count -- -10";
-    deepEqual(head(["-c-10", "lines"], fs), expectedOutput);
-  });
+    describe("should return error when count is invalid", function() {
+      it('should return illegal line count when option is(-n) and invalid count', function() {
+        expectedOutput = "head: illegal line count -- -10";
+        deepEqual(head(["-n-10", "lines"], fs), expectedOutput);
+      });
 
-  it("should return error when invalid option is speciified", function() {
-    expectedOutput =
-      "head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]";
-    deepEqual(head(["-z", "lines"], fs), expectedOutput);
-  });
+      it('should return illegal byte count when option is(-n) and invalid count', function() {
+        expectedOutput = "head: illegal byte count -- -10";
+        deepEqual(head(["-c-10", "lines"], fs), expectedOutput);
+      });
+    });
 
-  it("should return error when count is invalid and having characters in it", function() {
-    expectedOutput = "head: illegal line count -- 10u";
-    deepEqual(head(["-n10u", "lines"], fs), expectedOutput);
+    it("should return error when invalid option is speciified", function() {
+      expectedOutput =
+        "head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]";
+      deepEqual(head(["-z", "lines"], fs), expectedOutput);
+    });
 
-    expectedOutput = "head: illegal byte count -- 10u";
-    deepEqual(head(["-c10u", "lines"], fs), expectedOutput);
-  });
+    describe("should return error when count is invalid and having characters in it", function() {
+      it('should return invalid line count when option(-n) and invalid count', function() {
+        expectedOutput = "head: illegal line count -- 10u";
+        deepEqual(head(["-n10u", "lines"], fs), expectedOutput);
+      });
 
-  it("should return error if file not exit", function() {
-    fs.existsSync = x => false;
-    expectedOutput = "head: abc: No such file or directory";
-    deepEqual(head(["-c10", "abc"], fs), expectedOutput);
-  });
+      it('should return invalid byte count when option(-c) and invalid count', function() {
+        expectedOutput = "head: illegal byte count -- 10u";
+        deepEqual(head(["-c10u", "lines"], fs), expectedOutput);
+      });
+    });
 
-  it("should return error if file name is invalid", function() {
-    expectedOutput = "head: illegal byte count -- 10u";
-    deepEqual(head(["-c10u", "file2"], fs), expectedOutput);
+    it("should return error if file not exit", function() {
+      fs.existsSync = x => false;
+      expectedOutput = "head: abc: No such file or directory";
+      deepEqual(head(["-c10", "abc"], fs), expectedOutput);
+    });
+
+    it("should return error if file name is invalid", function() {
+      expectedOutput = "head: illegal byte count -- 10u";
+      deepEqual(head(["-c10u", "file2"], fs), expectedOutput);
+    });
   });
 });
 
