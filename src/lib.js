@@ -7,19 +7,21 @@ const errors = {
 
 const hasOption = function(option) {
   return option == "-c" || option == "-n";
-}
+};
 
 const hasDash = function(option) {
   return option.includes("-");
-}
+};
 
 const isZero = function(value) {
   return value == 0;
-}
+};
 
 const invalidCount = function(option, count) {
-  return option == "n"? errors.invalidLineCount + count : errors.invalidByteCount + count;
-}
+  return option == "n"
+    ? errors.invalidLineCount + count
+    : errors.invalidByteCount + count;
+};
 
 const extractLines = function(file, numberOfLines) {
   return file.slice(0, numberOfLines).join("\n");
@@ -103,19 +105,16 @@ const head = function(fileDetails, fs) {
     return errors.invalidLineCount + "0";
   }
   if (isNaN(count - 0) || count < 1) {
-    return invalidCount(option, count); 
+    return invalidCount(option, count);
   }
   if (
-    hasDash(fileDetails[0][0])&&
+    hasDash(fileDetails[0][0]) &&
     fileDetails[0][1] != "c" &&
     fileDetails[0][1] != "n" &&
     !parseInt(fileDetails[0])
   ) {
     return (
-      errors.illegalOption +
-      fileDetails[0][1] +
-      "\n" +
-      errors.usageMessage
+      errors.illegalOption + fileDetails[0][1] + "\n" + errors.usageMessage
     );
   }
   return getContent(fileDetails, existsSync, readFileSync);
@@ -131,5 +130,5 @@ module.exports = {
   isZero,
   invalidCount,
   hasDash,
-  hasOption  
+  hasOption
 };
