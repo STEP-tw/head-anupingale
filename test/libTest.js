@@ -5,7 +5,11 @@ const {
   parseInput,
   retrieveData,
   getContent,
-  head
+  head,
+  isZero,
+  hasDash,
+  hasOption,
+  invalidCount
 } = require("../src/lib.js");
 
 const typesOfLines = [
@@ -15,7 +19,7 @@ const typesOfLines = [
   "Skew Lines.",
   "Parallel Lines.",
   "Perpendicular Lines."
-];
+]
 
 const readFileSync = function(fileName) {
   let files = { "lines" : "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
@@ -376,5 +380,51 @@ describe("getContent", function() {
       getContent(["-c10", "abc"], existsSync, readFileSync),
       expectedOutput
     );
+  });
+});
+
+describe('isZero', function() {
+  it('should return true if the value is zero', function() {
+    deepEqual(isZero(0),true);
+  });
+
+  it('should return false if the value is nonZero', function() {
+    deepEqual(isZero(2),false);
+  });
+});
+
+describe('hasDash', function() {
+  it('should return true if the input includes dash', function() {
+    deepEqual(hasDash("-"),true);
+  });
+
+  it('should return false if the input has no dashes', function() {
+    deepEqual(hasDash(""),false);
+  });
+});
+
+describe('hasOption', function() {
+  it('should return true if option(-n) is valid', function() {
+    deepEqual(hasOption("-n"),true);
+  });
+
+  it('should return true if option(-c) is valid', function() {
+    deepEqual(hasOption("-c"),true);
+  });
+
+  it('should return false it option is invalid', function() {
+    deepEqual(hasOption("-d"),false);
+  });
+});
+
+describe('invalidCount', function() {
+  it('should return invalid line count if option is n', function() {
+    expectedOutput = "head: illegal line count -- 5"; 
+    deepEqual(invalidCount("n", 5),expectedOutput);
+  });
+
+  it('should return invalid byte count if option is c', function() {
+    expectedOutput = "head: illegal byte count -- 5"; 
+    deepEqual(invalidCount("c", 5), expectedOutput);
   });
 });

@@ -1,9 +1,25 @@
-const errorMessages = {
+const errors = {
   illegalOption: "head: illegal option -- ",
   usageMessage: "usage: head [-n lines | -c bytes] [file ...]",
   invalidLineCount: "head: illegal line count -- ",
   invalidByteCount: "head: illegal byte count -- "
 };
+
+const hasOption = function(option) {
+  return option == "-c" || option == "-n";
+}
+
+const hasDash = function(option) {
+  return option.includes("-");
+}
+
+const isZero = function(value) {
+  return value == 0;
+}
+
+const invalidCount = function(option, count) {
+  return option == "n"? errors.invalidLineCount + count : errors.invalidByteCount + count;
+}
 
 const extractLines = function(file, numberOfLines) {
   return file.slice(0, numberOfLines).join("\n");
@@ -15,14 +31,14 @@ const extractCharacters = function(file, numberOfCharacters) {
 
 const parseInput = function(args) {
   let organizedInput = { option: "n", count: 10, files: args.slice(0) };
-  if (args[0] == "-c" || args[0] == "-n") {
+  if (hasOption(args[0])) {
     organizedInput = {
       option: args[0][1],
       count: parseInt(args[1]),
       files: args.slice(2)
     };
   }
-  if (args[0].length > 2 && args[0].includes("-")) {
+  if (args[0].length > 2 && hasDash(args[0])) {
     organizedInput = {
       option: args[0].slice(1, 2),
       count: args[0].slice(2),
@@ -82,25 +98,24 @@ const getContent = function(fileDetails, existsSync, readFileSync) {
 const head = function(fileDetails, fs) {
   const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
-  if (fileDetails[0] == 0 || count == 0) {
-    return errorMessages.invalidLineCount + "0";
+
+  if (isZero(fileDetails[0]) || count == 0) {
+    return errors.invalidLineCount + "0";
   }
   if (isNaN(count - 0) || count < 1) {
-    return option == "n"
-      ? errorMessages.invalidLineCount + count
-      : errorMessages.invalidByteCount + count;
+    return invalidCount(option, count); 
   }
   if (
-    fileDetails[0][0] == "-" &&
+    hasDash(fileDetails[0][0])&&
     fileDetails[0][1] != "c" &&
     fileDetails[0][1] != "n" &&
     !parseInt(fileDetails[0])
   ) {
     return (
-      errorMessages.illegalOption +
+      errors.illegalOption +
       fileDetails[0][1] +
       "\n" +
-      errorMessages.usageMessage
+      errors.usageMessage
     );
   }
   return getContent(fileDetails, existsSync, readFileSync);
@@ -112,5 +127,9 @@ module.exports = {
   parseInput,
   retrieveData,
   head,
-  getContent
+  getContent,
+  isZero,
+  invalidCount,
+  hasDash,
+  hasOption  
 };
