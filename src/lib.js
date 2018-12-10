@@ -136,28 +136,29 @@ const tail = function(fileDetails, fs) {
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
   let details = {
-    contents: [],
-    delimeter: "",
+    contents : [],
+    existsSync,
+    readFileSync,
     count : parseInt(count),
     funcRef,
-    readFileSync,
-    existsSync,
-    funcName : "tail"
+    funcName : "tail",
+    delimeter : ""
   };
-
-  if (
-    fileDetails[0][0] == "-" &&
-    fileDetails[0][1] != "n" &&
+  
+  if (isNaN(count - 0)) {
+    return invalidCount(option, count);
+  }
+  if (hasDash(fileDetails[0][0]) &&
     fileDetails[0][1] != "c" &&
-    !parseInt(fileDetails[0])) 
-  {
-    return  "tail: illegal option --  "+ fileDetails[0][1]+"\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
+    fileDetails[0][1] != "n" &&
+    !parseInt(fileDetails[0])) {
+    return (errors.illegalOption + fileDetails[0][1] + "\n" + errors.usageMessage);
   }
-  if (isNaN(count - 0) || count < 1) {
-    return  "tail: illegal offset -- " + count
-  }
-  if (files.length == 1) {
-    return funcRef(readFileSync(files[0], "utf8").split("\n"), count );
+  if(files.length==1){
+    if(!existsSync(files[0])){
+      return "tail: "+files[0]+": No such file or directory";
+    }
+    return funcRef(readFileSync(files[0], "utf8").split("\n"), count);
   }
   return files.reduce(retrieveData, details).contents.join("\n");
 };

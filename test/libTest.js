@@ -26,12 +26,10 @@ const typesOfLines = [
 
 const readFileSync = function(fileName) {
   let files = {
-    lines:
-    "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
-    numbers: "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
-    lineData:
-    "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
-    digits : "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+    lines:"There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+    numbers:"One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
+    lineData:"There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+    digits:"0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
   };
   return files[fileName];
 };
@@ -42,7 +40,6 @@ const existsSync = function(fileName) {
 };
 
 const fs = { existsSync, readFileSync };
-
 let expectedOutput;
 let inputData;
 
@@ -496,30 +493,103 @@ describe("extractTailCharacters", function() {
 });
 
 
-describe("Tail", function() {
+describe("tail", function() {
+  const readFileSync = function(fileName) {
+    let files = {
+      lines:"There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+      numbers:"One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
+    };
+    return files[fileName];
+  };
 
-  it("should return the last ten lines of file when count is not specified", function() {
-    expectedOutput = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
-    deepEqual(tail(["digits"], fs), expectedOutput);
+  const existsSync = function(fileName) {
+    let files = ["lines", "numbers", "typesOfLines", "lineData", "digits"];
+    return files.includes(fileName);
+  };
+
+  const fs = { existsSync, readFileSync };
+  describe("should return specified number of lines or bytes from file depends upon option", function() {
+    it("should return lines when option(-n) and count are not seperated by space", function() {
+      deepEqual(tail(["-n1", "lines"], fs), "Perpendicular Lines.");
+
+      expectedOutput = "Eight\nNine\nTen";
+      deepEqual(tail(["-n3", "numbers"], fs), expectedOutput);
+    });
+
+    it("should return lines when option(-n) and count is seperated by spaces", function() {
+      deepEqual(tail(["-n", "1", "numbers"], fs), "Ten");
+
+      expectedOutput = "Eight\nNine\nTen";
+      deepEqual(tail(["-n", "3", "numbers"], fs), expectedOutput);
+    });
+
+    it("should return lines when only count is specified", function() {
+      deepEqual(tail(["-1", "numbers"], fs), "Ten");
+
+      expectedOutput = "Eight\nNine\nTen";
+      deepEqual(tail(["-3", "numbers"], fs), expectedOutput);
+    });
+
+    it("should return characters when option(-c) and count is specified", function() {
+      deepEqual(tail(["-c1", "numbers"], fs), "n");
+
+      deepEqual(tail(["-c3", "numbers"], fs), "Ten");
+    });
+
+    it("should return characters when option(-c) and count is seperated by spaces", function() {
+      deepEqual(tail(["-c", "1", "numbers"], fs), "n");
+      deepEqual(tail(["-c", "3", "numbers"], fs), "Ten");
+    });
   });
 
-  it("should return the given number of lines when only count is given", function() {
-    deepEqual(tail([-3, "digits"], fs), "7\n8\n9");
+  describe("should return formatted fileName with their contents for multiple files", function() {
+    it("should return when option(-n) and count is specified", function() {
+      expectedOutput =
+        "==> lines <==\nPerpendicular Lines.\n\n==> numbers <==\nTen";
+      deepEqual(tail(["-n1", "lines", "numbers"], fs), expectedOutput);
+    });
+
+    it("should return when option(-c) and count is specified", function() {
+      expectedOutput = "==> lines <==\nes.\n\n==> numbers <==\nTen";
+      deepEqual(tail(["-c", "3", "lines", "numbers"], fs), expectedOutput);
+    });
   });
 
-  it("should return the given number of lines when count and option is given without spaces", function() {
-    deepEqual(tail(["-n2", "digits"], fs), "8\n9");
-  });
+  describe("Default option and count", function() {
+    it("should return 10 lines By default if option and count is not specified", function() {
+      fs.existsSync = x => true;
+      expectedOutput =
+        "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
+      deepEqual(tail(["numbers"], fs), expectedOutput);
+    });
 
-  it("should return the given number of lines when count and option is given with spaces", function() {
-    deepEqual(tail(["-n", "1", "digits"], fs), "9");
-  });
+    it("should return error when invalid option is speciified", function() {
+      expectedOutput =
+        "head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]";
+      deepEqual(tail(["-z", "lines"], fs), expectedOutput);
+    });
 
-  it("should return the given number of characters when count is given with spaces", function() {
-    deepEqual(tail(["-c", "3", "digits"], fs), "8\n9");
-  });
+    describe("should return error when count is invalid and having characters in it", function() {
+      it("should return invalid line count when option(-n) and invalid count", function() {
+        expectedOutput = "head: illegal line count -- 10u";
+        deepEqual(tail(["-n10u", "lines"], fs), expectedOutput);
+      });
 
-  it("should return the given number of characters when count is given without spaces", function() {
-    deepEqual(tail(["-c6", "digits"], fs), "\n7\n8\n9");
+      it("should return invalid byte count when option(-c) and invalid count", function() {
+        expectedOutput = "head: illegal byte count -- 10u";
+        deepEqual(tail(["-c10u", "lines"], fs), expectedOutput);
+      });
+    });
+
+    it("should return error if file not exits", function() {
+      fs.existsSync = x => false;
+      expectedOutput = "tail: abc: No such file or directory";
+      deepEqual(tail(["-c10", "abc"], fs), expectedOutput);
+    });
+
+    it("should return illegal byte count when count is not a number", function() {
+      expectedOutput = "head: illegal byte count -- 10u";
+      deepEqual(tail(["-c10u", "file2"], fs), expectedOutput);
+    });
   });
 });
