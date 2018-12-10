@@ -11,7 +11,8 @@ const {
   hasOption,
   invalidCount,
   extractTailLines,
-  extractTailCharacters
+  extractTailCharacters,
+  tail
 } = require("../src/lib.js");
 
 const typesOfLines = [
@@ -26,16 +27,18 @@ const typesOfLines = [
 const readFileSync = function(fileName) {
   let files = {
     lines:
-      "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+    "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
     numbers: "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
     lineData:
-      "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines."
+    "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+    digits : "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
   };
   return files[fileName];
 };
 
 const existsSync = function(fileName) {
-  let files = ["lines", "numbers", "typesOfLines", "lineData"];
+  console.log(fileName);
+  let files = ["lines", "numbers", "typesOfLines", "lineData", "digits"];
   return files.includes(fileName);
 };
 
@@ -493,3 +496,31 @@ describe("extractTailCharacters", function() {
   });
 });
 
+
+describe("Tail", function() {
+
+  it("should return the first ten lines of file when count is not specified", function() {
+    expectedOutput = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
+    deepEqual(tail(["digits"], fs), expectedOutput);
+  });
+
+  it("should return the given number of lines when only count is given", function() {
+    deepEqual(tail([-3, "digits"], fs), "7\n8\n9");
+  });
+
+  it("should return the given number of lines when count and option is given without spaces", function() {
+    deepEqual(tail(["-n2", "digits"], fs), "8\n9");
+  });
+
+  it("should return the given number of lines when count and option is given with spaces", function() {
+    deepEqual(tail(["-n", "1", "digits"], fs), "9");
+  });
+
+  it("should return the given number of characters when count is given with spaces", function() {
+    deepEqual(tail(["-c", "3", "digits"], fs), "8\n9");
+  });
+
+  it("should return the given number of characters when count is given without spaces", function() {
+    deepEqual(tail(["-c6", "digits"], fs), "\n7\n8\n9");
+  });
+});

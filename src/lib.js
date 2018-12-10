@@ -64,10 +64,12 @@ const retrieveData = function(details, fileName) {
     contents,
     existsSync,
     funcRef,
-    count
+    count,
+    funcName
   } = details;
   if (!existsSync(fileName)) {
-    contents.push("head: " + fileName + ": No such file or directory");
+    console.log(fileName);
+    contents.push(funcName+": " + fileName + ": No such file or directory");
     return details;
   }
   contents.push(delimeter + "==> " + fileName + " <==");
@@ -86,7 +88,8 @@ const getContent = function(fileDetails, existsSync, readFileSync) {
     count,
     funcRef,
     readFileSync,
-    delimeter: ""
+    delimeter: "",
+    funcName: "head"
   };
   if (files.length == 1) {
     if (!existsSync(files[0])) {
@@ -128,6 +131,42 @@ const extractTailCharacters = function(file, numberOfCharacters) {
   return file.join("\n").slice(-numberOfCharacters);
 };
 
+const tail = function(fileDetails, fs) {
+  const {existsSync, readFileSync} = fs;
+  let { option, count , files } = parseInput(fileDetails);
+  let getOutput = { n: extractTailLines, c: extractTailCharacters };
+  let funcRef = getOutput[option];
+  let details = {
+    content: [],
+    delimeter: "",
+    count : parseInt(count),
+    funcRef,
+    readFileSync,
+    existsSync,
+    funcName : "tail"
+  };
+
+  if (
+  fileDetails[0][0] == "-" &&
+    fileDetails[0][1] != "n" &&
+    fileDetails[0][1] != "c" &&
+    !parseInt(fileDetails[0])
+  ) { return
+    "tail: illegal option --  "+ fileDetails[0][1]+"\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
+  }
+  if (isNaN(count - 0) || count < 1) {
+    return  "tail: illegal offset -- " + count
+  }
+
+  if (files.length == 1) {
+    if (existsSync(files[0])) {
+      return "tail: " + files[0] + ": No such file or directory";
+    }
+    return funcRef(readFileSync(files[0], "utf8").split("\n"), count );
+  }
+  return files.reduce(retrieveData, details).content.join("\n");
+};
+
 module.exports = {
   extractLines,
   extractCharacters,
@@ -140,5 +179,6 @@ module.exports = {
   hasDash,
   hasOption,
   extractTailLines,
-  extractTailCharacters
+  extractTailCharacters,
+  tail
 };
