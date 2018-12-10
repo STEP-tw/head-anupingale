@@ -68,7 +68,6 @@ const retrieveData = function(details, fileName) {
     funcName
   } = details;
   if (!existsSync(fileName)) {
-    console.log(fileName);
     contents.push(funcName+": " + fileName + ": No such file or directory");
     return details;
   }

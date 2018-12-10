@@ -37,7 +37,6 @@ const readFileSync = function(fileName) {
 };
 
 const existsSync = function(fileName) {
-  console.log(fileName);
   let files = ["lines", "numbers", "typesOfLines", "lineData", "digits"];
   return files.includes(fileName);
 };
@@ -499,7 +498,7 @@ describe("extractTailCharacters", function() {
 
 describe("Tail", function() {
 
-  it("should return the first ten lines of file when count is not specified", function() {
+  it("should return the last ten lines of file when count is not specified", function() {
     expectedOutput = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9";
     deepEqual(tail(["digits"], fs), expectedOutput);
   });
