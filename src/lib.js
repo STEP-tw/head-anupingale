@@ -146,7 +146,7 @@ const tail = function(fileDetails, fs) {
   };
 
   if (
-  fileDetails[0][0] == "-" &&
+    fileDetails[0][0] == "-" &&
     fileDetails[0][1] != "n" &&
     fileDetails[0][1] != "c" &&
     !parseInt(fileDetails[0])
@@ -156,11 +156,7 @@ const tail = function(fileDetails, fs) {
   if (isNaN(count - 0) || count < 1) {
     return  "tail: illegal offset -- " + count
   }
-
   if (files.length == 1) {
-    if (existsSync(files[0])) {
-      return "tail: " + files[0] + ": No such file or directory";
-    }
     return funcRef(readFileSync(files[0], "utf8").split("\n"), count );
   }
   return files.reduce(retrieveData, details).content.join("\n");
