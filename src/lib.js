@@ -136,7 +136,7 @@ const tail = function(fileDetails, fs) {
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
   let details = {
-    content: [],
+    contents: [],
     delimeter: "",
     count : parseInt(count),
     funcRef,
@@ -159,7 +159,7 @@ const tail = function(fileDetails, fs) {
   if (files.length == 1) {
     return funcRef(readFileSync(files[0], "utf8").split("\n"), count );
   }
-  return files.reduce(retrieveData, details).content.join("\n");
+  return files.reduce(retrieveData, details).contents.join("\n");
 };
 
 module.exports = {
