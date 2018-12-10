@@ -9,7 +9,8 @@ const {
   isZero,
   hasDash,
   hasOption,
-  invalidCount
+  invalidCount,
+  extractTailLines
 } = require("../src/lib.js");
 
 const typesOfLines = [
@@ -438,3 +439,33 @@ describe("invalidCount", function() {
     deepEqual(invalidCount("c", 5), expectedOutput);
   });
 });
+
+describe("extractTailLines", function() {
+  let string = [];
+  let expectedOutput = "";
+
+  beforeEach("Make string constant", function() {
+    string = ["1","2","3","4","5","6","7","8","9","10"];
+  });
+
+  it("should return an empty string when empty array is given ", function() {
+    deepEqual(extractTailLines([]), "");
+  });
+
+  it("should return a single line when multiple element array is given and length is one", function() {
+    expectedOutput = "10";
+    deepEqual(extractTailLines(string,1), expectedOutput);
+  });
+
+  it("should return a given number of lines when multiple element array is given ", function() {
+    expectedOutput = "8\n9\n10";
+    deepEqual(extractTailLines(string, 3), expectedOutput);
+  });
+
+  it("should return whole file when multiple element array is given and number of lines is not specified", function() {
+    expectedOutput = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
+    deepEqual(extractTailLines(string), expectedOutput);
+  });
+});
+
+

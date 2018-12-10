@@ -120,6 +120,10 @@ const head = function(fileDetails, fs) {
   return getContent(fileDetails, existsSync, readFileSync);
 };
 
+const extractTailLines = function(file, numberOfLines) {
+  return file.slice(-numberOfLines).join("\n");
+};
+
 module.exports = {
   extractLines,
   extractCharacters,
@@ -130,5 +134,6 @@ module.exports = {
   isZero,
   invalidCount,
   hasDash,
-  hasOption
+  hasOption,
+  extractTailLines
 };
