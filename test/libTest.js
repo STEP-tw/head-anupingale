@@ -10,7 +10,8 @@ const {
   hasDash,
   hasOption,
   invalidCount,
-  extractTailLines
+  extractTailLines,
+  extractTailCharacters
 } = require("../src/lib.js");
 
 const typesOfLines = [
@@ -468,4 +469,27 @@ describe("extractTailLines", function() {
   });
 });
 
+describe("extractTailCharacters", function() {
+  let string = [];
+  let expectedOutput = "";
+  string = ["1","2","3","4","5","6","7","8","9","10"];
+
+  it("should return an empty string when empty array is given ", function() {
+    deepEqual(extractTailCharacters([], 2), "");
+  });
+
+  it("should return a single character when length given is one", function() {
+    deepEqual(extractTailCharacters(string, 1), "0");
+  });
+
+  it("should return a given number of characters when long text is given ", function() {
+    deepEqual(extractTailCharacters(string, 3), "\n10");
+    deepEqual(extractTailCharacters(string,7), "\n8\n9\n10");
+  });
+
+  it("should return whole file when number of characters is not specified", function() {
+    expectedOutput = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
+    deepEqual(extractTailCharacters(string), expectedOutput);
+  });
+});
 

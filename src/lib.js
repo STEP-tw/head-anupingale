@@ -124,6 +124,10 @@ const extractTailLines = function(file, numberOfLines) {
   return file.slice(-numberOfLines).join("\n");
 };
 
+const extractTailCharacters = function(file, numberOfCharacters) {
+  return file.join("\n").slice(-numberOfCharacters);
+};
+
 module.exports = {
   extractLines,
   extractCharacters,
@@ -135,5 +139,6 @@ module.exports = {
   invalidCount,
   hasDash,
   hasOption,
-  extractTailLines
+  extractTailLines,
+  extractTailCharacters
 };
