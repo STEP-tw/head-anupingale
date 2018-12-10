@@ -149,9 +149,9 @@ const tail = function(fileDetails, fs) {
     fileDetails[0][0] == "-" &&
     fileDetails[0][1] != "n" &&
     fileDetails[0][1] != "c" &&
-    !parseInt(fileDetails[0])
-  ) { return
-    "tail: illegal option --  "+ fileDetails[0][1]+"\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
+    !parseInt(fileDetails[0])) 
+  {
+    return  "tail: illegal option --  "+ fileDetails[0][1]+"\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
   }
   if (isNaN(count - 0) || count < 1) {
     return  "tail: illegal offset -- " + count
