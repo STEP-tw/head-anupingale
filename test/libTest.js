@@ -1,5 +1,6 @@
 const { deepEqual } = require("assert");
 const {
+  hasOtherCharacters,
   extractLines,
   extractCharacters,
   parseInput,
@@ -596,5 +597,15 @@ describe("tail", function() {
     it("should return nothing when input is -0", function() {
       deepEqual(tail(["-0", "lines"], fs), "");
     });
+  });
+});
+
+describe("hasOtherCharacters", function() {
+  it("should return true if has chracters except options", function() {
+    deepEqual(hasOtherCharacters(["-z"]), true);
+  });
+
+  it("should return false if has option", function() {
+    deepEqual(hasOtherCharacters(["-n"]), false);
   });
 });

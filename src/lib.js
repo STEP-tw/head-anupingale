@@ -23,6 +23,15 @@ const invalidCount = function(option, count) {
     : errors.invalidByteCount + count;
 };
 
+const hasOtherCharacters = function(fileDetails) {
+  return (
+    hasDash(fileDetails[0][0]) &&
+    fileDetails[0][1] != "c" &&
+    fileDetails[0][1] != "n" &&
+    !parseInt(fileDetails[0])
+  );
+};
+
 const extractLines = function(file, numberOfLines) {
   return file.slice(0, numberOfLines).join("\n");
 };
@@ -109,12 +118,7 @@ const head = function(fileDetails, fs) {
   if (isNaN(count - 0) || count < 1) {
     return invalidCount(option, count);
   }
-  if (
-    hasDash(fileDetails[0][0]) &&
-    fileDetails[0][1] != "c" &&
-    fileDetails[0][1] != "n" &&
-    !parseInt(fileDetails[0])
-  ) {
+  if (hasOtherCharacters(fileDetails)) {
     return (
       errors.illegalOption + fileDetails[0][1] + "\n" + errors.usageMessage
     );
@@ -154,18 +158,10 @@ const tail = function(fileDetails, fs) {
     return "tail: illegal offset -- " + fileDetails[0].slice(2);
   }
 
-  if (
-    hasDash(fileDetails[0][0]) &&
-    fileDetails[0][1] != "c" &&
-    fileDetails[0][1] != "n" &&
-    !parseInt(fileDetails[0])
-  ) {
-    return (
-      "tail: illegal option -- " +
-      fileDetails[0][1] +
-      "\n" +
-      "usage: tail [-n lines | -c bytes] [file ...]"
-    );
+  if (hasOtherCharacters(fileDetails)) {
+    let error = "tail: illegal option -- " + fileDetails[0][1] + "\n";
+    error += "usage: tail [-n lines | -c bytes] [file ...]";
+    return error;
   }
 
   if (files.length == 1) {
@@ -190,5 +186,6 @@ module.exports = {
   hasOption,
   extractTailLines,
   extractTailCharacters,
-  tail
+  tail,
+  hasOtherCharacters
 };
