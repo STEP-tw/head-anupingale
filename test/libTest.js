@@ -4,7 +4,6 @@ const {
   extractLines,
   extractCharacters,
   parseInput,
-  retrieveData,
   head,
   isZero,
   hasDash,
@@ -151,61 +150,6 @@ describe("parseInput", function() {
   });
 });
 
-describe("retrieveData", function() {
-  let truthy = x => true;
-  let falsy = x => false;
-
-  it("should keep function references as it is", function() {
-    inputData = {
-      delimeter: "",
-      readFileSync,
-      existsSync,
-      funcRef: truthy,
-      contents: [],
-      count: 2
-    };
-    expectedOutput = {
-      delimeter: "\n",
-      readFileSync,
-      existsSync,
-      funcRef: truthy,
-      contents: ["==> lineData <==", true],
-      count: 2
-    };
-    deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
-  });
-
-  it("should return fetched typesOfLines in contents key and change delimeter to \\n", function() {
-    inputData = {
-      delimeter: "",
-      readFileSync,
-      existsSync,
-      funcRef: truthy,
-      contents: [],
-      count: 2
-    };
-    expectedOutput = {
-      delimeter: "\n",
-      readFileSync,
-      existsSync,
-      funcRef: truthy,
-      contents: ["==> lineData <==", true],
-      count: 2
-    };
-    deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
-  });
-
-  it("should return error if file not exit", function() {
-    inputData = {
-      delimeter: "",
-      readFileSync,
-      existsSync,
-      funcRef: truthy,
-      contents: [],
-      count: 2
-    };
-  });
-});
 
 describe("head", function() {
   describe("should return specified number of lines or bytes from file depends upon option", function() {

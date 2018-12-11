@@ -82,40 +82,13 @@ const parseInput = function(args) {
   return organizedInput;
 };
 
-const retrieveData = function(details, fileName) {
-  let {
-    delimeter,
-    readFileSync,
-    contents,
-    existsSync,
-    funcRef,
-    count,
-    funcName
-  } = details;
-  if (!existsSync(fileName)) {
-    contents.push(funcName + ": " + fileName + ": No such file or directory");
-    return details;
-  }
-  contents.push(delimeter + "==> " + fileName + " <==");
-  contents.push(funcRef(readFileSync(fileName, "utf8").split("\n"), count));
-  details.delimeter = "\n";
-  return details;
-};
-
 const head = function(fileDetails, fs) {
   const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
   let getOutput = { n: extractLines, c: extractCharacters };
   let funcRef = getOutput[option];
-  let details = {
-    contents: [],
-    existsSync,
-    readFileSync,
-    count: parseInt(count),
-    funcRef,
-    funcName: "head",
-    delimeter: ""
-  };
+  let content = [];
+  let delimeter = "";
 
   if (isZero(fileDetails[0]) || count == 0) {
     return errors.invalidLineCount + "0";
@@ -140,7 +113,14 @@ const head = function(fileDetails, fs) {
       funcName: "head"
     });
   }
-  return files.reduce(retrieveData, details).contents.join("\n");
+  for (let index = 0; index < files.length; index++) {
+    content.push(delimeter + "==> " + files[index] + " <==");
+    content.push(
+      funcRef(readFileSync(files[index], "utf8").split("\n"), count)
+    );
+    delimeter = "\n";
+  }
+  return content.join("\n");
 };
 
 const tail = function(fileDetails, fs) {
@@ -148,15 +128,8 @@ const tail = function(fileDetails, fs) {
   let { option, count, files } = parseInput(fileDetails);
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
-  let details = {
-    contents: [],
-    existsSync,
-    readFileSync,
-    count: parseInt(count),
-    funcRef,
-    funcName: "tail",
-    delimeter: ""
-  };
+  let content = [];
+  let delimeter = "";
 
   if (files.includes("-0") || count == 0) {
     return "";
@@ -181,14 +154,21 @@ const tail = function(fileDetails, fs) {
       funcName: "tail"
     });
   }
-  return files.reduce(retrieveData, details).contents.join("\n");
+
+  for (let index = 0; index < files.length; index++) {
+    content.push(delimeter + "==> " + files[index] + " <==");
+    content.push(
+      funcRef(readFileSync(files[index], "utf8").split("\n"), count)
+    );
+    delimeter = "\n";
+  }
+  return content.join("\n");
 };
 
 module.exports = {
   extractLines,
   extractCharacters,
   parseInput,
-  retrieveData,
   head,
   isZero,
   invalidCount,
