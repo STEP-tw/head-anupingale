@@ -1,16 +1,10 @@
+const {hasDash, parseInput, hasOption} = require("./parser.js");
+
 const errors = {
   illegalOption: "head: illegal option -- ",
   usageMessage: "usage: head [-n lines | -c bytes] [file ...]",
   invalidLineCount: "head: illegal line count -- ",
   invalidByteCount: "head: illegal byte count -- "
-};
-
-const hasOption = function(option) {
-  return option == "-c" || option == "-n";
-};
-
-const hasDash = function(option) {
-  return option.includes("-");
 };
 
 const isZero = function(value) {
@@ -54,32 +48,6 @@ const singleFileData = function(file, details) {
     return funcName + ": " + file + ": No such file or directory";
   }
   return funcRef(readFileSync(file, "utf8").split("\n"), count);
-};
-
-const parseInput = function(args) {
-  let organizedInput = { option: "n", count: 10, files: args.slice(0) };
-  if (hasOption(args[0])) {
-    organizedInput = {
-      option: args[0][1],
-      count: parseInt(args[1]),
-      files: args.slice(2)
-    };
-  }
-  if (args[0].length > 2 && hasDash(args[0])) {
-    organizedInput = {
-      option: args[0].slice(1, 2),
-      count: args[0].slice(2),
-      files: args.slice(1)
-    };
-  }
-  if (parseInt(args[0])) {
-    organizedInput = {
-      option: "n",
-      count: Math.abs(args[0]),
-      files: args.slice(1)
-    };
-  }
-  return organizedInput;
 };
 
 const head = function(fileDetails, fs) {
@@ -168,7 +136,6 @@ const tail = function(fileDetails, fs) {
 module.exports = {
   extractLines,
   extractCharacters,
-  parseInput,
   head,
   isZero,
   invalidCount,

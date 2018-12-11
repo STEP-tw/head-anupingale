@@ -3,16 +3,15 @@ const {
   hasOtherCharacters,
   extractLines,
   extractCharacters,
-  parseInput,
   head,
   isZero,
-  hasDash,
-  hasOption,
   invalidCount,
   extractTailLines,
   extractTailCharacters,
   tail
 } = require("../src/lib.js");
+
+const {parseInput, hasOption, hasDash} = require("../src/parser.js");
 
 const typesOfLines = [
   "There are 5 types of lines:",
