@@ -151,9 +151,7 @@ const tail = function(fileDetails, fs) {
   }
 
   if (isNaN(count)) {
-    return  option == "n"
-      ? "tail: illegal line count -- "+ count
-      : "tail: illegal byte count -- " + count;
+    return  "tail: illegal offset -- "+fileDetails[0].slice(2);
   }
 
   if (hasDash(fileDetails[0][0]) &&
@@ -161,7 +159,7 @@ const tail = function(fileDetails, fs) {
     fileDetails[0][1] != "n" &&
     !parseInt(fileDetails[0])) {
     return "tail: illegal option -- " + fileDetails[0][1] + "\n" + "usage: tail [-n lines | -c bytes] [file ...]";
-     }
+      }
 
   if(files.length==1){
     if(!existsSync(files[0])){

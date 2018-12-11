@@ -570,14 +570,9 @@ describe("tail", function() {
     });
 
     describe("should return error when count is invalid and having characters in it", function() {
-      it("should return invalid line count when option(-n) and invalid count", function() {
-        expectedOutput = "tail: illegal line count -- 10u";
+      it("should return illegal when option(-n) and invalid count", function() {
+        expectedOutput = "tail: illegal offset -- 10u";
         deepEqual(tail(["-n10u", "lines"], fs), expectedOutput);
-      });
-
-      it("should return invalid byte count when option(-c) and invalid count", function() {
-        expectedOutput = "tail: illegal byte count -- 10u";
-        deepEqual(tail(["-c10u", "lines"], fs), expectedOutput);
       });
     });
 
@@ -588,7 +583,7 @@ describe("tail", function() {
     });
 
     it("should return illegal byte count when count is not a number", function() {
-      expectedOutput = "tail: illegal byte count -- 10u";
+      expectedOutput = "tail: illegal offset -- 10u";
       deepEqual(tail(["-c10u", "file2"], fs), expectedOutput);
     });
 
