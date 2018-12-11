@@ -17,7 +17,7 @@ const isZero = function(value) {
   return value == 0;
 };
 
-const invalidCount = function(option, count) {
+const invalidCount = function(option, count, functionName) {
   return option == "n"
     ? errors.invalidLineCount + count
     : errors.invalidByteCount + count;
@@ -38,6 +38,14 @@ const extractLines = function(file, numberOfLines) {
 
 const extractCharacters = function(file, numberOfCharacters) {
   return file.join("\n").slice(0, numberOfCharacters);
+};
+
+const extractTailLines = function(file, numberOfLines) {
+  return file.slice(-numberOfLines).join("\n");
+};
+
+const extractTailCharacters = function(file, numberOfCharacters) {
+  return file.join("\n").slice(-numberOfCharacters);
 };
 
 const parseInput = function(args) {
@@ -115,23 +123,17 @@ const head = function(fileDetails, fs) {
   if (isZero(fileDetails[0]) || count == 0) {
     return errors.invalidLineCount + "0";
   }
+
   if (isNaN(count - 0) || count < 1) {
     return invalidCount(option, count);
   }
+
   if (hasOtherCharacters(fileDetails)) {
     return (
       errors.illegalOption + fileDetails[0][1] + "\n" + errors.usageMessage
     );
   }
   return getContent(fileDetails, existsSync, readFileSync);
-};
-
-const extractTailLines = function(file, numberOfLines) {
-  return file.slice(-numberOfLines).join("\n");
-};
-
-const extractTailCharacters = function(file, numberOfCharacters) {
-  return file.join("\n").slice(-numberOfCharacters);
 };
 
 const tail = function(fileDetails, fs) {
@@ -150,7 +152,7 @@ const tail = function(fileDetails, fs) {
     delimeter: ""
   };
 
-  if (files.includes("-0") || count == 0) {
+  if (files.includes("-0") || count == 0)  {
     return "";
   }
 
