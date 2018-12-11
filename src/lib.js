@@ -68,7 +68,7 @@ const retrieveData = function(details, fileName) {
     funcName
   } = details;
   if (!existsSync(fileName)) {
-    contents.push(funcName+": " + fileName + ": No such file or directory");
+    contents.push(funcName + ": " + fileName + ": No such file or directory");
     return details;
   }
   contents.push(delimeter + "==> " + fileName + " <==");
@@ -131,39 +131,46 @@ const extractTailCharacters = function(file, numberOfCharacters) {
 };
 
 const tail = function(fileDetails, fs) {
-  const {existsSync, readFileSync} = fs;
-  let { option, count , files } = parseInput(fileDetails);
-  
+  const { existsSync, readFileSync } = fs;
+  let { option, count, files } = parseInput(fileDetails);
+
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
   let details = {
-    contents : [],
+    contents: [],
     existsSync,
     readFileSync,
-    count : parseInt(count),
+    count: parseInt(count),
     funcRef,
-    funcName : "tail",
-    delimeter : ""
+    funcName: "tail",
+    delimeter: ""
   };
 
-  if(files.includes("-0") || count == 0) {
+  if (files.includes("-0") || count == 0) {
     return "";
   }
 
   if (isNaN(count)) {
-    return  "tail: illegal offset -- "+fileDetails[0].slice(2);
+    return "tail: illegal offset -- " + fileDetails[0].slice(2);
   }
 
-  if (hasDash(fileDetails[0][0]) &&
-      fileDetails[0][1] != "c" &&
+  if (
+    hasDash(fileDetails[0][0]) &&
+    fileDetails[0][1] != "c" &&
     fileDetails[0][1] != "n" &&
-    !parseInt(fileDetails[0])) {
-    return "tail: illegal option -- " + fileDetails[0][1] + "\n" + "usage: tail [-n lines | -c bytes] [file ...]";
-      }
+    !parseInt(fileDetails[0])
+  ) {
+    return (
+      "tail: illegal option -- " +
+      fileDetails[0][1] +
+      "\n" +
+      "usage: tail [-n lines | -c bytes] [file ...]"
+    );
+  }
 
-  if(files.length==1){
-    if(!existsSync(files[0])){
-      return "tail: "+files[0]+": No such file or directory";
+  if (files.length == 1) {
+    if (!existsSync(files[0])) {
+      return "tail: " + files[0] + ": No such file or directory";
     }
     return funcRef(readFileSync(files[0], "utf8").split("\n"), count);
   }

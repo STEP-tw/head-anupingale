@@ -26,10 +26,12 @@ const typesOfLines = [
 
 const readFileSync = function(fileName) {
   let files = {
-    lines:"There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
-    numbers:"One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
-    lineData:"There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
-    digits:"0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+    lines:
+      "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+    numbers: "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
+    lineData:
+      "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+    digits: "0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
   };
   return files[fileName];
 };
@@ -445,7 +447,7 @@ describe("extractTailLines", function() {
   let expectedOutput = "";
 
   beforeEach("Make string constant", function() {
-    string = ["1","2","3","4","5","6","7","8","9","10"];
+    string = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   });
 
   it("should return an empty string when empty array is given ", function() {
@@ -454,7 +456,7 @@ describe("extractTailLines", function() {
 
   it("should return a single line when multiple element array is given and length is one", function() {
     expectedOutput = "10";
-    deepEqual(extractTailLines(string,1), expectedOutput);
+    deepEqual(extractTailLines(string, 1), expectedOutput);
   });
 
   it("should return a given number of lines when multiple element array is given ", function() {
@@ -471,7 +473,7 @@ describe("extractTailLines", function() {
 describe("extractTailCharacters", function() {
   let string = [];
   let expectedOutput = "";
-  string = ["1","2","3","4","5","6","7","8","9","10"];
+  string = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   it("should return an empty string when empty array is given ", function() {
     deepEqual(extractTailCharacters([], 2), "");
@@ -483,7 +485,7 @@ describe("extractTailCharacters", function() {
 
   it("should return a given number of characters when long text is given ", function() {
     deepEqual(extractTailCharacters(string, 3), "\n10");
-    deepEqual(extractTailCharacters(string,7), "\n8\n9\n10");
+    deepEqual(extractTailCharacters(string, 7), "\n8\n9\n10");
   });
 
   it("should return whole file when number of characters is not specified", function() {
@@ -492,12 +494,12 @@ describe("extractTailCharacters", function() {
   });
 });
 
-
 describe("tail", function() {
   const readFileSync = function(fileName) {
     let files = {
-      lines:"There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
-      numbers:"One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen",
+      lines:
+        "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+      numbers: "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"
     };
     return files[fileName];
   };
@@ -587,12 +589,12 @@ describe("tail", function() {
       deepEqual(tail(["-c10u", "file2"], fs), expectedOutput);
     });
 
-    it('should return nothing when input is zero', function() {
-      deepEqual(tail(["-n0","lines"], fs), '');
+    it("should return nothing when input is zero", function() {
+      deepEqual(tail(["-n0", "lines"], fs), "");
     });
 
-    it('should return nothing when input is -0', function() {
-      deepEqual(tail(["-0","lines"], fs), '');
+    it("should return nothing when input is -0", function() {
+      deepEqual(tail(["-0", "lines"], fs), "");
     });
   });
 });
