@@ -5,7 +5,6 @@ const {
   extractCharacters,
   parseInput,
   retrieveData,
-  getContent,
   head,
   isZero,
   hasDash,
@@ -321,79 +320,6 @@ describe("head", function() {
       expectedOutput = "head: illegal byte count -- 10u";
       deepEqual(head(["-c10u", "file2"], fs), expectedOutput);
     });
-  });
-});
-
-describe("getContent", function() {
-  it("should return specified number of lines or bytes from file depends upon option", function() {
-    deepEqual(
-      getContent(["-n1", "lines"], existsSync, readFileSync),
-      "There are 5 types of lines:"
-    );
-    deepEqual(
-      getContent(["-n", "1", "lines"], existsSync, readFileSync),
-      "There are 5 types of lines:"
-    );
-    deepEqual(
-      getContent(["-1", "lines"], existsSync, readFileSync),
-      "There are 5 types of lines:"
-    );
-    deepEqual(getContent(["-c1", "lines"], existsSync, readFileSync), "T");
-    deepEqual(getContent(["-c", "1", "lines"], existsSync, readFileSync), "T");
-
-    expectedOutput =
-      "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-    deepEqual(
-      getContent(["-n3", "lines"], existsSync, readFileSync),
-      expectedOutput
-    );
-    deepEqual(
-      getContent(["-n", "3", "lines"], existsSync, readFileSync),
-      expectedOutput
-    );
-    deepEqual(
-      getContent(["-3", "lines"], existsSync, readFileSync),
-      expectedOutput
-    );
-    deepEqual(getContent(["-c3", "lines"], existsSync, readFileSync), "The");
-    deepEqual(
-      getContent(["-c", "3", "lines"], existsSync, readFileSync),
-      "The"
-    );
-  });
-
-  it("should return 10 lines By default if option and count is not specified", function() {
-    expectedOutput =
-      "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen";
-    deepEqual(
-      getContent(["numbers"], existsSync, readFileSync),
-      expectedOutput
-    );
-  });
-
-  it("should return formatted fileName with their contents for multiple files", function() {
-    expectedOutput =
-      "==> lines <==\nThere are 5 types of lines:\n\n==> lines <==\nThere are 5 types of lines:";
-    deepEqual(
-      getContent(["-n1", "lines", "lines"], existsSync, readFileSync),
-      expectedOutput
-    );
-    deepEqual(
-      getContent(["-n", "1", "lines", "lines"], existsSync, readFileSync),
-      expectedOutput
-    );
-    deepEqual(
-      getContent(["-1", "lines", "lines"], existsSync, readFileSync),
-      expectedOutput
-    );
-  });
-
-  it("should return error if file not exit", function() {
-    expectedOutput = "head: abc: No such file or directory";
-    deepEqual(
-      getContent(["-c10", "abc"], existsSync, readFileSync),
-      expectedOutput
-    );
   });
 });
 

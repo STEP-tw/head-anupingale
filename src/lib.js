@@ -48,6 +48,14 @@ const extractTailCharacters = function(file, numberOfCharacters) {
   return file.join("\n").slice(-numberOfCharacters);
 };
 
+const singleFileData = function(file, details) {
+  let { existsSync, readFileSync, count, funcRef, funcName } = details;
+  if (!existsSync(file)) {
+    return funcName + ": " + file + ": No such file or directory";
+  }
+  return funcRef(readFileSync(file, "utf8").split("\n"), count);
+};
+
 const parseInput = function(args) {
   let organizedInput = { option: "n", count: 10, files: args.slice(0) };
   if (hasOption(args[0])) {
@@ -94,31 +102,20 @@ const retrieveData = function(details, fileName) {
   return details;
 };
 
-const getContent = function(fileDetails, existsSync, readFileSync) {
-  let { option, count, files } = parseInput(fileDetails);
-  let getReference = { n: extractLines, c: extractCharacters };
-  let funcRef = getReference[option];
-  let details = {
-    contents: [],
-    existsSync,
-    count,
-    funcRef,
-    readFileSync,
-    delimeter: "",
-    funcName: "head"
-  };
-  if (files.length == 1) {
-    if (!existsSync(files[0])) {
-      return "head: " + files[0] + ": No such file or directory";
-    }
-    return funcRef(readFileSync(files[0], "utf8").split("\n"), count);
-  }
-  return files.reduce(retrieveData, details).contents.join("\n");
-};
-
 const head = function(fileDetails, fs) {
   const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
+  let getOutput = { n: extractLines, c: extractCharacters };
+  let funcRef = getOutput[option];
+  let details = {
+    contents: [],
+    existsSync,
+    readFileSync,
+    count: parseInt(count),
+    funcRef,
+    funcName: "head",
+    delimeter: ""
+  };
 
   if (isZero(fileDetails[0]) || count == 0) {
     return errors.invalidLineCount + "0";
@@ -133,13 +130,22 @@ const head = function(fileDetails, fs) {
       errors.illegalOption + fileDetails[0][1] + "\n" + errors.usageMessage
     );
   }
-  return getContent(fileDetails, existsSync, readFileSync);
+
+  if (files.length == 1) {
+    return singleFileData(files[0], {
+      existsSync,
+      readFileSync,
+      count,
+      funcRef,
+      funcName: "head"
+    });
+  }
+  return files.reduce(retrieveData, details).contents.join("\n");
 };
 
 const tail = function(fileDetails, fs) {
   const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
-
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
   let details = {
@@ -152,7 +158,7 @@ const tail = function(fileDetails, fs) {
     delimeter: ""
   };
 
-  if (files.includes("-0") || count == 0)  {
+  if (files.includes("-0") || count == 0) {
     return "";
   }
 
@@ -167,10 +173,13 @@ const tail = function(fileDetails, fs) {
   }
 
   if (files.length == 1) {
-    if (!existsSync(files[0])) {
-      return "tail: " + files[0] + ": No such file or directory";
-    }
-    return funcRef(readFileSync(files[0], "utf8").split("\n"), count);
+    return singleFileData(files[0], {
+      existsSync,
+      readFileSync,
+      count,
+      funcRef,
+      funcName: "tail"
+    });
   }
   return files.reduce(retrieveData, details).contents.join("\n");
 };
@@ -181,7 +190,6 @@ module.exports = {
   parseInput,
   retrieveData,
   head,
-  getContent,
   isZero,
   invalidCount,
   hasDash,
