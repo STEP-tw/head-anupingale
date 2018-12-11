@@ -136,7 +136,7 @@ const tail = function(fileDetails, fs) {
   let { option, count, files } = parseInput(fileDetails);
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
-  let details = {contents: [], existsSync, readFileSync, count: parseInt(count), funcRef, funcName: "head",delimeter: "" };
+  let details = {contents: [], existsSync, readFileSync, count: parseInt(count), funcRef, funcName: "tail",delimeter: "" };
 
   if(checkTail(fileDetails, count, files) != undefined) {
     return checkTail(fileDetails, count, files);
