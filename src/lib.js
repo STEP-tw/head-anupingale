@@ -50,6 +50,26 @@ const singleFileData = function(file, details) {
   return funcRef(readFileSync(file, "utf8").split("\n"), count);
 };
 
+const retrieveData = function(details, fileName) {
+  let {
+    delimeter,
+    readFileSync,
+    contents,
+    existsSync,
+    funcRef,
+    count,
+    funcName
+  } = details;
+  if (!existsSync(fileName)) {
+    contents.push(funcName + ": " + fileName + ": No such file or directory");
+    return details;
+  }
+  contents.push(delimeter + "==> " + fileName + " <==");
+  contents.push(funcRef(readFileSync(fileName, "utf8").split("\n"), count));
+  details.delimeter = "\n";
+  return details;
+};
+
 const checkHead = function(fileDetails, count, option) {
   if (isZero(fileDetails[0]) || count == 0) {
     return errors.invalidLineCount + "0";
@@ -69,8 +89,17 @@ const head = function(fileDetails, fs) {
   let { option, count, files } = parseInput(fileDetails);
   let getOutput = { n: extractLines, c: extractCharacters };
   let funcRef = getOutput[option];
-  let content = [];
-  let delimeter = "";
+ 
+  let details = {
+    contents: [],
+    existsSync,
+    readFileSync,
+    count: parseInt(count),
+    funcRef,
+    funcName: "head",
+    delimeter: ""
+  };
+
   if(checkHead(fileDetails, count, option) != undefined) {
     return checkHead(fileDetails, count, option);
   }
@@ -83,17 +112,7 @@ const head = function(fileDetails, fs) {
       funcName: "head"
     });
   }
-  for (let index = 0; index < files.length; index++) {
-    if (!existsSync(files[index])) {
-      content.push(funcName + ": " + file[index] + ": No such file or directory");
-    }
-    content.push(delimeter + "==> " + files[index] + " <==");
-    content.push(
-      funcRef(readFileSync(files[index], "utf8").split("\n"), count)
-    );
-    delimeter = "\n";
-  }
-  return content.join("\n");
+  return files.reduce(retrieveData, details).contents.join("\n");
 };
 
 const checkTail = function(fileDetails, count, files) {
@@ -117,32 +136,15 @@ const tail = function(fileDetails, fs) {
   let { option, count, files } = parseInput(fileDetails);
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
-  let content = [];
-  let delimeter = "";
+  let details = {contents: [], existsSync, readFileSync, count: parseInt(count), funcRef, funcName: "head",delimeter: "" };
+
   if(checkTail(fileDetails, count, files) != undefined) {
     return checkTail(fileDetails, count, files);
   }
   if (files.length == 1) {
-    return singleFileData(files[0], {
-      existsSync,
-      readFileSync,
-      count,
-      funcRef,
-      funcName: "tail"
-    });
+    return singleFileData(files[0], {existsSync, readFileSync,count,funcRef,funcName: "tail"});
   }
-
-  for (let index = 0; index < files.length; index++) {
-    if (!existsSync(files[index])) {
-      content.push(funcName + ": " + file[index] + ": No such file or directory");
-    }
-    content.push(delimeter + "==> " + files[index] + " <==");
-    content.push(
-    funcRef(readFileSync(files[index], "utf8").split("\n"), count)
-    );
-    delimeter = "\n";
-  }
-  return content.join("\n");
+  return files.reduce(retrieveData, details).contents.join("\n");
 };
 
 module.exports = {
@@ -157,6 +159,7 @@ module.exports = {
   extractTailCharacters,
   tail,
   hasOtherCharacters,
+  retrieveData,
   checkHead,
   checkTail
 };
