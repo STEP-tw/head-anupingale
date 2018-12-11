@@ -133,6 +133,7 @@ const extractTailCharacters = function(file, numberOfCharacters) {
 const tail = function(fileDetails, fs) {
   const {existsSync, readFileSync} = fs;
   let { option, count , files } = parseInput(fileDetails);
+  
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
   let details = {
@@ -145,6 +146,10 @@ const tail = function(fileDetails, fs) {
     delimeter : ""
   };
 
+  if(files.includes("-0") || count == 0) {
+    return "";
+  }
+
   if (isNaN(count)) {
     return  option == "n"
       ? "tail: illegal line count -- "+ count
@@ -152,7 +157,7 @@ const tail = function(fileDetails, fs) {
   }
 
   if (hasDash(fileDetails[0][0]) &&
-    fileDetails[0][1] != "c" &&
+      fileDetails[0][1] != "c" &&
     fileDetails[0][1] != "n" &&
     !parseInt(fileDetails[0])) {
     return "tail: illegal option -- " + fileDetails[0][1] + "\n" + "usage: tail [-n lines | -c bytes] [file ...]";

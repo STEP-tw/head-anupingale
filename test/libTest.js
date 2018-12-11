@@ -591,5 +591,13 @@ describe("tail", function() {
       expectedOutput = "tail: illegal byte count -- 10u";
       deepEqual(tail(["-c10u", "file2"], fs), expectedOutput);
     });
+
+    it('should return nothing when input is zero', function() {
+      deepEqual(tail(["-n0","lines"], fs), '');
+    });
+
+    it('should return nothing when input is -0', function() {
+      deepEqual(tail(["-0","lines"], fs), '');
+    });
   });
 });
