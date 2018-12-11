@@ -81,7 +81,11 @@ const head = function(fileDetails, fs) {
       funcName: "head"
     });
   }
+
   for (let index = 0; index < files.length; index++) {
+    if (!existsSync(files[index])) {
+      content.push(funcName + ": " + file[index] + ": No such file or directory");
+    }
     content.push(delimeter + "==> " + files[index] + " <==");
     content.push(
       funcRef(readFileSync(files[index], "utf8").split("\n"), count)
@@ -124,9 +128,12 @@ const tail = function(fileDetails, fs) {
   }
 
   for (let index = 0; index < files.length; index++) {
+    if (!existsSync(files[index])) {
+      content.push(funcName + ": " + file[index] + ": No such file or directory");
+    }
     content.push(delimeter + "==> " + files[index] + " <==");
     content.push(
-      funcRef(readFileSync(files[index], "utf8").split("\n"), count)
+    funcRef(readFileSync(files[index], "utf8").split("\n"), count)
     );
     delimeter = "\n";
   }
