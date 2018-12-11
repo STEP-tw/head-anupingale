@@ -144,16 +144,20 @@ const tail = function(fileDetails, fs) {
     funcName : "tail",
     delimeter : ""
   };
-  
-  if (isNaN(count - 0)) {
-    return invalidCount(option, count);
+
+  if (isNaN(count)) {
+    return  option == "n"
+      ? "tail: illegal line count -- "+ count
+      : "tail: illegal byte count -- " + count;
   }
+
   if (hasDash(fileDetails[0][0]) &&
     fileDetails[0][1] != "c" &&
     fileDetails[0][1] != "n" &&
     !parseInt(fileDetails[0])) {
-    return (errors.illegalOption + fileDetails[0][1] + "\n" + errors.usageMessage);
-  }
+    return "tail: illegal option -- " + fileDetails[0][1] + "\n" + "usage: tail [-n lines | -c bytes] [file ...]";
+     }
+
   if(files.length==1){
     if(!existsSync(files[0])){
       return "tail: "+files[0]+": No such file or directory";

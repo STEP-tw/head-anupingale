@@ -565,18 +565,18 @@ describe("tail", function() {
 
     it("should return error when invalid option is speciified", function() {
       expectedOutput =
-        "head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]";
+        "tail: illegal option -- z\nusage: tail [-n lines | -c bytes] [file ...]";
       deepEqual(tail(["-z", "lines"], fs), expectedOutput);
     });
 
     describe("should return error when count is invalid and having characters in it", function() {
       it("should return invalid line count when option(-n) and invalid count", function() {
-        expectedOutput = "head: illegal line count -- 10u";
+        expectedOutput = "tail: illegal line count -- 10u";
         deepEqual(tail(["-n10u", "lines"], fs), expectedOutput);
       });
 
       it("should return invalid byte count when option(-c) and invalid count", function() {
-        expectedOutput = "head: illegal byte count -- 10u";
+        expectedOutput = "tail: illegal byte count -- 10u";
         deepEqual(tail(["-c10u", "lines"], fs), expectedOutput);
       });
     });
@@ -588,7 +588,7 @@ describe("tail", function() {
     });
 
     it("should return illegal byte count when count is not a number", function() {
-      expectedOutput = "head: illegal byte count -- 10u";
+      expectedOutput = "tail: illegal byte count -- 10u";
       deepEqual(tail(["-c10u", "file2"], fs), expectedOutput);
     });
   });
