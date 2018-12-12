@@ -62,7 +62,6 @@ const getContent = function(fileDetails, fs, operation) {
   };
 
   if (files.length == 1) {
-    console.log(singleFileData(files[0], details));
     return singleFileData(files[0], details);
   }
   return files.reduce(retrieveData, details).contents.join("\n");
