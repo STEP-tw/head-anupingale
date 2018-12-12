@@ -1,8 +1,8 @@
 const { deepEqual } = require("assert");
 const {
   retrieveData,
-  extractLines,
-  extractCharacters,
+  extractHeadLines,
+  extractHeadCharacters,
   head,
   extractTailLines,
   extractTailCharacters,
@@ -39,49 +39,49 @@ const fs = { existsSync, readFileSync };
 let expectedOutput;
 let inputData;
 
-describe("extractLines", function() {
+describe("extractHeadLines", function() {
   it("should return empty string when typesOfLines is empty", function() {
-    deepEqual(extractLines([], 2), "");
+    deepEqual(extractHeadLines([], 2), "");
   });
 
   it("should return single line from typesOfLines when number of line is 1", function() {
     expectedOutput = "There are 5 types of lines:";
-    deepEqual(extractLines(typesOfLines, 1), expectedOutput);
+    deepEqual(extractHeadLines(typesOfLines, 1), expectedOutput);
   });
 
   it("should return specified number of lines joined with \\n ", function() {
     expectedOutput = "There are 5 types of lines:\nHorizontal line.";
-    deepEqual(extractLines(typesOfLines, 2), expectedOutput);
+    deepEqual(extractHeadLines(typesOfLines, 2), expectedOutput);
 
     expectedOutput =
       "There are 5 types of lines:\nHorizontal line.\nVertical line.";
-    deepEqual(extractLines(typesOfLines, 3), expectedOutput);
+    deepEqual(extractHeadLines(typesOfLines, 3), expectedOutput);
   });
 
   it("should return whole typesOfLines if length is not specified", function() {
     expectedOutput =
       "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.";
-    deepEqual(extractLines(typesOfLines), expectedOutput);
+    deepEqual(extractHeadLines(typesOfLines), expectedOutput);
   });
 });
 
-describe("extractCharacters", function() {
+describe("extractHeadCharacters", function() {
   it("should return empty string when typesOfLines is empty", function() {
-    deepEqual(extractCharacters([], 2), "");
+    deepEqual(extractHeadCharacters([], 2), "");
   });
 
   it("should return specified number of characters from typesOfLines", function() {
     expectedOutput = "T";
-    deepEqual(extractCharacters(typesOfLines, 1), expectedOutput);
+    deepEqual(extractHeadCharacters(typesOfLines, 1), expectedOutput);
 
     expectedOutput = "There ";
-    deepEqual(extractCharacters(typesOfLines, 6), expectedOutput);
+    deepEqual(extractHeadCharacters(typesOfLines, 6), expectedOutput);
   });
 
   it("should return whole typesOfLines if number of characters is not specified", function() {
     expectedOutput =
       "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.";
-    deepEqual(extractCharacters(typesOfLines), expectedOutput);
+    deepEqual(extractHeadCharacters(typesOfLines), expectedOutput);
   });
 });
 

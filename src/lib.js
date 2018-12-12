@@ -1,11 +1,11 @@
 const { parseInput, hasOption } = require("./parser.js");
 const { checkHead, checkTail } = require("./errorHandler.js");
 
-const extractLines = function(file, numberOfLines) {
+const extractHeadLines = function(file, numberOfLines) {
   return file.slice(0, numberOfLines).join("\n");
 };
 
-const extractCharacters = function(file, numberOfCharacters) {
+const extractHeadCharacters = function(file, numberOfCharacters) {
   return file.join("\n").slice(0, numberOfCharacters);
 };
 
@@ -48,7 +48,7 @@ const retrieveData = function(details, fileName) {
 const head = function(fileDetails, fs) {
   const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
-  let getOutput = { n: extractLines, c: extractCharacters };
+  let getOutput = { n: extractHeadLines, c: extractHeadCharacters };
   let funcRef = getOutput[option];
 
   let details = {
@@ -107,8 +107,8 @@ const tail = function(fileDetails, fs) {
 };
 
 module.exports = {
-  extractLines,
-  extractCharacters,
+  extractHeadLines,
+  extractHeadCharacters,
   head,
   hasOption,
   extractTailLines,
