@@ -1,30 +1,5 @@
-const {hasDash, parseInput, hasOption} = require("./parser.js");
-
-const errors = {
-  illegalOption: "head: illegal option -- ",
-  usageMessage: "usage: head [-n lines | -c bytes] [file ...]",
-  invalidLineCount: "head: illegal line count -- ",
-  invalidByteCount: "head: illegal byte count -- "
-};
-
-const isZero = function(value) {
-  return value == 0;
-};
-
-const invalidCount = function(option, count, functionName) {
-  return option == "n"
-    ? errors.invalidLineCount + count
-    : errors.invalidByteCount + count;
-};
-
-const hasOtherCharacters = function(fileDetails) {
-  return (
-    hasDash(fileDetails[0][0]) &&
-    fileDetails[0][1] != "c" &&
-    fileDetails[0][1] != "n" &&
-    !parseInt(fileDetails[0])
-  );
-};
+const {parseInput, hasOption} = require("./parser.js");
+const {checkHead, checkTail} = require("./errorHandler.js");
 
 const extractLines = function(file, numberOfLines) {
   return file.slice(0, numberOfLines).join("\n");
@@ -70,20 +45,6 @@ const retrieveData = function(details, fileName) {
   return details;
 };
 
-const checkHead = function(fileDetails, count, option) {
-  if (isZero(fileDetails[0]) || count == 0) {
-    return errors.invalidLineCount + "0";
-  }
-  if (isNaN(count - 0) || count < 1) {
-    return invalidCount(option, count);
-  }
-  if (hasOtherCharacters(fileDetails)) {
-    return (
-      errors.illegalOption + fileDetails[0][1] + "\n" + errors.usageMessage
-    );
-  }
-}
-
 const head = function(fileDetails, fs) {
   const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
@@ -115,22 +76,6 @@ const head = function(fileDetails, fs) {
   return files.reduce(retrieveData, details).contents.join("\n");
 };
 
-const checkTail = function(fileDetails, count, files) {
-  if (files.includes("-0") || count == 0) {
-    return "";
-  }
-
-  if (isNaN(count)) {
-    return "tail: illegal offset -- " + fileDetails[0].slice(2);
-  }
-
-  if (hasOtherCharacters(fileDetails)) {
-    let error = "tail: illegal option -- " + fileDetails[0][1] + "\n";
-    error += "usage: tail [-n lines | -c bytes] [file ...]";
-    return error;
-  }
-}
-
 const tail = function(fileDetails, fs) {
   const { existsSync, readFileSync } = fs;
   let { option, count, files } = parseInput(fileDetails);
@@ -151,14 +96,10 @@ module.exports = {
   extractLines,
   extractCharacters,
   head,
-  isZero,
-  invalidCount,
-  hasDash,
   hasOption,
   extractTailLines,
   extractTailCharacters,
   tail,
-  hasOtherCharacters,
   retrieveData,
   checkHead,
   checkTail

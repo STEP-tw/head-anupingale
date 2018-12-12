@@ -1,20 +1,16 @@
 const { deepEqual } = require("assert");
 const {
-  hasOtherCharacters,
   retrieveData,
   extractLines,
   extractCharacters,
   head,
-  isZero,
-  invalidCount,
   extractTailLines,
   extractTailCharacters,
-  tail,
-  checkHead,
-  checkTail
+  tail
 } = require("../src/lib.js");
 
 const {parseInput, hasOption, hasDash} = require("../src/parser.js");
+const {checkHead, checkTail, isZero, hasOtherCharacters, invalidCount} = require("../src/errorHandler.js");
 
 const typesOfLines = [
   "There are 5 types of lines:",
