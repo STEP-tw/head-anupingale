@@ -361,7 +361,7 @@ describe("tail", function() {
 describe("retrieveData", function() {
   let truthy = x => true;
   let falsy = x => false;
-   it("should keep function references as it is", function() {
+  it("should keep function references as it is", function() {
     inputData = {
       delimeter: "",
       readFileSync,
@@ -380,7 +380,8 @@ describe("retrieveData", function() {
     };
     deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
   });
-   it("should return fetched typesOfLines in contents key and change delimeter to \\n", function() {
+
+  it("should return fetched typesOfLines in contents key and change delimeter to \\n", function() {
     inputData = {
       delimeter: "",
       readFileSync,
@@ -399,7 +400,7 @@ describe("retrieveData", function() {
     };
     deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
   });
-   it("should return error if file not exit", function() {
+  it("should return error if file not exit", function() {
     inputData = {
       delimeter: "",
       readFileSync,

@@ -15,7 +15,7 @@ describe('checkHead', function() {
         expectedOutput = "head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]";
         deepEqual(checkHead(["-z","10","abc"], 10, "z"), expectedOutput);
     });
-  });
+  }); 
 
   describe("isZero", function() {
     it("should return true if the value is zero", function() {

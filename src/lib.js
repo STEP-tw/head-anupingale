@@ -1,5 +1,5 @@
-const {parseInput, hasOption} = require("./parser.js");
-const {checkHead, checkTail} = require("./errorHandler.js");
+const { parseInput, hasOption } = require("./parser.js");
+const { checkHead, checkTail } = require("./errorHandler.js");
 
 const extractLines = function(file, numberOfLines) {
   return file.slice(0, numberOfLines).join("\n");
@@ -50,7 +50,7 @@ const head = function(fileDetails, fs) {
   let { option, count, files } = parseInput(fileDetails);
   let getOutput = { n: extractLines, c: extractCharacters };
   let funcRef = getOutput[option];
- 
+
   let details = {
     contents: [],
     existsSync,
@@ -61,7 +61,7 @@ const head = function(fileDetails, fs) {
     delimeter: ""
   };
 
-  if(checkHead(fileDetails, count, option) != undefined) {
+  if (checkHead(fileDetails, count, option) != undefined) {
     return checkHead(fileDetails, count, option);
   }
   if (files.length == 1) {
@@ -81,13 +81,27 @@ const tail = function(fileDetails, fs) {
   let { option, count, files } = parseInput(fileDetails);
   let getOutput = { n: extractTailLines, c: extractTailCharacters };
   let funcRef = getOutput[option];
-  let details = {contents: [], existsSync, readFileSync, count: parseInt(count), funcRef, funcName: "tail",delimeter: "" };
+  let details = {
+    contents: [],
+    existsSync,
+    readFileSync,
+    count: parseInt(count),
+    funcRef,
+    funcName: "tail",
+    delimeter: ""
+  };
 
-  if(checkTail(fileDetails, count, files) != undefined) {
+  if (checkTail(fileDetails, count, files) != undefined) {
     return checkTail(fileDetails, count, files);
   }
   if (files.length == 1) {
-    return singleFileData(files[0], {existsSync, readFileSync,count,funcRef,funcName: "tail"});
+    return singleFileData(files[0], {
+      existsSync,
+      readFileSync,
+      count,
+      funcRef,
+      funcName: "tail"
+    });
   }
   return files.reduce(retrieveData, details).contents.join("\n");
 };
