@@ -1,5 +1,6 @@
 const { deepEqual } = require("assert");
 const {
+  getContent,
   retrieveData,
   extractHeadLines,
   extractHeadCharacters,
@@ -409,5 +410,70 @@ describe("retrieveData", function() {
       contents: [],
       count: 2
     };
+  });
+});
+
+
+describe("getContent", function() {
+  const readFileSync = function(fileName) {
+    let files = {
+      lines:
+        "There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.",
+      numbers: "One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen"
+    };
+    return files[fileName];
+  };
+
+  const existsSync = function(fileName) {
+    let files = ["lines", "numbers", "typesOfLines", "lineData", "digits"];
+    return files.includes(fileName);
+  };
+
+  const fs = { existsSync, readFileSync };
+  describe("should return specified number of lines or bytes from file depends upon option", function() {
+    it("should return lines when option(-n) and count are not seperated by space", function() {
+      deepEqual(getContent(["-n1", "lines"], fs, "tail"), "Perpendicular Lines.");
+
+      expectedOutput = "Eight\nNine\nTen";
+      deepEqual(getContent(["-n3", "numbers"], fs, "tail"), expectedOutput);
+    });
+
+    it("should return lines when option(-n) and count is seperated by spaces", function() {
+      deepEqual(getContent(["-n", "1", "numbers"], fs, "tail"), "Ten");
+
+      expectedOutput = "Eight\nNine\nTen";
+      deepEqual(getContent(["-n", "3", "numbers"], fs, "tail"), expectedOutput);
+    });
+
+    it("should return lines when only count is specified", function() {
+      deepEqual(getContent(["-1", "numbers"], fs, "tail"), "Ten");
+
+      expectedOutput = "Eight\nNine\nTen";
+      deepEqual(getContent(["-3", "numbers"], fs, "tail"), expectedOutput);
+    });
+
+    it("should return characters when option(-c) and count is specified", function() {
+      deepEqual(getContent(["-c1", "numbers"], fs, "tail"), "n");
+
+      deepEqual(getContent(["-c3", "numbers"], fs, "tail"), "Ten");
+    });
+
+    it("should return characters when option(-c) and count is seperated by spaces", function() {
+      deepEqual(getContent(["-c", "1", "numbers"], fs, "tail"), "n");
+      deepEqual(getContent(["-c", "3", "numbers"], fs, "tail"), "Ten");
+    });
+  });
+
+  describe("should return formatted fileName with their contents for multiple files", function() {
+    it("should return when option(-n) and count is specified", function() {
+      expectedOutput =
+        "==> lines <==\nPerpendicular Lines.\n\n==> numbers <==\nTen";
+      deepEqual(getContent(["-n1", "lines", "numbers"], fs, "tail"), expectedOutput);
+    });
+
+    it("should return when option(-c) and count is specified", function() {
+      expectedOutput = "==> lines <==\nes.\n\n==> numbers <==\nTen";
+      deepEqual(getContent(["-c", "3", "lines", "numbers"], fs, "tail"), expectedOutput);
+    });
   });
 });
