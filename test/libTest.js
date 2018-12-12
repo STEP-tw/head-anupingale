@@ -382,7 +382,7 @@ describe("retrieveData", function() {
     deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
   });
 
-  it("should return fetched typesOfLines in contents key and change delimeter to \\n", function() {
+ it("should return fetched typesOfLines in contents key and change delimeter to \\n", function() {
     inputData = {
       delimeter: "",
       readFileSync,
@@ -400,16 +400,6 @@ describe("retrieveData", function() {
       count: 2
     };
     deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
-  });
-  it("should return error if file not exit", function() {
-    inputData = {
-      delimeter: "",
-      readFileSync,
-      existsSync,
-      funcRef: truthy,
-      contents: [],
-      count: 2
-    };
   });
 });
 

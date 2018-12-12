@@ -37,6 +37,7 @@ const retrieveData = function(details, fileName) {
   } = details;
   if (!existsSync(fileName)) {
     contents.push(operation + ": " + fileName + ": No such file or directory");
+    details.delimeter = "\n";
     return details;
   }
   contents.push(delimeter + "==> " + fileName + " <==");
