@@ -421,7 +421,6 @@ describe("retrieveData", function() {
     };
     deepEqual(retrieveData(inputData, "abc"), expectedOutput);
   });
-  
 });
 
 
