@@ -401,6 +401,27 @@ describe("retrieveData", function() {
     };
     deepEqual(retrieveData(inputData, "lineData"), expectedOutput);
   });
+  
+  it('should return error when file is not exist', function() {
+    inputData = {
+      delimeter:"",
+      readFileSync,
+      existsSync,
+      contents:[],
+      count: 2,
+      operation:"head"
+    };
+    expectedOutput = {
+      delimeter:'\n',
+      readFileSync,
+      existsSync,
+      contents: ['head: abc: No such file or directory'],
+      count: 2,
+      operation:"head" 
+    };
+    deepEqual(retrieveData(inputData, "abc"), expectedOutput);
+  });
+  
 });
 
 
