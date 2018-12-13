@@ -1,5 +1,5 @@
 const { deepEqual } = require("assert");
-const {validateHeadArguments, checkTail, isZero, hasOtherCharacters, invalidCount} = require("../src/errorHandler.js");
+const {validateHeadArguments, validateTailArguments, isZero, hasOtherCharacters, invalidCount} = require("../src/errorHandler.js");
 
 describe('validateHeadArguments', function() {
     it('should return undefined if function condition is false', function() {
@@ -48,17 +48,17 @@ describe('validateHeadArguments', function() {
     });
   });  
 
-  describe('checkTail', function() {
+  describe('validateTailArguments', function() {
     it('should return undefined if function condition is false', function() {
-      deepEqual(checkTail(["n", "10","numbers"], 10, "n"), undefined);
+      deepEqual(validateTailArguments(["n", "10","numbers"], 10, "n"), undefined);
     });
   
     it('should return error if count is invalid', function() {
-      deepEqual(checkTail(["n","-0","tail"], 0, "n"), "");
+      deepEqual(validateTailArguments(["n","-0","tail"], 0, "n"), "");
     });
   
     it('should return error filename is invalid', function() {
         expectedOutput = "tail: illegal option -- z\nusage: tail [-n lines | -c bytes] [file ...]";
-        deepEqual(checkTail(["-z","10","abc"], 10, "z"), expectedOutput);
+        deepEqual(validateTailArguments(["-z","10","abc"], 10, "z"), expectedOutput);
     });
   });

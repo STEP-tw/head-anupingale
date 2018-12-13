@@ -1,5 +1,5 @@
 const { parseInput, hasOption } = require("./parser.js");
-const { validateHeadArguments, checkTail } = require("./errorHandler.js");
+const { validateHeadArguments, validateTailArguments } = require("./errorHandler.js");
 
 const extractHeadLines = function(file, numberOfLines) {
   return file.slice(0, numberOfLines).join("\n");
@@ -77,8 +77,8 @@ const head = function(fileDetails, fs) {
 
 const tail = function(fileDetails, fs) {
   let { option, count, files } = parseInput(fileDetails);
-  if (checkTail(fileDetails, count, files) != undefined) {
-    return checkTail(fileDetails, count, files);
+  if (validateTailArguments(fileDetails, count, files) != undefined) {
+    return validateTailArguments(fileDetails, count, files);
   }
   return getContent(fileDetails, fs, "tail");
 };
@@ -93,6 +93,6 @@ module.exports = {
   tail,
   retrieveData,
   validateHeadArguments,
-  checkTail,
+  validateTailArguments,
   getContent
 };

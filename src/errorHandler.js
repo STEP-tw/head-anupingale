@@ -33,7 +33,7 @@ const validateHeadArguments = function(fileDetails, count, option) {
     }
   }
 
-  const checkTail = function(fileDetails, count, files) {
+  const validateTailArguments = function(fileDetails, count, files) {
     if (files.includes("-0") || count == 0) {
       return "";
     }
@@ -49,4 +49,4 @@ const validateHeadArguments = function(fileDetails, count, option) {
     }
   }
 
-  module.exports = {validateHeadArguments, checkTail, isZero, hasOtherCharacters, invalidCount};
+  module.exports = {validateHeadArguments, validateTailArguments, isZero, hasOtherCharacters, invalidCount};
