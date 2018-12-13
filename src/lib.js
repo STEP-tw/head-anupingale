@@ -99,5 +99,6 @@ module.exports = {
 	validateHeadArguments,
 	validateTailArguments,
 	getContent,
-	singleFile
+	singleFile,
+	singleFileData
 };
