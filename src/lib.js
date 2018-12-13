@@ -4,6 +4,10 @@ const {
 	validateTailArguments
 } = require('./errorHandler.js');
 
+const has = function(arguments) {
+code
+}
+
 const extractHeadLines = function(file, numberOfLines) {
 	return file.slice(0, numberOfLines).join('\n');
 };
@@ -74,17 +78,16 @@ const getContent = function(fileDetails, fs, operation) {
 };
 
 const head = function(fileDetails, fs) {
-	let { option, count } = parseInput(fileDetails);
-	if (validateHeadArguments(fileDetails, count, option) != undefined) {
-		return validateHeadArguments(fileDetails, count, option);
-	}
-	return getContent(fileDetails, fs, 'head');
+  let { option, count } = parseInput(fileDetails);
+  let error = validateHeadArguments(fileDetails, count, option);
+	return error || getContent(fileDetails, fs, 'head');
 };
 
 const tail = function(fileDetails, fs) {
-	let { count, files } = parseInput(fileDetails);
-	if (validateTailArguments(fileDetails, count, files) != undefined) {
-		return validateTailArguments(fileDetails, count, files);
+  let { count, files } = parseInput(fileDetails);
+  let error = validateTailArguments(fileDetails, count, files);
+	if (error != undefined) {
+		return error;
 	}
 	return getContent(fileDetails, fs, 'tail');
 };
