@@ -1,5 +1,5 @@
 const { deepEqual } = require("assert");
-const {parseInput, hasOption, hasDash} = require("../src/parser.js");
+const {parseInput, hasValidOption, hasDash} = require("../src/parser.js");
 
 describe("parseInput", function() {
     describe("should seperate all arguments", function() {
@@ -61,17 +61,17 @@ describe("parseInput", function() {
     });
   });
   
-  describe("hasOption", function() {
+  describe("hasValidOption", function() {
     it("should return true if option(-n) is valid", function() {
-      deepEqual(hasOption("-n"), true);
+      deepEqual(hasValidOption("-n"), true);
     });
   
     it("should return true if option(-c) is valid", function() {
-      deepEqual(hasOption("-c"), true);
+      deepEqual(hasValidOption("-c"), true);
     });
   
     it("should return false it option is invalid", function() {
-      deepEqual(hasOption("-d"), false);
+      deepEqual(hasValidOption("-d"), false);
     });
   });
   

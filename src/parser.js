@@ -1,6 +1,6 @@
 const parseInput = function(args) {
 	let defaultParameters = { option: 'n', count: 10, files: args};
-	if (hasOption(args[0])) {
+	if (hasValidOption(args[0])) {
 		return {
 			option: args[0][1],
 			count: parseInt(args[1]),
@@ -28,12 +28,12 @@ const hasValidLength = function(args) {
   return args.length > 2 && hasDash(args);
 }
 
-const hasOption = function(option) {
+const hasValidOption = function(option) {
 	return option == '-c' || option == '-n';
 };
 
 const hasDash = function(option) {
-	return option.includes('-');
+	return option.startsWith('-');
 };
 
-module.exports = { parseInput, hasOption, hasDash };
+module.exports = { parseInput, hasValidOption, hasDash };
