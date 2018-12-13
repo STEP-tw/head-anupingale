@@ -24,7 +24,7 @@ const extractTailCharacters = function(file, numberOfCharacters) {
 	return file.join('\n').slice(-numberOfCharacters);
 };
 
-const singleFileData = function(file, details) {
+const fetchSingleFileData = function(file, details) {
 	let { existsSync, readFileSync, count, binaryFunc, operation } = details;
 	if (existsSync(file)) {
 		return binaryFunc(readFileSync(file, 'utf8').split('\n'), count);
@@ -64,7 +64,7 @@ const getContent = function(fileDetails, fs, operation) {
 		operation
 	};
 	if (singleFile(files)) {
-		return singleFileData(files[0], details);
+		return fetchSingleFileData(files[0], details);
 	}
 	let multipleFileData = fetchMultipleFileData.bind(null, details);
 	return files
@@ -100,5 +100,5 @@ module.exports = {
 	validateTailArguments,
 	getContent,
 	singleFile,
-	singleFileData
+	fetchSingleFileData
 };

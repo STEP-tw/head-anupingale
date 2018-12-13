@@ -1,7 +1,7 @@
 const { deepEqual } = require('assert');
 const {
   getContent,
-  singleFileData,
+  fetchSingleFileData,
 	fetchMultipleFileData,
 	extractHeadLines,
 	extractHeadCharacters,
@@ -491,7 +491,7 @@ describe('singleFile', function() {
 	});
 });
 
-describe('singleFileData', function() {
+describe('fetchSingleFileData', function() {
   let truthy = (x) => true;
 	details = {
 		readFileSync,
@@ -502,11 +502,11 @@ describe('singleFileData', function() {
   };
   it('should return result from the given file', function() {
     expectedOutput = true;
-    deepEqual(singleFileData("numbers", details), expectedOutput);
+    deepEqual(fetchSingleFileData("numbers", details), expectedOutput);
   });
 
   it('should return error if file name is invalid', function() {
     expectedOutput = "head: abc: No such file or directory";
-    deepEqual(singleFileData("abc", details), expectedOutput);
+    deepEqual(fetchSingleFileData("abc", details), expectedOutput);
   });
 });
