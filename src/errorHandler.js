@@ -19,7 +19,7 @@ const hasOtherCharacters = function(fileDetails) {
     );
   };
 
-const checkHead = function(fileDetails, count, option) {
+const validateHeadArguments = function(fileDetails, count, option) {
     if (isZero(fileDetails[0]) || count == 0) {
       return "head: illegal line count -- " + "0";
     }
@@ -49,4 +49,4 @@ const checkHead = function(fileDetails, count, option) {
     }
   }
 
-  module.exports = {checkHead, checkTail, isZero, hasOtherCharacters, invalidCount};
+  module.exports = {validateHeadArguments, checkTail, isZero, hasOtherCharacters, invalidCount};

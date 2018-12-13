@@ -1,19 +1,19 @@
 const { deepEqual } = require("assert");
-const {checkHead, checkTail, isZero, hasOtherCharacters, invalidCount} = require("../src/errorHandler.js");
+const {validateHeadArguments, checkTail, isZero, hasOtherCharacters, invalidCount} = require("../src/errorHandler.js");
 
-describe('checkHead', function() {
+describe('validateHeadArguments', function() {
     it('should return undefined if function condition is false', function() {
-      deepEqual(checkHead(["n", "10","numbers"], 10, "n"), undefined);
+      deepEqual(validateHeadArguments(["n", "10","numbers"], 10, "n"), undefined);
     });
   
     it('should return error if count is invalid', function() {
       expectedOutput = "head: illegal line count -- 0";
-      deepEqual(checkHead(["n","-0","head"], 0, "n"), expectedOutput);
+      deepEqual(validateHeadArguments(["n","-0","head"], 0, "n"), expectedOutput);
     });
   
     it('should return error filename is invalid', function() {
         expectedOutput = "head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]";
-        deepEqual(checkHead(["-z","10","abc"], 10, "z"), expectedOutput);
+        deepEqual(validateHeadArguments(["-z","10","abc"], 10, "z"), expectedOutput);
     });
   }); 
 
