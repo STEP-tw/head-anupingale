@@ -1,12 +1,12 @@
 const { deepEqual } = require('assert');
 const {
 	getContent,
-	extractHeadLines,
-	extractHeadCharacters,
+	getLinesFromTop,
+	getCharactersFromTop,
 	head,
 	isValidSingleFile,
-	extractTailLines,
-	extractTailCharacters,
+	getLinesFromBottom,
+	getCharactersFromBottom,
 	tail
 } = require('../src/lib.js');
 
@@ -34,49 +34,49 @@ const fs = { existsSync, readFileSync };
 let expectedOutput;
 let inputData;
 
-describe('extractHeadLines', function() {
+describe('getLinesFromTop', function() {
 	it('should return empty string when typesOfLines is empty', function() {
-		deepEqual(extractHeadLines('', 2), '');
+		deepEqual(getLinesFromTop('', 2), '');
 	});
 
 	it('should return single line from typesOfLines when number of line is 1', function() {
 		expectedOutput = 'There are 5 types of lines:';
-		deepEqual(extractHeadLines(typesOfLines, 1), expectedOutput);
+		deepEqual(getLinesFromTop(typesOfLines, 1), expectedOutput);
 	});
 
 	it('should return specified number of lines joined with \\n ', function() {
 		expectedOutput = 'There are 5 types of lines:\nHorizontal line.';
-		deepEqual(extractHeadLines(typesOfLines, 2), expectedOutput);
+		deepEqual(getLinesFromTop(typesOfLines, 2), expectedOutput);
 
 		expectedOutput =
 			'There are 5 types of lines:\nHorizontal line.\nVertical line.';
-		deepEqual(extractHeadLines(typesOfLines, 3), expectedOutput);
+		deepEqual(getLinesFromTop(typesOfLines, 3), expectedOutput);
 	});
 
 	it('should return whole typesOfLines if length is not specified', function() {
 		expectedOutput =
 			'There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.';
-		deepEqual(extractHeadLines(typesOfLines), expectedOutput);
+		deepEqual(getLinesFromTop(typesOfLines), expectedOutput);
 	});
 });
 
-describe('extractHeadCharacters', function() {
+describe('getCharactersFromTop', function() {
 	it('should return empty string when typesOfLines is empty', function() {
-		deepEqual(extractHeadCharacters('', 2), '');
+		deepEqual(getCharactersFromTop('', 2), '');
 	});
 
 	it('should return specified number of characters from typesOfLines', function() {
 		expectedOutput = 'T';
-		deepEqual(extractHeadCharacters(typesOfLines, 1), expectedOutput);
+		deepEqual(getCharactersFromTop(typesOfLines, 1), expectedOutput);
 
 		expectedOutput = 'There ';
-		deepEqual(extractHeadCharacters(typesOfLines, 6), expectedOutput);
+		deepEqual(getCharactersFromTop(typesOfLines, 6), expectedOutput);
 	});
 
 	it('should return whole typesOfLines if number of characters is not specified', function() {
 		expectedOutput =
 			'There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.';
-		deepEqual(extractHeadCharacters(typesOfLines), expectedOutput);
+		deepEqual(getCharactersFromTop(typesOfLines), expectedOutput);
 	});
 });
 
@@ -196,7 +196,7 @@ describe('head', function() {
 	});
 });
 
-describe('extractTailLines', function() {
+describe('getLinesFromBottom', function() {
 	let string = [];
 	let expectedOutput = '';
 
@@ -205,46 +205,46 @@ describe('extractTailLines', function() {
 	});
 
 	it('should return an empty string when empty array is given ', function() {
-		deepEqual(extractTailLines(''), '');
+		deepEqual(getLinesFromBottom(''), '');
 	});
 
 	it('should return a single line when multiple element array is given and length is one', function() {
 		expectedOutput = '10';
-		deepEqual(extractTailLines(string, 1), expectedOutput);
+		deepEqual(getLinesFromBottom(string, 1), expectedOutput);
 	});
 
 	it('should return a given number of lines when multiple element array is given ', function() {
 		expectedOutput = '8\n9\n10';
-		deepEqual(extractTailLines(string, 3), expectedOutput);
+		deepEqual(getLinesFromBottom(string, 3), expectedOutput);
 	});
 
 	it('should return whole file when multiple element array is given and number of lines is not specified', function() {
 		expectedOutput = '1\n2\n3\n4\n5\n6\n7\n8\n9\n10';
-		deepEqual(extractTailLines(string), expectedOutput);
+		deepEqual(getLinesFromBottom(string), expectedOutput);
 	});
 });
 
-describe('extractTailCharacters', function() {
+describe('getCharactersFromBottom', function() {
 	let string = [];
 	let expectedOutput = '';
 	string = '1\n2\n3\n4\n5\n6\n7\n8\n9\n10';
 
 	it('should return an empty string when empty array is given ', function() {
-		deepEqual(extractTailCharacters('', 2), '');
+		deepEqual(getCharactersFromBottom('', 2), '');
 	});
 
 	it('should return a single character when length given is one', function() {
-		deepEqual(extractTailCharacters(string, 1), '0');
+		deepEqual(getCharactersFromBottom(string, 1), '0');
 	});
 
 	it('should return a given number of characters when long text is given ', function() {
-		deepEqual(extractTailCharacters(string, 3), '\n10');
-		deepEqual(extractTailCharacters(string, 7), '\n8\n9\n10');
+		deepEqual(getCharactersFromBottom(string, 3), '\n10');
+		deepEqual(getCharactersFromBottom(string, 7), '\n8\n9\n10');
 	});
 
 	it('should return whole file when number of characters is not specified', function() {
 		expectedOutput = '1\n2\n3\n4\n5\n6\n7\n8\n9\n10';
-		deepEqual(extractTailCharacters(string), expectedOutput);
+		deepEqual(getCharactersFromBottom(string), expectedOutput);
 	});
 });
 

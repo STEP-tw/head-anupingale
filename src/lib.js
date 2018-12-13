@@ -8,30 +8,30 @@ const isValidSingleFile = function (fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
 };
 
-const extractHeadLines = function (file, count) {
+const getLinesFromTop = function (file, count) {
 	return file.split('\n').slice(0, count).join('\n');
 };
 
-const extractHeadCharacters = function (file, count) {
+const getCharactersFromTop = function (file, count) {
 	return file.split('').slice(0, count).join('');
 };
 
-const extractTailLines = function (file, count) {
+const getLinesFromBottom = function (file, count) {
 	return file.split('\n').slice(-count).join('\n');
 };
 
-const extractTailCharacters = function (file, count) {
+const getCharactersFromBottom = function (file, count) {
 	return file.split('').slice(-count).join('');
 };
 
 const extractContent = {
 	head: {
-		n: extractHeadLines,
-		c: extractHeadCharacters
+		n: getLinesFromTop,
+		c: getCharactersFromTop
 	},
 	tail: {
-		n: extractTailLines,
-		c: extractTailCharacters
+		n: getLinesFromBottom,
+		c: getCharactersFromBottom
 	}
 };
 
@@ -74,11 +74,11 @@ const tail = function (parameters, fs) {
 };
 
 module.exports = {
-	extractHeadLines,
-	extractHeadCharacters,
+	getLinesFromTop,
+	getCharactersFromTop,
 	head,
-	extractTailLines,
-	extractTailCharacters,
+	getLinesFromBottom,
+	getCharactersFromBottom,
 	tail,
 	validateHeadArguments,
 	validateTailArguments,
