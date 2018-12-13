@@ -4,7 +4,7 @@ const {
 	validateTailArguments
 } = require('./errorHandler.js');
 
-const singleFile = function(files) {
+const isSingleFile = function(files) {
 	return files.length == 1;
 };
 
@@ -37,9 +37,7 @@ const fetchMultipleFileData = function(details, fileContent, fileName) {
 	let { existsSync, count, binaryFunc, readFileSync, operation } = details;
 	if (existsSync(fileName)) {
 		contents.push(delimeter + '==> ' + fileName + ' <==');
-		contents.push(
-			binaryFunc(readFileSync(fileName, 'utf8').split('\n'), count)
-		);
+		contents.push(binaryFunc(readFileSync(fileName, 'utf8').split('\n'), count));
 		fileContent.delimeter = '\n';
 		return fileContent;
 	}
@@ -58,7 +56,7 @@ const getContent = function(fileDetails, fs, operation) {
 	let binaryFunc = reference[operation][option];
 	let details = { existsSync, count: parseInt(count), binaryFunc, readFileSync, operation};
 	let multipleFileData = fetchMultipleFileData.bind(null, details);
-	if (singleFile(files)) return fetchSingleFileData(files[0], details);
+	if (isSingleFile(files)) return fetchSingleFileData(files[0], details);
 	return files.reduce(multipleFileData, { contents: [], delimeter: '' }).contents.join('\n');
 };
 
@@ -89,6 +87,6 @@ module.exports = {
 	validateHeadArguments,
 	validateTailArguments,
 	getContent,
-	singleFile,
+	isSingleFile,
 	fetchSingleFileData
 };

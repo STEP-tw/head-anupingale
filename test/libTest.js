@@ -6,7 +6,7 @@ const {
 	extractHeadLines,
 	extractHeadCharacters,
 	head,
-	singleFile,
+	isSingleFile,
 	extractTailLines,
 	extractTailCharacters,
 	tail
@@ -469,11 +469,11 @@ describe('getContent', function() {
 
 describe('singleFile', function() {
 	it('should return true if it has a single file', function() {
-		deepEqual(singleFile(['abc']), true);
+		deepEqual(isSingleFile(['abc']), true);
 	});
 
 	it('should return false if it has more than one file', function() {
-		deepEqual(singleFile(['abc', 'numbers']), false);
+		deepEqual(isSingleFile(['abc', 'numbers']), false);
 	});
 });
 
