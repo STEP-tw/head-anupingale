@@ -1,7 +1,6 @@
 const { deepEqual } = require('assert');
 const {
 	getContent,
-	fetchMultipleFileData,
 	extractHeadLines,
 	extractHeadCharacters,
 	head,
@@ -185,7 +184,7 @@ describe('head', function() {
 		});
 
 		it('should return error if file not exits', function() {
-			fs.existsSync = (x) => false;
+			fs.existsSync = x => false;
 			expectedOutput = 'head: abc: No such file or directory';
 			deepEqual(head(['-c10', 'abc'], fs), expectedOutput);
 		});
@@ -354,38 +353,6 @@ describe('tail', function() {
 	});
 });
 
-describe('fetchMultipleFileData', function() {
-	let truthy = (x) => true;
-	details = {
-		readFileSync,
-		existsSync,
-		binaryFunc: truthy,
-		count: 2,
-		operation: 'head'
-	};
-	let multipleFileData = fetchMultipleFileData.bind(null, details);
-
-	it('should keep function references as it is', function() {
-		inputData = { delimeter: '', contents: [] };
-		expectedOutput = { delimeter: '\n', contents: ['==> lineData <==', true] };
-		deepEqual(multipleFileData(inputData, 'lineData'), expectedOutput);
-	});
-
-	it('should return fetched typesOfLines in contents key and change delimeter to \\n', function() {
-		inputData = { delimeter: '', contents: [] };
-		expectedOutput = { delimeter: '\n', contents: ['==> lineData <==', true] };
-		deepEqual(multipleFileData(inputData, 'lineData'), expectedOutput);
-	});
-
-	it('should return error when file is not exist', function() {
-		inputData = { delimeter: '', contents: [] };
-		expectedOutput = {
-			delimeter: '\n',
-			contents: ['head: abc: No such file or directory']
-		};
-		deepEqual(multipleFileData(inputData, 'abc'), expectedOutput);
-	});
-});
 
 describe('getContent', function() {
 	const readFileSync = function(fileName) {

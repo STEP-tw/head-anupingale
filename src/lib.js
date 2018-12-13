@@ -4,49 +4,29 @@ const {
 	validateTailArguments
 } = require('./errorHandler.js');
 
-const isValidSingleFile = function(fileNames, existsSync) {
+const isValidSingleFile = function (fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
 };
 
-const extractHeadLines = function(file, count) {
-	return file.split('\n').slice(0,count).join("\n");
+const extractHeadLines = function (file, count) {
+	return file.split('\n').slice(0, count).join('\n');
 };
 
-const extractHeadCharacters = function(file, count) {
-	return file.split('').slice(0,count).join('');
-}
-
-const extractTailLines = function(file, count) {
-	return file.split('\n').slice(-count).join("\n");
+const extractHeadCharacters = function (file, count) {
+	return file.split('').slice(0, count).join('');
 };
 
-const extractTailCharacters = function(file, count) {
-	return file.split('').slice(-count).join("");
+const extractTailLines = function (file, count) {
+	return file.split('\n').slice(-count).join('\n');
 };
 
-const fetchMultipleFileData = function(details, fileContent, fileName) {
-	let { contents, delimeter } = fileContent;
-	let { existsSync, count, binaryFunc, readFileSync, operation } = details;
-
-	if (existsSync(fileName)) {
-		contents.push(delimeter + '==> ' + fileName + ' <==');
-		contents.push(
-			binaryFunc(readFileSync(fileName, 'utf8'), count)
-		);
-		fileContent.delimeter = '\n';
-		return fileContent;
-	}
-
-	contents.push(operation + ': ' + fileName + ': No such file or directory');
-	fileContent.delimeter = '\n';
-
-	return fileContent;
+const extractTailCharacters = function (file, count) {
+	return file.split('').slice(-count).join('');
 };
-
 
 const extractContent = {
 	head: {
-		n: extractHeadLines,	
+		n: extractHeadLines,
 		c: extractHeadCharacters
 	},
 	tail: {
@@ -55,26 +35,34 @@ const extractContent = {
 	}
 };
 
-const getContent = function(parameters, fs, operation) {
+const getContent = function (parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parseInput(parameters);
 	let binaryFunc = extractContent[operation][option];
-	let details = { existsSync, count : parseInt(count), binaryFunc, readFileSync, operation }
+	let contents = [];
+	let delimeter = '';
 	if (isValidSingleFile(fileNames, existsSync))
-		return binaryFunc(readFileSync(fileNames[0], "utf8"), count);
-	let multipleFileData = fetchMultipleFileData.bind(null, details);
-	return fileNames
-		.reduce(multipleFileData, { contents: [], delimeter: '' })
-		.contents.join('\n');
+		return binaryFunc(readFileSync(fileNames[0], 'utf8'), count);
+
+	for (let index = 0; index < fileNames.length; index++) {
+		let fileContent = operation + ': ' + fileNames[index] + ': No such file or directory';
+		if (existsSync(fileNames[index])) {
+			fileContent = delimeter + '==> ' + fileNames[index] + ' <==\n';
+			fileContent += binaryFunc(readFileSync(fileNames[index], 'utf8'), count);
+			delimeter = '\n';
+		}
+		contents.push(fileContent);
+	}
+	return contents.join('\n');
 };
 
-const head = function(parameters, fs) {
+const head = function (parameters, fs) {
 	let { option, count } = parseInput(parameters);
 	let error = validateHeadArguments(parameters, count, option);
 	return error || getContent(parameters, fs, 'head');
 };
 
-const tail = function(parameters, fs) {
+const tail = function (parameters, fs) {
 	let { count, fileNames } = parseInput(parameters);
 	let error = validateTailArguments(parameters, count, fileNames);
 
@@ -92,7 +80,6 @@ module.exports = {
 	extractTailLines,
 	extractTailCharacters,
 	tail,
-	fetchMultipleFileData,
 	validateHeadArguments,
 	validateTailArguments,
 	getContent,
