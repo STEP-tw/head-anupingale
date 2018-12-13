@@ -32,7 +32,7 @@ const singleFileData = function(file, details) {
 	return operation + ': ' + file + ': No such file or directory';
 };
 
-const retrieveData = function(details, fileContent, fileName) {
+const fetchMultipleFileData = function(details, fileContent, fileName) {
 	let { contents, delimeter } = fileContent;
 	let { existsSync, count, binaryFunc, readFileSync, operation } = details;
 	if (existsSync(fileName)) {
@@ -66,7 +66,7 @@ const getContent = function(fileDetails, fs, operation) {
 	if (singleFile(files)) {
 		return singleFileData(files[0], details);
 	}
-	let multipleFileData = retrieveData.bind(null, details);
+	let multipleFileData = fetchMultipleFileData.bind(null, details);
 	return files
 		.reduce(multipleFileData, { contents: [], delimeter: '' })
 		.contents.join('\n');
@@ -95,7 +95,7 @@ module.exports = {
 	extractTailLines,
 	extractTailCharacters,
 	tail,
-	retrieveData,
+	fetchMultipleFileData,
 	validateHeadArguments,
 	validateTailArguments,
 	getContent,

@@ -2,7 +2,7 @@ const { deepEqual } = require('assert');
 const {
   getContent,
   singleFileData,
-	retrieveData,
+	fetchMultipleFileData,
 	extractHeadLines,
 	extractHeadCharacters,
 	head,
@@ -361,7 +361,7 @@ describe('tail', function() {
 	});
 });
 
-describe('retrieveData', function() {
+describe('fetchMultipleFileData', function() {
 	let truthy = (x) => true;
 	details = {
 		readFileSync,
@@ -370,7 +370,7 @@ describe('retrieveData', function() {
 		count: 2,
 		operation: 'head'
 	};
-	let multipleFileData = retrieveData.bind(null, details);
+	let multipleFileData = fetchMultipleFileData.bind(null, details);
 	it('should keep function references as it is', function() {
 		inputData = {
 			delimeter: '',
