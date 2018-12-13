@@ -367,7 +367,7 @@ describe("retrieveData", function() {
       delimeter: "",
       readFileSync,
       existsSync,
-      funcRef: truthy,
+      binaryFunc: truthy,
       contents: [],
       count: 2
     };
@@ -375,7 +375,7 @@ describe("retrieveData", function() {
       delimeter: "\n",
       readFileSync,
       existsSync,
-      funcRef: truthy,
+      binaryFunc: truthy,
       contents: ["==> lineData <==", true],
       count: 2
     };
@@ -387,7 +387,7 @@ describe("retrieveData", function() {
       delimeter: "",
       readFileSync,
       existsSync,
-      funcRef: truthy,
+      binaryFunc: truthy,
       contents: [],
       count: 2
     };
@@ -395,7 +395,7 @@ describe("retrieveData", function() {
       delimeter: "\n",
       readFileSync,
       existsSync,
-      funcRef: truthy,
+      binaryFunc: truthy,
       contents: ["==> lineData <==", true],
       count: 2
     };
