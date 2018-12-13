@@ -8,7 +8,7 @@ describe("parseInput", function() {
         expectedOutput = {
           option: "n",
           count: 10,
-          files: ["typesOfLines", "numbers"]
+          fileNames: ["typesOfLines", "numbers"]
         };
         deepEqual(parseInput(inputData), expectedOutput);
       });
@@ -18,7 +18,7 @@ describe("parseInput", function() {
         expectedOutput = {
           option: "n",
           count: 5,
-          files: ["typesOfLines", "numbers"]
+          fileNames: ["typesOfLines", "numbers"]
         };
         deepEqual(parseInput(inputData), expectedOutput);
       });
@@ -28,7 +28,7 @@ describe("parseInput", function() {
         expectedOutput = {
           option: "n",
           count: 10,
-          files: ["typesOfLines", "numbers"]
+          fileNames: ["typesOfLines", "numbers"]
         };
         deepEqual(parseInput(inputData), expectedOutput);
   
@@ -36,7 +36,7 @@ describe("parseInput", function() {
         expectedOutput = {
           option: "c",
           count: 10,
-          files: ["typesOfLines", "numbers"]
+          fileNames: ["typesOfLines", "numbers"]
         };
         deepEqual(parseInput(inputData), expectedOutput);
       });
@@ -46,7 +46,7 @@ describe("parseInput", function() {
         expectedOutput = {
           option: "n",
           count: 10,
-          files: ["typesOfLines", "numbers"]
+          fileNames: ["typesOfLines", "numbers"]
         };
         deepEqual(parseInput(inputData), expectedOutput);
   
@@ -54,7 +54,7 @@ describe("parseInput", function() {
         expectedOutput = {
           option: "c",
           count: 10,
-          files: ["typesOfLines", "numbers"]
+          fileNames: ["typesOfLines", "numbers"]
         };
         deepEqual(parseInput(inputData), expectedOutput);
       });

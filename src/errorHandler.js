@@ -4,7 +4,7 @@ const isZero = function(value) {
     return value == 0;
 };
 
-const invalidCount = function(option, count, functionName) {
+const invalidCount = function(option, count) {
     return option == "n"
       ? "head: illegal line count -- " + count
       : "head: illegal byte count -- " + count;
