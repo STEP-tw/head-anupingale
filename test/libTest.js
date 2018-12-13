@@ -1,12 +1,11 @@
 const { deepEqual } = require('assert');
 const {
 	getContent,
-	fetchSingleFileData,
 	fetchMultipleFileData,
 	extractHeadLines,
 	extractHeadCharacters,
 	head,
-	isSingleFile,
+	isValidSingleFile,
 	extractTailLines,
 	extractTailCharacters,
 	tail
@@ -467,32 +466,12 @@ describe('getContent', function() {
 	});
 });
 
-describe('singleFile', function() {
+describe('singleValidFile', function() {
 	it('should return true if it has a single file', function() {
-		deepEqual(isSingleFile(['abc']), true);
+		deepEqual(isValidSingleFile(['numbers'], existsSync), true);
 	});
 
 	it('should return false if it has more than one file', function() {
-		deepEqual(isSingleFile(['abc', 'numbers']), false);
-	});
-});
-
-describe('fetchSingleFileData', function() {
-	let truthy = (x) => true;
-	details = {
-		readFileSync,
-		existsSync,
-		binaryFunc: truthy,
-		count: 1,
-		operation: 'head'
-	};
-	it('should return result from the given file', function() {
-		expectedOutput = true;
-		deepEqual(fetchSingleFileData('numbers', details), expectedOutput);
-	});
-
-	it('should return error if file name is invalid', function() {
-		expectedOutput = 'head: abc: No such file or directory';
-		deepEqual(fetchSingleFileData('abc', details), expectedOutput);
+		deepEqual(isValidSingleFile(['abc', 'numbers'], existsSync), false);
 	});
 });
