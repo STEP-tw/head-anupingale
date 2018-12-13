@@ -11,14 +11,8 @@ const {
 	tail
 } = require('../src/lib.js');
 
-const typesOfLines = [
-	'There are 5 types of lines:',
-	'Horizontal line.',
-	'Vertical line.',
-	'Skew Lines.',
-	'Parallel Lines.',
-	'Perpendicular Lines.'
-];
+const typesOfLines =
+	'There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.';
 
 const readFileSync = function(fileName) {
 	let files = {
@@ -43,7 +37,7 @@ let inputData;
 
 describe('extractHeadLines', function() {
 	it('should return empty string when typesOfLines is empty', function() {
-		deepEqual(extractHeadLines([], 2), '');
+		deepEqual(extractHeadLines('', 2), '');
 	});
 
 	it('should return single line from typesOfLines when number of line is 1', function() {
@@ -69,7 +63,7 @@ describe('extractHeadLines', function() {
 
 describe('extractHeadCharacters', function() {
 	it('should return empty string when typesOfLines is empty', function() {
-		deepEqual(extractHeadCharacters([], 2), '');
+		deepEqual(extractHeadCharacters('', 2), '');
 	});
 
 	it('should return specified number of characters from typesOfLines', function() {
@@ -208,11 +202,11 @@ describe('extractTailLines', function() {
 	let expectedOutput = '';
 
 	beforeEach('Make string constant', function() {
-		string = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+		string = '1\n2\n3\n4\n5\n6\n7\n8\n9\n10';
 	});
 
 	it('should return an empty string when empty array is given ', function() {
-		deepEqual(extractTailLines([]), '');
+		deepEqual(extractTailLines(''), '');
 	});
 
 	it('should return a single line when multiple element array is given and length is one', function() {
@@ -234,10 +228,10 @@ describe('extractTailLines', function() {
 describe('extractTailCharacters', function() {
 	let string = [];
 	let expectedOutput = '';
-	string = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+	string = '1\n2\n3\n4\n5\n6\n7\n8\n9\n10';
 
 	it('should return an empty string when empty array is given ', function() {
-		deepEqual(extractTailCharacters([], 2), '');
+		deepEqual(extractTailCharacters('', 2), '');
 	});
 
 	it('should return a single character when length given is one', function() {

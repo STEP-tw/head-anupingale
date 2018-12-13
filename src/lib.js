@@ -8,20 +8,20 @@ const isValidSingleFile = function(fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
 };
 
-const extractHeadLines = function(file, numberOfLines) {
-	return file.slice(0, numberOfLines).join('\n');
+const extractHeadLines = function(file, count) {
+	return file.split('\n').slice(0,count).join("\n");
 };
 
-const extractHeadCharacters = function(file, numberOfCharacters) {
-	return file.join('\n').slice(0, numberOfCharacters);
+const extractHeadCharacters = function(file, count) {
+	return file.split('').slice(0,count).join('');
+}
+
+const extractTailLines = function(file, count) {
+	return file.split('\n').slice(-count).join("\n");
 };
 
-const extractTailLines = function(file, numberOfLines) {
-	return file.slice(-numberOfLines).join('\n');
-};
-
-const extractTailCharacters = function(file, numberOfCharacters) {
-	return file.join('\n').slice(-numberOfCharacters);
+const extractTailCharacters = function(file, count) {
+	return file.split('').slice(-count).join("");
 };
 
 const fetchSingleFileData = function(file, details) {
@@ -54,20 +54,12 @@ const fetchMultipleFileData = function(details, fileContent, fileName) {
 
 const extractContent = {
 	head: {
-		n: function(file, count) {
-			return file.split('\n').slice(0,count).join("\n");
-		},
-		c: function(file, count) {
-			return file.split('').slice(0,count).join('');
-		}
+		n: extractHeadLines,	
+		c: extractHeadCharacters
 	},
 	tail: {
-		n: function(file, count) {
-			return file.split('\n').slice(-count).join("\n");
-		},
-		c: function(file, count) {
-			return file.split('').slice(-count).join("");
-		}
+		n: extractTailLines,
+		c: extractTailCharacters
 	}
 };
 
