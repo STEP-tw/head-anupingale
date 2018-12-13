@@ -54,9 +54,9 @@ const reference = {
 	tail: { n: extractTailLines, c: extractTailCharacters }
 };
 
-const getContent = function(fileDetails, fs, operation) {
+const getContent = function(parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
-	let { option, count, fileNames } = parseInput(fileDetails);
+	let { option, count, fileNames } = parseInput(parameters);
 	
 	let binaryFunc = reference[operation][option];
 	let details = { existsSync, count: parseInt(count), binaryFunc, readFileSync, operation};
@@ -67,21 +67,21 @@ const getContent = function(fileDetails, fs, operation) {
 	return fileNames.reduce(multipleFileData, { contents: [], delimeter: '' }).contents.join('\n');
 };
 
-const head = function(fileDetails, fs) {
-	let { option, count } = parseInput(fileDetails);
-	let error = validateHeadArguments(fileDetails, count, option);
-	return error || getContent(fileDetails, fs, 'head');
+const head = function(parameters, fs) {
+	let { option, count } = parseInput(parameters);
+	let error = validateHeadArguments(parameters, count, option);
+	return error || getContent(parameters, fs, 'head');
 };
 
-const tail = function(fileDetails, fs) {
-	let { count, fileNames } = parseInput(fileDetails);
-	let error = validateTailArguments(fileDetails, count, fileNames);
+const tail = function(parameters, fs) {
+	let { count, fileNames } = parseInput(parameters);
+	let error = validateTailArguments(parameters, count, fileNames);
 
 	if (error != undefined) {
 		return error;
 	}
 
-	return getContent(fileDetails, fs, 'tail');
+	return getContent(parameters, fs, 'tail');
 };
 
 module.exports = {
