@@ -5,6 +5,7 @@ const {
   extractHeadLines,
   extractHeadCharacters,
   head,
+  singleFile,
   extractTailLines,
   extractTailCharacters,
   tail
@@ -485,5 +486,15 @@ describe("getContent", function() {
       expectedOutput = "==> lines <==\nes.\n\n==> numbers <==\nTen";
       deepEqual(getContent(["-c", "3", "lines", "numbers"], fs, "tail"), expectedOutput);
     });
+  });
+});
+
+describe('singleFile', function() {
+  it('should return true if it has a single file', function() {
+    deepEqual(singleFile(["abc"]), true);
+  });
+
+  it('should return false if it has more than one file', function() {
+    deepEqual(singleFile(["abc", "numbers"]), false);
   });
 });

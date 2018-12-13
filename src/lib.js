@@ -4,8 +4,8 @@ const {
 	validateTailArguments
 } = require('./errorHandler.js');
 
-const has = function(arguments) {
-code
+const singleFile = function(files) {
+  return files.length == 1;
 }
 
 const extractHeadLines = function(file, numberOfLines) {
@@ -71,7 +71,7 @@ const getContent = function(fileDetails, fs, operation) {
 		delimeter: ''
 	};
 
-	if (files.length == 1) {
+	if (singleFile(files)) {
 		return singleFileData(files[0], details);
 	}
 	return files.reduce(retrieveData, details).contents.join('\n');
@@ -103,5 +103,6 @@ module.exports = {
 	retrieveData,
 	validateHeadArguments,
 	validateTailArguments,
-	getContent
+  getContent,
+  singleFile
 };
