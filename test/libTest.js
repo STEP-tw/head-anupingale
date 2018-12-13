@@ -1,7 +1,7 @@
 const { deepEqual } = require('assert');
 const {
-  getContent,
-  fetchSingleFileData,
+	getContent,
+	fetchSingleFileData,
 	fetchMultipleFileData,
 	extractHeadLines,
 	extractHeadCharacters,
@@ -371,35 +371,21 @@ describe('fetchMultipleFileData', function() {
 		operation: 'head'
 	};
 	let multipleFileData = fetchMultipleFileData.bind(null, details);
+
 	it('should keep function references as it is', function() {
-		inputData = {
-			delimeter: '',
-			contents: []
-		};
-		expectedOutput = {
-			delimeter: '\n',
-			contents: ['==> lineData <==', true]
-		};
+		inputData = { delimeter: '', contents: [] };
+		expectedOutput = { delimeter: '\n', contents: ['==> lineData <==', true] };
 		deepEqual(multipleFileData(inputData, 'lineData'), expectedOutput);
 	});
 
 	it('should return fetched typesOfLines in contents key and change delimeter to \\n', function() {
-		inputData = {
-			delimeter: '',
-			contents: []
-		};
-		expectedOutput = {
-			delimeter: '\n',
-			contents: ['==> lineData <==', true]
-		};
+		inputData = { delimeter: '', contents: [] };
+		expectedOutput = { delimeter: '\n', contents: ['==> lineData <==', true] };
 		deepEqual(multipleFileData(inputData, 'lineData'), expectedOutput);
 	});
 
 	it('should return error when file is not exist', function() {
-		inputData = {
-			delimeter: '',
-			contents: []
-		};
+		inputData = { delimeter: '', contents: [] };
 		expectedOutput = {
 			delimeter: '\n',
 			contents: ['head: abc: No such file or directory']
@@ -492,21 +478,21 @@ describe('singleFile', function() {
 });
 
 describe('fetchSingleFileData', function() {
-  let truthy = (x) => true;
+	let truthy = (x) => true;
 	details = {
 		readFileSync,
 		existsSync,
 		binaryFunc: truthy,
 		count: 1,
 		operation: 'head'
-  };
-  it('should return result from the given file', function() {
-    expectedOutput = true;
-    deepEqual(fetchSingleFileData("numbers", details), expectedOutput);
-  });
+	};
+	it('should return result from the given file', function() {
+		expectedOutput = true;
+		deepEqual(fetchSingleFileData('numbers', details), expectedOutput);
+	});
 
-  it('should return error if file name is invalid', function() {
-    expectedOutput = "head: abc: No such file or directory";
-    deepEqual(fetchSingleFileData("abc", details), expectedOutput);
-  });
+	it('should return error if file name is invalid', function() {
+		expectedOutput = 'head: abc: No such file or directory';
+		deepEqual(fetchSingleFileData('abc', details), expectedOutput);
+	});
 });

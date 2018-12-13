@@ -56,20 +56,10 @@ const getContent = function(fileDetails, fs, operation) {
 		tail: { n: extractTailLines, c: extractTailCharacters }
 	};
 	let binaryFunc = reference[operation][option];
-	let details = {
-		existsSync,
-		count: parseInt(count),
-		binaryFunc,
-		readFileSync,
-		operation
-	};
-	if (singleFile(files)) {
-		return fetchSingleFileData(files[0], details);
-	}
+	let details = { existsSync, count: parseInt(count), binaryFunc, readFileSync, operation};
 	let multipleFileData = fetchMultipleFileData.bind(null, details);
-	return files
-		.reduce(multipleFileData, { contents: [], delimeter: '' })
-		.contents.join('\n');
+	if (singleFile(files)) return fetchSingleFileData(files[0], details);
+	return files.reduce(multipleFileData, { contents: [], delimeter: '' }).contents.join('\n');
 };
 
 const head = function(fileDetails, fs) {
