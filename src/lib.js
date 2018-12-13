@@ -32,25 +32,20 @@ const singleFileData = function(file, details) {
 	return operation + ': ' + file + ': No such file or directory';
 };
 
-const retrieveData = function(details, fileName) {
-	let {
-		delimeter,
-		readFileSync,
-		contents,
-		existsSync,
-		binaryFunc,
-		count,
-		operation
-	} = details;
+const retrieveData = function(details, fileContent, fileName) {
+	let { contents, delimeter } = fileContent;
+	let { existsSync, count, binaryFunc, readFileSync, operation } = details;
 	if (existsSync(fileName)) {
 		contents.push(delimeter + '==> ' + fileName + ' <==');
-		contents.push(binaryFunc(readFileSync(fileName, 'utf8').split('\n'), count));
-		details.delimeter = '\n';
-		return details;
+		contents.push(
+			binaryFunc(readFileSync(fileName, 'utf8').split('\n'), count)
+		);
+		fileContent.delimeter = '\n';
+		return fileContent;
 	}
 	contents.push(operation + ': ' + fileName + ': No such file or directory');
-	details.delimeter = '\n';
-	return details;
+	fileContent.delimeter = '\n';
+	return fileContent;
 };
 
 const getContent = function(fileDetails, fs, operation) {
@@ -62,19 +57,19 @@ const getContent = function(fileDetails, fs, operation) {
 	};
 	let binaryFunc = reference[operation][option];
 	let details = {
-		contents: [],
 		existsSync,
 		count: parseInt(count),
 		binaryFunc,
 		readFileSync,
-		operation,
-		delimeter: ''
+		operation
 	};
-
 	if (singleFile(files)) {
 		return singleFileData(files[0], details);
 	}
-	return files.reduce(retrieveData, details).contents.join('\n');
+	let multipleFileData = retrieveData.bind(null, details);
+	return files
+		.reduce(multipleFileData, { contents: [], delimeter: '' })
+		.contents.join('\n');
 };
 
 const head = function(fileDetails, fs) {
