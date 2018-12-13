@@ -1,4 +1,4 @@
-const { parseInput, hasOption } = require('./parser.js');
+const { parseInput} = require('./parser.js');
 const {
 	validateHeadArguments,
 	validateTailArguments
@@ -35,28 +35,35 @@ const fetchSingleFileData = function(file, details) {
 const fetchMultipleFileData = function(details, fileContent, fileName) {
 	let { contents, delimeter } = fileContent;
 	let { existsSync, count, binaryFunc, readFileSync, operation } = details;
+	
 	if (existsSync(fileName)) {
 		contents.push(delimeter + '==> ' + fileName + ' <==');
 		contents.push(binaryFunc(readFileSync(fileName, 'utf8').split('\n'), count));
 		fileContent.delimeter = '\n';
 		return fileContent;
 	}
+	
 	contents.push(operation + ': ' + fileName + ': No such file or directory');
 	fileContent.delimeter = '\n';
+	
 	return fileContent;
+};
+
+const reference = {
+	head: { n: extractHeadLines, c: extractHeadCharacters },
+	tail: { n: extractTailLines, c: extractTailCharacters }
 };
 
 const getContent = function(fileDetails, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, files } = parseInput(fileDetails);
-	let reference = {
-		head: { n: extractHeadLines, c: extractHeadCharacters },
-		tail: { n: extractTailLines, c: extractTailCharacters }
-	};
+	
 	let binaryFunc = reference[operation][option];
 	let details = { existsSync, count: parseInt(count), binaryFunc, readFileSync, operation};
 	let multipleFileData = fetchMultipleFileData.bind(null, details);
+
 	if (isSingleFile(files)) return fetchSingleFileData(files[0], details);
+
 	return files.reduce(multipleFileData, { contents: [], delimeter: '' }).contents.join('\n');
 };
 
@@ -69,9 +76,11 @@ const head = function(fileDetails, fs) {
 const tail = function(fileDetails, fs) {
 	let { count, files } = parseInput(fileDetails);
 	let error = validateTailArguments(fileDetails, count, files);
+
 	if (error != undefined) {
 		return error;
 	}
+
 	return getContent(fileDetails, fs, 'tail');
 };
 
@@ -79,7 +88,6 @@ module.exports = {
 	extractHeadLines,
 	extractHeadCharacters,
 	head,
-	hasOption,
 	extractTailLines,
 	extractTailCharacters,
 	tail,

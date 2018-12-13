@@ -47,4 +47,10 @@ const validateHeadArguments = function(fileDetails, count, option) {
     }
   }
 
-  module.exports = {validateHeadArguments, validateTailArguments, isZero, hasOtherCharacters, invalidCount};
+  module.exports = {
+    validateHeadArguments, 
+    validateTailArguments, 
+    isZero, 
+    hasOtherCharacters, 
+    invalidCount
+  };
