@@ -11,12 +11,10 @@ const invalidCount = function(option, count, functionName) {
   };
 
 const hasOtherCharacters = function(fileDetails) {
-    return (
-      hasDash(fileDetails[0][0]) &&
-      fileDetails[0][1] != "c" &&
-      fileDetails[0][1] != "n" &&
-      !parseInt(fileDetails[0])
-    );
+    let invalidOption = hasDash(fileDetails[0][0]) &&
+    fileDetails[0][1] != "c" &&
+    fileDetails[0][1] != "n";
+    return invalidOption && !parseInt(fileDetails[0]);
   };
 
 const validateHeadArguments = function(fileDetails, count, option) {
