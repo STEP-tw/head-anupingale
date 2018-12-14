@@ -17,8 +17,8 @@ const hasInvalidOption = function(fileDetails) {
   };
 
 const validateHeadArguments = function(fileDetails, count, option) {
-    if (isZero(fileDetails[0]) || count == 0) {
-      return "head: illegal line count -- " + "0";
+    if (isZero(fileDetails[0])) {
+      return "head: illegal line count -- 0";
     }
     if (isNaN(count - 0) || count < 1) {
       return invalidCount(option, count);
