@@ -1,5 +1,5 @@
 const { deepEqual } = require("assert");
-const {validateHeadArguments, validateTailArguments, isZero, hasOtherCharacters, invalidCount} = require("../src/errorHandler.js");
+const {validateHeadArguments, validateTailArguments, isZero, hasInvalidOption, invalidCount} = require("../src/errorHandler.js");
 
 describe('validateHeadArguments', function() {
     it('should return undefined if function condition is false', function() {
@@ -38,13 +38,13 @@ describe('validateHeadArguments', function() {
       deepEqual(invalidCount("c", 5), expectedOutput);
     });
   });
-  describe("hasOtherCharacters", function() {
+  describe("hasInvalidOption", function() {
     it("should return true if has chracters except options", function() {
-      deepEqual(hasOtherCharacters(["-z"]), true);
+      deepEqual(hasInvalidOption(["-z"]), true);
     });
   
     it("should return false if has option", function() {
-      deepEqual(hasOtherCharacters(["-n"]), false);
+      deepEqual(hasInvalidOption(["-n"]), false);
     });
   });  
 
