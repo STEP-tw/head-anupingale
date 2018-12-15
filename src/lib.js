@@ -4,32 +4,44 @@ const {
 	validateTailArguments
 } = require('./errorHandler.js');
 
-const isValidSingleFile = function (fileNames, existsSync) {
+const isValidSingleFile = function(fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
 };
 
-const displayFileNotFoundError = function (file, operation) {
-	return operation+ ": " + file + ": No such file or directory";
+const displayFileNotFoundError = function(file, operation) {
+	return operation + ': ' + file + ': No such file or directory';
 };
 
-const generateHeader = function (fileName) {
-	return "==> " + fileName + " <==\n";
+const generateHeader = function(fileName) {
+	return '==> ' + fileName + ' <==\n';
 };
 
-const getLinesFromTop = function (file, count) {
-	return file.split('\n').slice(0, count).join('\n');
+const getLinesFromTop = function(file, count) {
+	return file
+		.split('\n')
+		.slice(0, count)
+		.join('\n');
 };
 
-const getCharactersFromTop = function (file, count) {
-	return file.split('').slice(0, count).join('');
+const getCharactersFromTop = function(file, count) {
+	return file
+		.split('')
+		.slice(0, count)
+		.join('');
 };
 
-const getLinesFromBottom = function (file, count) {
-	return file.split('\n').slice(-count).join('\n');
+const getLinesFromBottom = function(file, count) {
+	return file
+		.split('\n')
+		.slice(-count)
+		.join('\n');
 };
 
-const getCharactersFromBottom = function (file, count) {
-	return file.split('').slice(-count).join('');
+const getCharactersFromBottom = function(file, count) {
+	return file
+		.split('')
+		.slice(-count)
+		.join('');
 };
 
 const extractContent = {
@@ -43,7 +55,7 @@ const extractContent = {
 	}
 };
 
-const getContent = function (parameters, fs, operation) {
+const getContent = function(parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
 	let getFileContent = extractContent[operation][option];
@@ -65,14 +77,14 @@ const getContent = function (parameters, fs, operation) {
 	return contents.join('\n');
 };
 
-const head = function (arguments, fs) {
+const head = function(arguments, fs) {
 	let parameters = parseInput(arguments);
 	let { option, count } = parameters;
 	let error = validateHeadArguments(arguments, count, option);
 	return error || getContent(parameters, fs, 'head');
 };
 
-const tail = function (arguments, fs) {
+const tail = function(arguments, fs) {
 	let parameters = parseInput(arguments);
 	let { count, fileNames } = parameters;
 	let error = validateTailArguments(arguments, count, fileNames);
