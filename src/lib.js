@@ -53,11 +53,11 @@ const getContent = function (parameters, fs, operation) {
 		return binaryFunc(readFileSync(fileNames[0], 'utf8'), count);
 	}
 
-	for (let index = 0; index < fileNames.length; index++) {
-		let fileContent = displayFileNotFoundError(fileNames[index], operation);
-		if (existsSync(fileNames[index])) {
-			fileContent = delimeter + generateHeader(fileNames[index]) + "\n";
-			fileContent += binaryFunc(readFileSync(fileNames[index], 'utf8'), count);
+	for (let file of fileNames) {
+		let fileContent = displayFileNotFoundError(file, operation);
+		if (existsSync(file)) {
+			fileContent = delimeter + generateHeader(file) + "\n";
+			fileContent += binaryFunc(readFileSync(file, 'utf8'), count);
 			delimeter = '\n';
 		}
 		contents.push(fileContent);
