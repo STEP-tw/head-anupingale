@@ -372,55 +372,67 @@ describe('getContent', function() {
 	const fs = { existsSync, readFileSync };
 	describe('should return specified number of lines or bytes from file depends upon option', function() {
 		it('should return lines when option(-n) and count are not seperated by space', function() {
+			inputData = {count :1, option:"n", fileNames:["lines"]};
 			deepEqual(
-				getContent(['-n1', 'lines'], fs, 'tail'),
+				getContent(inputData, fs, 'tail'),
 				'Perpendicular Lines.'
 			);
-
+			inputData = {count :3, option:"n", fileNames:["numbers"]};
 			expectedOutput = 'Eight\nNine\nTen';
-			deepEqual(getContent(['-n3', 'numbers'], fs, 'tail'), expectedOutput);
+			deepEqual(getContent(inputData, fs, 'tail'), expectedOutput);
 		});
 
 		it('should return lines when option(-n) and count is seperated by spaces', function() {
-			deepEqual(getContent(['-n', '1', 'numbers'], fs, 'tail'), 'Ten');
+			inputData = {count :1, option:"n", fileNames:["numbers"]};
+			deepEqual(getContent(inputData, fs, 'tail'), 'Ten');
 
+			inputData = {count :3, option:"n", fileNames:["numbers"]};
 			expectedOutput = 'Eight\nNine\nTen';
-			deepEqual(getContent(['-n', '3', 'numbers'], fs, 'tail'), expectedOutput);
+			deepEqual(getContent(inputData, fs, 'tail'), expectedOutput);
 		});
 
 		it('should return lines when only count is specified', function() {
-			deepEqual(getContent(['-1', 'numbers'], fs, 'tail'), 'Ten');
+			inputData = {count :1, option:"n", fileNames:["numbers"]};
+			deepEqual(getContent(inputData, fs, 'tail'), 'Ten');
 
+			inputData = {count :3, option:"n", fileNames:["numbers"]};
 			expectedOutput = 'Eight\nNine\nTen';
-			deepEqual(getContent(['-3', 'numbers'], fs, 'tail'), expectedOutput);
+			deepEqual(getContent(inputData, fs, 'tail'), expectedOutput);
 		});
 
 		it('should return characters when option(-c) and count is specified', function() {
-			deepEqual(getContent(['-c1', 'numbers'], fs, 'tail'), 'n');
+			inputData = {count :1, option:"c", fileNames:["numbers"]};
+			deepEqual(getContent(inputData, fs, 'tail'), 'n');
 
-			deepEqual(getContent(['-c3', 'numbers'], fs, 'tail'), 'Ten');
+			inputData = {count :3, option:"c", fileNames:["numbers"]};
+			deepEqual(getContent(inputData, fs, 'tail'), 'Ten');
 		});
 
 		it('should return characters when option(-c) and count is seperated by spaces', function() {
-			deepEqual(getContent(['-c', '1', 'numbers'], fs, 'tail'), 'n');
-			deepEqual(getContent(['-c', '3', 'numbers'], fs, 'tail'), 'Ten');
+			inputData = {count :1, option:"c", fileNames:["numbers"]};
+			deepEqual(getContent(inputData, fs, 'tail'), 'n');
+
+			inputData = {count :3, option:"c", fileNames:["numbers"]};
+			deepEqual(getContent(inputData, fs, 'tail'), 'Ten');
 		});
 	});
 
 	describe('should return formatted fileName with their contents for multiple files', function() {
 		it('should return when option(-n) and count is specified', function() {
+			inputData = {count :1, option:"n", fileNames:["lines","numbers"]};
 			expectedOutput =
 				'==> lines <==\nPerpendicular Lines.\n\n==> numbers <==\nTen';
 			deepEqual(
-				getContent(['-n1', 'lines', 'numbers'], fs, 'tail'),
+				getContent(inputData, fs, 'tail'),
 				expectedOutput
 			);
 		});
 
 		it('should return when option(-c) and count is specified', function() {
+			inputData = {count :3, option:"c", fileNames:["lines","numbers"]};
 			expectedOutput = '==> lines <==\nes.\n\n==> numbers <==\nTen';
 			deepEqual(
-				getContent(['-c', '3', 'lines', 'numbers'], fs, 'tail'),
+				getContent(inputData, fs, 'tail'),
 				expectedOutput
 			);
 		});

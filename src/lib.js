@@ -37,7 +37,7 @@ const extractContent = {
 
 const getContent = function (parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
-	let { option, count, fileNames } = parseInput(parameters);
+	let { option, count, fileNames } = parameters;
 	let binaryFunc = extractContent[operation][option];
 	let contents = [];
 	let delimeter = '';
@@ -56,15 +56,17 @@ const getContent = function (parameters, fs, operation) {
 	return contents.join('\n');
 };
 
-const head = function (parameters, fs) {
-	let { option, count } = parseInput(parameters);
-	let error = validateHeadArguments(parameters, count, option);
+const head = function (arguments, fs) {
+	let parameters = parseInput(arguments);
+	let { fileNames, option, count } = parameters;
+	let error = validateHeadArguments(arguments, count, option);
 	return error || getContent(parameters, fs, 'head');
 };
 
-const tail = function (parameters, fs) {
-	let { count, fileNames } = parseInput(parameters);
-	let error = validateTailArguments(parameters, count, fileNames);
+const tail = function (arguments, fs) {
+	let parameters = parseInput(arguments);
+	let {option, count, fileNames } = parameters;
+	let error = validateTailArguments(arguments, count, fileNames);
 
 	if (error != undefined) {
 		return error;
