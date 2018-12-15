@@ -7,7 +7,8 @@ const {
 	isValidSingleFile,
 	getLinesFromBottom,
 	getCharactersFromBottom,
-	tail
+	tail,
+	generateHeader
 } = require('../src/lib.js');
 
 const typesOfLines =
@@ -424,3 +425,19 @@ describe('singleValidFile', function() {
 		deepEqual(isValidSingleFile(['abc', 'numbers'], existsSync), false);
 	});
 });
+
+describe("generateHeader", function(){
+
+	it("should create a head line using a file name", function(){
+	 deepEqual(generateHeader("lib.js"), "==> lib.js <==");
+	 deepEqual(generateHeader("createHead.js"), "==> createHead.js <==");
+	});
+  
+	it("should create a head line when file name is empty", function(){
+	 deepEqual(generateHeader(""), "==>  <==");
+	});
+  
+	it("should create a head line when no file name is given", function(){
+	 deepEqual(generateHeader(), "==> undefined <==");
+	});
+  });

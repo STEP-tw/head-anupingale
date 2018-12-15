@@ -8,6 +8,10 @@ const isValidSingleFile = function (fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
 };
 
+const generateHeader = function(fileName) {
+	return "==> " + fileName + " <==";
+  };  
+
 const getLinesFromTop = function (file, count) {
 	return file.split('\n').slice(0, count).join('\n');
 };
@@ -41,13 +45,14 @@ const getContent = function (parameters, fs, operation) {
 	let binaryFunc = extractContent[operation][option];
 	let contents = [];
 	let delimeter = '';
-	if (isValidSingleFile(fileNames, existsSync))
+	if (isValidSingleFile(fileNames, existsSync)) {
 		return binaryFunc(readFileSync(fileNames[0], 'utf8'), count);
+	}
 
 	for (let index = 0; index < fileNames.length; index++) {
 		let fileContent = operation + ': ' + fileNames[index] + ': No such file or directory';
 		if (existsSync(fileNames[index])) {
-			fileContent = delimeter + '==> ' + fileNames[index] + ' <==\n';
+			fileContent = delimeter + generateHeader(fileNames[index])+"\n";
 			fileContent += binaryFunc(readFileSync(fileNames[index], 'utf8'), count);
 			delimeter = '\n';
 		}
@@ -83,5 +88,6 @@ module.exports = {
 	getCharactersFromBottom,
 	tail,
 	getContent,
-	isValidSingleFile
+	isValidSingleFile,
+	generateHeader
 };
