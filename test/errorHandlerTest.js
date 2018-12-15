@@ -4,7 +4,8 @@ const {
   validateTailArguments,
   isZero,
   hasInvalidOption,
-  invalidCount,
+  invalidCountError,
+  invalidOptionError,
   hasInvalidCount } = require("../src/errorHandler.js");
 
 describe('validateHeadArguments', function () {
@@ -33,15 +34,15 @@ describe("isZero", function () {
   });
 });
 
-describe("invalidCount", function () {
+describe("invalidCountError", function () {
   it("should return invalid line count if option is n", function () {
     expectedOutput = "head: illegal line count -- 5";
-    deepEqual(invalidCount("n", 5), expectedOutput);
+    deepEqual(invalidCountError("n", 5), expectedOutput);
   });
 
   it("should return invalid byte count if option is c", function () {
     expectedOutput = "head: illegal byte count -- 5";
-    deepEqual(invalidCount("c", 5), expectedOutput);
+    deepEqual(invalidCountError("c", 5), expectedOutput);
   });
 });
 describe("hasInvalidOption", function () {
@@ -76,5 +77,12 @@ describe('hasInvalidCount', function () {
 
   it('should return false if count is a number number and greater than 1 ', function () {
     deepEqual(hasInvalidCount(5), false);
+  });
+});
+
+describe('invalidOptionError', function () {
+  it('should return error when invalid option is specified', function () {
+    expectedOutput = "head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]"
+    deepEqual(invalidOptionError("z", "head"), expectedOutput);
   });
 });
