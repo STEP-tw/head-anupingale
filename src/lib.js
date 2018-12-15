@@ -13,7 +13,7 @@ const displayFileNotFoundError = function (file, operation) {
 };
 
 const generateHeader = function (fileName) {
-	return "==> " + fileName + " <==";
+	return "==> " + fileName + " <==\n";
 };
 
 const getLinesFromTop = function (file, count) {
@@ -46,18 +46,18 @@ const extractContent = {
 const getContent = function (parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
-	let binaryFunc = extractContent[operation][option];
+	let getFileContent = extractContent[operation][option];
 	let contents = [];
 	let delimeter = '';
 	if (isValidSingleFile(fileNames, existsSync)) {
-		return binaryFunc(readFileSync(fileNames[0], 'utf8'), count);
+		return getFileContent(readFileSync(fileNames[0], 'utf8'), count);
 	}
 
 	for (let file of fileNames) {
 		let fileContent = displayFileNotFoundError(file, operation);
 		if (existsSync(file)) {
-			fileContent = delimeter + generateHeader(file) + "\n";
-			fileContent += binaryFunc(readFileSync(file, 'utf8'), count);
+			fileContent = delimeter + generateHeader(file);
+			fileContent += getFileContent(readFileSync(file, 'utf8'), count);
 			delimeter = '\n';
 		}
 		contents.push(fileContent);

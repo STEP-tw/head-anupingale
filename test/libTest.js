@@ -404,16 +404,16 @@ describe('singleValidFile', function () {
 describe("generateHeader", function () {
 
 	it("should create a head line using a file name", function () {
-		deepEqual(generateHeader("lib.js"), "==> lib.js <==");
-		deepEqual(generateHeader("createHead.js"), "==> createHead.js <==");
+		deepEqual(generateHeader("lib.js"), "==> lib.js <==\n");
+		deepEqual(generateHeader("createHead.js"), "==> createHead.js <==\n");
 	});
 
 	it("should create a head line when file name is empty", function () {
-		deepEqual(generateHeader(""), "==>  <==");
+		deepEqual(generateHeader(""), "==>  <==\n");
 	});
 
 	it("should create a head line when no file name is given", function () {
-		deepEqual(generateHeader(), "==> undefined <==");
+		deepEqual(generateHeader(), "==> undefined <==\n");
 	});
 });
 
