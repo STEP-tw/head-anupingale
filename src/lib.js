@@ -76,7 +76,6 @@ const tail = function (arguments, fs) {
 	if (error != undefined) {
 		return error;
 	}
-
 	return getContent(parameters, fs, 'tail');
 };
 
