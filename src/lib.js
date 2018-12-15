@@ -82,8 +82,6 @@ module.exports = {
 	getLinesFromBottom,
 	getCharactersFromBottom,
 	tail,
-	validateHeadArguments,
-	validateTailArguments,
 	getContent,
 	isValidSingleFile
 };
