@@ -195,10 +195,7 @@ describe('head', function () {
 	});
 });
 
-describe('getLinesFromBottom', function () {
-	let string = [];
-	let expectedOutput = '';
-
+describe('getLinesFromBottom', function () {``
 	beforeEach('Make string constant', function () {
 		string = '1\n2\n3\n4\n5\n6\n7\n8\n9\n10';
 	});
