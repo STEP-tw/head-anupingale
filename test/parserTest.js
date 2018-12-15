@@ -1,4 +1,4 @@
-const { deepEqual } = require("assert");
+const assert = require("assert");
 const {parseInput, hasValidOption, hasDash} = require("../src/parser.js");
 
 describe("parseInput", function() {
@@ -10,7 +10,7 @@ describe("parseInput", function() {
           count: 10,
           fileNames: ["typesOfLines", "numbers"]
         };
-        deepEqual(parseInput(inputData), expectedOutput);
+        assert.deepEqual(parseInput(inputData), expectedOutput);
       });
   
       it("should give default option -n if option is not specified", function() {
@@ -20,7 +20,7 @@ describe("parseInput", function() {
           count: 5,
           fileNames: ["typesOfLines", "numbers"]
         };
-        deepEqual(parseInput(inputData), expectedOutput);
+        assert.deepEqual(parseInput(inputData), expectedOutput);
       });
   
       it("should seperate option and count when taken as single argument", function() {
@@ -30,7 +30,7 @@ describe("parseInput", function() {
           count: 10,
           fileNames: ["typesOfLines", "numbers"]
         };
-        deepEqual(parseInput(inputData), expectedOutput);
+        assert.deepEqual(parseInput(inputData), expectedOutput);
   
         inputData = ["-c10", "typesOfLines", "numbers"];
         expectedOutput = {
@@ -38,7 +38,7 @@ describe("parseInput", function() {
           count: 10,
           fileNames: ["typesOfLines", "numbers"]
         };
-        deepEqual(parseInput(inputData), expectedOutput);
+        assert.deepEqual(parseInput(inputData), expectedOutput);
       });
   
       it("should return option and count when seperated with spaces", function() {
@@ -48,7 +48,7 @@ describe("parseInput", function() {
           count: 10,
           fileNames: ["typesOfLines", "numbers"]
         };
-        deepEqual(parseInput(inputData), expectedOutput);
+        assert.deepEqual(parseInput(inputData), expectedOutput);
   
         inputData = ["-c", 10, "typesOfLines", "numbers"];
         expectedOutput = {
@@ -56,32 +56,32 @@ describe("parseInput", function() {
           count: 10,
           fileNames: ["typesOfLines", "numbers"]
         };
-        deepEqual(parseInput(inputData), expectedOutput);
+        assert.deepEqual(parseInput(inputData), expectedOutput);
       });
     });
   });
   
   describe("hasValidOption", function() {
     it("should return true if option(-n) is valid", function() {
-      deepEqual(hasValidOption("-n"), true);
+      assert.deepEqual(hasValidOption("-n"), true);
     });
   
     it("should return true if option(-c) is valid", function() {
-      deepEqual(hasValidOption("-c"), true);
+      assert.deepEqual(hasValidOption("-c"), true);
     });
   
     it("should return false it option is invalid", function() {
-      deepEqual(hasValidOption("-d"), false);
+      assert.deepEqual(hasValidOption("-d"), false);
     });
   });
   
 describe("hasDash", function() {
     it("should return true if the input includes dash", function() {
-      deepEqual(hasDash("-"), true);
+      assert.deepEqual(hasDash("-"), true);
     });
   
     it("should return false if the input has no dashes", function() {
-      deepEqual(hasDash(""), false);
+      assert.deepEqual(hasDash(""), false);
     });
   });
   
