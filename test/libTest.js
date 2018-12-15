@@ -8,7 +8,8 @@ const {
 	getLinesFromBottom,
 	getCharactersFromBottom,
 	tail,
-	generateHeader
+	generateHeader,
+	displayFileNotFoundError
 } = require('../src/lib.js');
 
 const typesOfLines =
@@ -415,3 +416,15 @@ describe("generateHeader", function () {
 		deepEqual(generateHeader(), "==> undefined <==");
 	});
 });
+
+describe('displayFileNotFoundError', function() {
+	it('should return file not found message with file name', () => {
+	  deepEqual(displayFileNotFoundError('myFile.txt', 'head'), 'head: myFile.txt: No such file or directory');
+	  deepEqual(displayFileNotFoundError('123.txt', 'head'), 'head: 123.txt: No such file or directory');
+	});
+  
+	it('should return file not found message with file name', () => {
+	  deepEqual(displayFileNotFoundError('myFile.txt', 'tail'), 'tail: myFile.txt: No such file or directory');
+	  deepEqual(displayFileNotFoundError('123.txt', 'tail'), 'tail: 123.txt: No such file or directory');
+	});
+  });

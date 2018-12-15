@@ -8,9 +8,13 @@ const isValidSingleFile = function (fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
 };
 
-const generateHeader = function(fileName) {
+const displayFileNotFoundError = function (file, operation) {
+	return operation+ ": " + file + ": No such file or directory";
+};
+
+const generateHeader = function (fileName) {
 	return "==> " + fileName + " <==";
-  };  
+};
 
 const getLinesFromTop = function (file, count) {
 	return file.split('\n').slice(0, count).join('\n');
@@ -50,9 +54,9 @@ const getContent = function (parameters, fs, operation) {
 	}
 
 	for (let index = 0; index < fileNames.length; index++) {
-		let fileContent = operation + ': ' + fileNames[index] + ': No such file or directory';
+		let fileContent = displayFileNotFoundError(fileNames[index], operation);
 		if (existsSync(fileNames[index])) {
-			fileContent = delimeter + generateHeader(fileNames[index])+"\n";
+			fileContent = delimeter + generateHeader(fileNames[index]) + "\n";
 			fileContent += binaryFunc(readFileSync(fileNames[index], 'utf8'), count);
 			delimeter = '\n';
 		}
@@ -63,14 +67,14 @@ const getContent = function (parameters, fs, operation) {
 
 const head = function (arguments, fs) {
 	let parameters = parseInput(arguments);
-	let {option, count } = parameters;
+	let { option, count } = parameters;
 	let error = validateHeadArguments(arguments, count, option);
 	return error || getContent(parameters, fs, 'head');
 };
 
 const tail = function (arguments, fs) {
 	let parameters = parseInput(arguments);
-	let {count, fileNames } = parameters;
+	let { count, fileNames } = parameters;
 	let error = validateTailArguments(arguments, count, fileNames);
 
 	if (error != undefined) {
@@ -88,5 +92,6 @@ module.exports = {
 	tail,
 	getContent,
 	isValidSingleFile,
-	generateHeader
+	generateHeader,
+	displayFileNotFoundError
 };
