@@ -58,14 +58,14 @@ const getContent = function (parameters, fs, operation) {
 
 const head = function (arguments, fs) {
 	let parameters = parseInput(arguments);
-	let { fileNames, option, count } = parameters;
+	let {option, count } = parameters;
 	let error = validateHeadArguments(arguments, count, option);
 	return error || getContent(parameters, fs, 'head');
 };
 
 const tail = function (arguments, fs) {
 	let parameters = parseInput(arguments);
-	let {option, count, fileNames } = parameters;
+	let {count, fileNames } = parameters;
 	let error = validateTailArguments(arguments, count, fileNames);
 
 	if (error != undefined) {
