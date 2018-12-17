@@ -1,5 +1,10 @@
 const assert = require('assert');
-const { parseInput, hasValidOption, hasDash } = require('../src/parser.js');
+const {
+	parseInput,
+	hasValidOption,
+	hasDash,
+	createObject
+} = require('../src/parser.js');
 
 describe('parseInput', function() {
 	describe('should seperate all arguments', function() {
@@ -82,5 +87,21 @@ describe('hasDash', function() {
 
 	it('should return false if the input has no dashes', function() {
 		assert.deepEqual(hasDash(''), false);
+	});
+});
+
+describe('createObject', function() {
+	it('should return object with given parameters', function() {
+		expectedOutput = { option: 'n', count: 3, fileNames: ['file1', 'file2'] };
+		assert.deepEqual(createObject('n', 3, ['file1', 'file2']), expectedOutput);
+	});
+
+	it('should return undefined values of object if values are not specified', function() {
+		expectedOutput = {
+			option: undefined,
+			count: undefined,
+			fileNames: undefined
+		};
+		assert.deepEqual(createObject(), expectedOutput);
 	});
 });
