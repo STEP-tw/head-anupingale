@@ -1,15 +1,12 @@
 const { parseInput } = require('./parser.js');
 const {
 	validateHeadArguments,
-	validateTailArguments
+	validateTailArguments,
+	displayFileNotFoundError
 } = require('./errorHandler.js');
 
 const isValidSingleFile = function(fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
-};
-
-const displayFileNotFoundError = function(file, operation) {
-	return operation + ': ' + file + ': No such file or directory';
 };
 
 const generateHeader = function(fileName) {
