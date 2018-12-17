@@ -13,60 +13,42 @@ const generateHeader = function(fileName) {
 	return '==> ' + fileName + ' <==\n';
 };
 
-const getLinesFromTop = function(file, count) {
+const seperator = { n: '\n', c: '' };
+
+const getHeadContent = function(file, count, option) {
 	return file
-		.split('\n')
+		.split(seperator[option])
 		.slice(0, count)
-		.join('\n');
+		.join(seperator[option]);
 };
 
-const getCharactersFromTop = function(file, count) {
+const getTailContent = function(file, count, option) {
 	return file
-		.split('')
-		.slice(0, count)
-		.join('');
-};
-
-const getLinesFromBottom = function(file, count) {
-	return file
-		.split('\n')
+		.split(seperator[option])
 		.slice(-count)
-		.join('\n');
-};
-
-const getCharactersFromBottom = function(file, count) {
-	return file
-		.split('')
-		.slice(-count)
-		.join('');
+		.join(seperator[option]);
 };
 
 const extractContent = {
-	head: {
-		n: getLinesFromTop,
-		c: getCharactersFromTop
-	},
-	tail: {
-		n: getLinesFromBottom,
-		c: getCharactersFromBottom
-	}
+	head: getHeadContent,
+	tail: getTailContent
 };
 
 const getContent = function(parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
-	let getFileContent = extractContent[operation][option];
+	let getFileContent = extractContent[operation];
 	let contents = [];
 	let delimeter = '';
 	if (isValidSingleFile(fileNames, existsSync)) {
-		return getFileContent(readFileSync(fileNames[0], 'utf8'), count);
+		return getFileContent(readFileSync(fileNames[0], 'utf8'), count, option);
 	}
 
 	for (let file of fileNames) {
 		let fileContent = displayFileNotFoundError(file, operation);
 		if (existsSync(file)) {
 			fileContent = delimeter + generateHeader(file);
-			fileContent += getFileContent(readFileSync(file, 'utf8'), count);
+			fileContent += getFileContent(readFileSync(file, 'utf8'), count, option);
 			delimeter = '\n';
 		}
 		contents.push(fileContent);
@@ -93,11 +75,9 @@ const tail = function(arguments, fs) {
 };
 
 module.exports = {
-	getLinesFromTop,
-	getCharactersFromTop,
 	head,
-	getLinesFromBottom,
-	getCharactersFromBottom,
+	getHeadContent,
+	getTailContent,
 	tail,
 	getContent,
 	isValidSingleFile,
