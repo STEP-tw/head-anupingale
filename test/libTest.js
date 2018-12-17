@@ -26,12 +26,12 @@ const existsSync = function(fileName) {
 	return files.includes(fileName);
 };
 
+const fs = { existsSync, readFileSync };
+
 let expectedOutput;
 let inputData;
 
 describe('head', function() {
-	const fs = { existsSync, readFileSync };
-
 	describe('should return specified number of lines or bytes from file depends upon option', function() {
 		it('should return lines when option(-n) and count are not seperated by space', function() {
 			deepEqual(head(['-n1', 'lines'], fs), 'There are 5 types of lines:');
@@ -86,7 +86,6 @@ describe('head', function() {
 
 	describe('Default option and count', function() {
 		it('should return 10 lines By default if option and count is not specified', function() {
-			fs.existsSync = (x) => true;
 			expectedOutput =
 				'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
 			deepEqual(head(['numbers'], fs), expectedOutput);
@@ -135,7 +134,6 @@ describe('head', function() {
 		});
 
 		it('should return error if file not exits', function() {
-			fs.existsSync = (x) => false;
 			expectedOutput = 'head: abc: No such file or directory';
 			deepEqual(head(['-c10', 'abc'], fs), expectedOutput);
 		});
@@ -238,8 +236,6 @@ describe('tail', function() {
 });
 
 describe('getContent', function() {
-	const fs = { existsSync, readFileSync };
-
 	describe('should return specified number of lines or bytes from file depends upon option', function() {
 		it('should return when operation tail is specified with count and option(-n)', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['lines'] };
