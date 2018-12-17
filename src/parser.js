@@ -1,5 +1,5 @@
 const parseInput = function(parameters) {
-	let defaultParameters = { option: 'n', count: 10, fileNames: parameters};
+	let defaultParameters = { option: 'n', count: 10, fileNames: parameters };
 	if (hasValidOption(parameters[0])) {
 		return {
 			option: parameters[0][1],
@@ -8,7 +8,7 @@ const parseInput = function(parameters) {
 		};
 	}
 	if (hasValidLength(parameters[0])) {
-	  return {
+		return {
 			option: parameters[0].slice(1, 2),
 			count: parameters[0].slice(2),
 			fileNames: parameters.slice(1)
@@ -25,8 +25,8 @@ const parseInput = function(parameters) {
 };
 
 const hasValidLength = function(parameters) {
-  return parameters.length > 2 && hasDash(parameters);
-}
+	return parameters.length > 2 && hasDash(parameters);
+};
 
 const hasValidOption = function(option) {
 	return option == '-c' || option == '-n';
