@@ -32,6 +32,14 @@ let expectedOutput;
 let inputData;
 
 describe('head', function() {
+	describe('Default option and count', function() {
+		it('should return 10 lines By default if option and count is not specified', function() {
+			expectedOutput =
+				'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
+			assert.deepEqual(head(['numbers'], fs), expectedOutput);
+		});
+	});
+
 	describe('should return specified number of lines or bytes from file depends upon option', function() {
 		it('should return lines when option(-n) and count are not seperated by space', function() {
 			assert.deepEqual(
@@ -93,14 +101,6 @@ describe('head', function() {
 		});
 	});
 
-	describe('Default option and count', function() {
-		it('should return 10 lines By default if option and count is not specified', function() {
-			expectedOutput =
-				'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
-			assert.deepEqual(head(['numbers'], fs), expectedOutput);
-		});
-	});
-
 	describe('error messages', function() {
 		it('should return error when invalid option is specified', function() {
 			expectedOutput = 'head: illegal line count -- 0';
@@ -130,18 +130,6 @@ describe('head', function() {
 			assert.deepEqual(head(['-z', 'lines'], fs), expectedOutput);
 		});
 
-		describe('should return error when count is invalid and having characters in it', function() {
-			it('should return invalid line count when option(-n) and invalid count', function() {
-				expectedOutput = 'head: illegal line count -- 10u';
-				assert.deepEqual(head(['-n10u', 'lines'], fs), expectedOutput);
-			});
-
-			it('should return invalid byte count when option(-c) and invalid count', function() {
-				expectedOutput = 'head: illegal byte count -- 10u';
-				assert.deepEqual(head(['-c10u', 'lines'], fs), expectedOutput);
-			});
-		});
-
 		it('should return error if file not exits', function() {
 			expectedOutput = 'head: abc: No such file or directory';
 			assert.deepEqual(head(['-c10', 'abc'], fs), expectedOutput);
@@ -152,10 +140,34 @@ describe('head', function() {
 			assert.deepEqual(head(['-c10u', 'file2'], fs), expectedOutput);
 		});
 	});
+
+	describe('should return error when count is invalid and having characters in it', function() {
+		it('should return invalid line count when option(-n) and invalid count', function() {
+			expectedOutput = 'head: illegal line count -- 10u';
+			assert.deepEqual(head(['-n10u', 'lines'], fs), expectedOutput);
+		});
+
+		it('should return invalid byte count when option(-c) and invalid count', function() {
+			expectedOutput = 'head: illegal byte count -- 10u';
+			assert.deepEqual(head(['-c10u', 'lines'], fs), expectedOutput);
+		});
+	});
 });
 
 describe('tail', function() {
-	const fs = { existsSync, readFileSync };
+	describe('Default option and count', function() {
+		it('should return 10 lines By default if option and count is not specified', function() {
+			expectedOutput =
+				'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
+			assert.deepEqual(tail(['numbers'], fs), expectedOutput);
+		});
+
+		it('should return error when invalid option is specified', function() {
+			expectedOutput =
+				'tail: illegal option -- z\nusage: tail [-n lines | -c bytes] [file ...]';
+			assert.deepEqual(tail(['-z', 'lines'], fs), expectedOutput);
+		});
+	});
 
 	describe('should return specified number of lines or bytes from file depends upon option', function() {
 		it('should return lines when option(-n) and count are not seperated by space', function() {
@@ -207,43 +219,29 @@ describe('tail', function() {
 		});
 	});
 
-	describe('Default option and count', function() {
-		it('should return 10 lines By default if option and count is not specified', function() {
-			expectedOutput =
-				'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
-			assert.deepEqual(tail(['numbers'], fs), expectedOutput);
-		});
-
-		it('should return error when invalid option is specified', function() {
-			expectedOutput =
-				'tail: illegal option -- z\nusage: tail [-n lines | -c bytes] [file ...]';
-			assert.deepEqual(tail(['-z', 'lines'], fs), expectedOutput);
-		});
-
-		describe('should return error when count is invalid and having characters in it', function() {
-			it('should return illegal when option(-n) and invalid count', function() {
-				expectedOutput = 'tail: illegal offset -- 10u';
-				assert.deepEqual(tail(['-n10u', 'lines'], fs), expectedOutput);
-			});
-		});
-
-		it('should return error if file not exits', function() {
-			expectedOutput = 'tail: abc: No such file or directory';
-			assert.deepEqual(tail(['-c10', 'abc'], fs), expectedOutput);
-		});
-
-		it('should return illegal byte count when count is not a number', function() {
+	describe('should return error when count is invalid and having characters in it', function() {
+		it('should return illegal when option(-n) and invalid count', function() {
 			expectedOutput = 'tail: illegal offset -- 10u';
-			assert.deepEqual(tail(['-c10u', 'file2'], fs), expectedOutput);
+			assert.deepEqual(tail(['-n10u', 'lines'], fs), expectedOutput);
 		});
+	});
 
-		it('should return nothing when input is zero', function() {
-			assert.deepEqual(tail(['-n0', 'lines'], fs), '');
-		});
+	it('should return error if file not exits', function() {
+		expectedOutput = 'tail: abc: No such file or directory';
+		assert.deepEqual(tail(['-c10', 'abc'], fs), expectedOutput);
+	});
 
-		it('should return nothing when input is -0', function() {
-			assert.deepEqual(tail(['-0', 'lines'], fs), '');
-		});
+	it('should return illegal byte count when count is not a number', function() {
+		expectedOutput = 'tail: illegal offset -- 10u';
+		assert.deepEqual(tail(['-c10u', 'file2'], fs), expectedOutput);
+	});
+
+	it('should return nothing when input is zero', function() {
+		assert.deepEqual(tail(['-n0', 'lines'], fs), '');
+	});
+
+	it('should return nothing when input is -0', function() {
+		assert.deepEqual(tail(['-0', 'lines'], fs), '');
 	});
 });
 
