@@ -15,40 +15,39 @@ const generateHeader = function(fileName) {
 
 const seperator = { n: '\n', c: '' };
 
-const getHeadContent = function(file, count, option) {
+const getSpecifiedContent = function(file, option, count, operation) {
+	let ranges = { head: [0, count], tail: [-count] };
+	let range = ranges[operation];
 	return file
 		.split(seperator[option])
-		.slice(0, count)
+		.slice(range[0], range[1])
 		.join(seperator[option]);
-};
-
-const getTailContent = function(file, count, option) {
-	return file
-		.split(seperator[option])
-		.slice(-count)
-		.join(seperator[option]);
-};
-
-const extractContent = {
-	head: getHeadContent,
-	tail: getTailContent
 };
 
 const getContent = function(parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
-	let getFileContent = extractContent[operation];
 	let contents = [];
 	let delimeter = '';
 	if (isValidSingleFile(fileNames, existsSync)) {
-		return getFileContent(readFileSync(fileNames[0], 'utf8'), count, option);
+		return getSpecifiedContent(
+			readFileSync(fileNames[0], 'utf8'),
+			option,
+			count,
+			operation
+		);
 	}
 
 	for (let file of fileNames) {
 		let fileContent = displayFileNotFoundError(file, operation);
 		if (existsSync(file)) {
 			fileContent = delimeter + generateHeader(file);
-			fileContent += getFileContent(readFileSync(file, 'utf8'), count, option);
+			fileContent += getSpecifiedContent(
+				readFileSync(file, 'utf8'),
+				option,
+				count,
+				operation
+			);
 			delimeter = '\n';
 		}
 		contents.push(fileContent);
@@ -76,8 +75,7 @@ const tail = function(arguments, fs) {
 
 module.exports = {
 	head,
-	getHeadContent,
-	getTailContent,
+	getSpecifiedContent,
 	tail,
 	getContent,
 	isValidSingleFile,

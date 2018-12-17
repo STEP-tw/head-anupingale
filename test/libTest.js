@@ -3,8 +3,7 @@ const {
 	getContent,
 	head,
 	isValidSingleFile,
-	getHeadContent,
-	getTailContent,
+	getSpecifiedContent,
 	tail,
 	generateHeader
 } = require('../src/lib.js');
@@ -329,28 +328,37 @@ describe('generateHeader', function() {
 	});
 });
 
-describe('getHeadContent', function() {
+describe('getSpecifiedContent', function() {
 	let numbers = 'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
 	it('should return head content when -n is given as option', function() {
 		expectedOutput = 'One\nTwo\nThree';
-		assert.deepEqual(getHeadContent(numbers, 3, 'n'), expectedOutput);
+		assert.deepEqual(
+			getSpecifiedContent(numbers, 'n', 3, 'head'),
+			expectedOutput
+		);
+	});
+
+	it('should return tail content when -c is given as option', function() {
+		expectedOutput = 'Ten';
+		assert.deepEqual(
+			getSpecifiedContent(numbers, 'c', 3, 'tail'),
+			expectedOutput
+		);
+	});
+
+	it('should return tail content when -n is given as option', function() {
+		expectedOutput = 'Eight\nNine\nTen';
+		assert.deepEqual(
+			getSpecifiedContent(numbers, 'n', 3, 'tail'),
+			expectedOutput
+		);
 	});
 
 	it('should return head content when -c is given as option', function() {
 		expectedOutput = 'One';
-		assert.deepEqual(getHeadContent(numbers, 3, 'c'), expectedOutput);
-	});
-});
-
-describe('getTailContent', function() {
-	let numbers = 'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
-	it('should return head content when -n is given as option', function() {
-		expectedOutput = 'Eight\nNine\nTen';
-		assert.deepEqual(getTailContent(numbers, 3, 'n'), expectedOutput);
-	});
-
-	it('should return head content when -c is given as option', function() {
-		expectedOutput = 'Ten';
-		assert.deepEqual(getTailContent(numbers, 3, 'c'), expectedOutput);
+		assert.deepEqual(
+			getSpecifiedContent(numbers, 'c', 3, 'head'),
+			expectedOutput
+		);
 	});
 });
