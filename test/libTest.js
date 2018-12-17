@@ -22,7 +22,7 @@ const readFileSync = function(fileName) {
 };
 
 const existsSync = function(fileName) {
-	let files = ['lines', 'numbers', 'typesOfLines', 'lineData', 'digits'];
+	let files = ['lines', 'numbers', 'lineData', 'digits'];
 	return files.includes(fileName);
 };
 

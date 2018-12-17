@@ -26,7 +26,7 @@ describe('validateHeadArguments', function() {
 		);
 	});
 
-	it('should return error filename is invalid', function() {
+	it('should return error when option is invalid', function() {
 		expectedOutput =
 			'head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]';
 		assert.deepEqual(
