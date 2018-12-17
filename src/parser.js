@@ -14,7 +14,7 @@ const createObject = function(option, count, fileNames) {
 	return { option, count, fileNames };
 };
 
-const parseInput = function(args) {
+const parse = function(args) {
 	let defaultArgs = { option: 'n', count: 10, fileNames: args };
 	if (hasValidOption(args[0])) {
 		return createObject(args[0][1], parseInt(args[1]), args.slice(2));
@@ -29,7 +29,7 @@ const parseInput = function(args) {
 };
 
 module.exports = {
-	parseInput,
+	parse,
 	hasValidOption,
 	hasDash,
 	createObject

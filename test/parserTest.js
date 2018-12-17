@@ -1,12 +1,12 @@
 const assert = require('assert');
 const {
-	parseInput,
+	parse,
 	hasValidOption,
 	hasDash,
 	createObject
 } = require('../src/parser.js');
 
-describe('parseInput', function() {
+describe('parse', function() {
 	describe('should seperate all arguments', function() {
 		it('should give default option -n and count 10 when both are not specified', function() {
 			inputData = ['typesOfLines', 'numbers'];
@@ -15,7 +15,7 @@ describe('parseInput', function() {
 				count: 10,
 				fileNames: ['typesOfLines', 'numbers']
 			};
-			assert.deepEqual(parseInput(inputData), expectedOutput);
+			assert.deepEqual(parse(inputData), expectedOutput);
 		});
 
 		it('should give default option -n if option is not specified', function() {
@@ -25,7 +25,7 @@ describe('parseInput', function() {
 				count: 5,
 				fileNames: ['typesOfLines', 'numbers']
 			};
-			assert.deepEqual(parseInput(inputData), expectedOutput);
+			assert.deepEqual(parse(inputData), expectedOutput);
 		});
 
 		it('should seperate option and count when taken as single argument', function() {
@@ -35,7 +35,7 @@ describe('parseInput', function() {
 				count: 10,
 				fileNames: ['typesOfLines', 'numbers']
 			};
-			assert.deepEqual(parseInput(inputData), expectedOutput);
+			assert.deepEqual(parse(inputData), expectedOutput);
 
 			inputData = ['-c10', 'typesOfLines', 'numbers'];
 			expectedOutput = {
@@ -43,7 +43,7 @@ describe('parseInput', function() {
 				count: 10,
 				fileNames: ['typesOfLines', 'numbers']
 			};
-			assert.deepEqual(parseInput(inputData), expectedOutput);
+			assert.deepEqual(parse(inputData), expectedOutput);
 		});
 
 		it('should return option and count when seperated with spaces', function() {
@@ -53,7 +53,7 @@ describe('parseInput', function() {
 				count: 10,
 				fileNames: ['typesOfLines', 'numbers']
 			};
-			assert.deepEqual(parseInput(inputData), expectedOutput);
+			assert.deepEqual(parse(inputData), expectedOutput);
 
 			inputData = ['-c', 10, 'typesOfLines', 'numbers'];
 			expectedOutput = {
@@ -61,7 +61,7 @@ describe('parseInput', function() {
 				count: 10,
 				fileNames: ['typesOfLines', 'numbers']
 			};
-			assert.deepEqual(parseInput(inputData), expectedOutput);
+			assert.deepEqual(parse(inputData), expectedOutput);
 		});
 	});
 });

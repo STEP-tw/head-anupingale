@@ -1,4 +1,4 @@
-const { parseInput } = require('./parser.js');
+const { parse } = require('./parser.js');
 const {
 	validateHeadArguments,
 	validateTailArguments,
@@ -56,14 +56,14 @@ const getContent = function(parameters, fs, operation) {
 };
 
 const head = function(arguments, fs) {
-	let parameters = parseInput(arguments);
+	let parameters = parse(arguments);
 	let { option, count } = parameters;
 	let error = validateHeadArguments(arguments, count, option);
 	return error || getContent(parameters, fs, 'head');
 };
 
 const tail = function(arguments, fs) {
-	let parameters = parseInput(arguments);
+	let parameters = parse(arguments);
 	let { count, fileNames } = parameters;
 	let error = validateTailArguments(arguments, count, fileNames);
 
