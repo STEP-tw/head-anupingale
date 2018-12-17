@@ -160,12 +160,6 @@ describe('tail', function() {
 				'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
 			assert.deepEqual(tail(['numbers'], fs), expectedOutput);
 		});
-
-		it('should return error when invalid option is specified', function() {
-			expectedOutput =
-				'tail: illegal option -- z\nusage: tail [-n lines | -c bytes] [file ...]';
-			assert.deepEqual(tail(['-z', 'lines'], fs), expectedOutput);
-		});
 	});
 
 	describe('should return specified number of lines or bytes from file depends upon option', function() {

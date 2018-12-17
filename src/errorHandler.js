@@ -1,5 +1,3 @@
-const { hasDash } = require('./parser.js');
-
 const isZero = function(value) {
 	return value == 0;
 };
@@ -8,14 +6,11 @@ const hasInvalidCount = function(count) {
 	return isNaN(count) || count < 1;
 };
 
-const invalidOptionError = function(option, operation) {
+const invalidOptionError = function(option) {
 	return (
-		operation +
-		': illegal option -- ' +
+		'head: illegal option -- ' +
 		option +
-		'\nusage: ' +
-		operation +
-		' [-n lines | -c bytes] [file ...]'
+		'\nusage: head [-n lines | -c bytes] [file ...]'
 	);
 };
 
@@ -27,35 +22,46 @@ const invalidCountError = function(option, count) {
 	return errors[option] + count;
 };
 
-const hasInvalidOption = function(parameters) {
-	let invalidOption =
-		hasDash(parameters[0]) && !['n', 'c'].includes(parameters[1]);
-	return invalidOption && !parseInt(parameters);
+const hasInvalidOption = function(option) {
+	return !['n', 'c'].includes(option);
 };
 
-const validateHeadArguments = function(parameters, count, option) {
-	if (isZero(parameters[0])) {
+const validateHeadArguments = function(parameters) {
+	let { option, count, fileNames } = parameters;
+
+	if (hasInvalidOption(option)) {
+		return invalidOptionError(option);
+	}
+
+	if (isZero(count) || fileNames.includes('-0')) {
 		return 'head: illegal line count -- 0';
 	}
+
 	if (hasInvalidCount(count)) {
 		return invalidCountError(option, count);
 	}
-	if (hasInvalidOption(parameters[0])) {
-		return invalidOptionError(parameters[0][1], 'head');
-	}
 };
 
-const validateTailArguments = function(parameters, count, files) {
-	if (files.includes('-0') || count == 0) {
+const validateTailArguments = function(parameters) {
+	let { option, count, fileNames } = parameters;
+	if (isZero(count) || fileNames.includes('-0')) {
 		return '';
 	}
 
 	if (isNaN(count)) {
-		return 'tail: illegal offset -- ' + parameters[0].slice(2);
+		return 'tail: illegal offset -- ' + count;
 	}
 
-	if (hasInvalidOption(parameters[0])) {
-		return invalidOptionError(parameters[0][1], 'tail');
+	if (count < 0) {
+		return 'tail: illegal offset -- ' + count.slice(1);
+	}
+
+	if (hasInvalidOption(option)) {
+		return (
+			'tail: illegal option -- ' +
+			option +
+			'usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]'
+		);
 	}
 };
 

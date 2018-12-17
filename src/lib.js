@@ -55,18 +55,15 @@ const getContent = function(parameters, fs, operation) {
 	return contents.join('\n');
 };
 
-const head = function(arguments, fs) {
-	let parameters = parse(arguments);
-	let { option, count } = parameters;
-	let error = validateHeadArguments(arguments, count, option);
+const head = function(args, fs) {
+	let parameters = parse(args);
+	let error = validateHeadArguments(parameters);
 	return error || getContent(parameters, fs, 'head');
 };
 
-const tail = function(arguments, fs) {
-	let parameters = parse(arguments);
-	let { count, fileNames } = parameters;
-	let error = validateTailArguments(arguments, count, fileNames);
-
+const tail = function(args, fs) {
+	let parameters = parse(args);
+	let error = validateTailArguments(parameters);
 	if (error != undefined) {
 		return error;
 	}

@@ -19,10 +19,11 @@ describe('parse', function() {
 		});
 
 		it('should give default option -n if option is not specified', function() {
-			inputData = [-5, 'typesOfLines', 'numbers'];
+			inputData = ['-5', 'typesOfLines', 'numbers'];
 			expectedOutput = {
 				option: 'n',
 				count: 5,
+
 				fileNames: ['typesOfLines', 'numbers']
 			};
 			assert.deepEqual(parse(inputData), expectedOutput);
@@ -73,10 +74,6 @@ describe('hasValidOption', function() {
 
 	it('should return true if option(-c) is valid', function() {
 		assert.deepEqual(hasValidOption('-c'), true);
-	});
-
-	it('should return false it option is invalid', function() {
-		assert.deepEqual(hasValidOption('-d'), false);
 	});
 });
 

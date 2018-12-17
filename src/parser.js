@@ -2,8 +2,14 @@ const hasValidLength = function(args) {
 	return args.length > 2 && hasDash(args);
 };
 
+const isCharacterOption = function(givenOption) {
+	let isNotAlphabet = !givenOption[1].match(/[A-z]/);
+	let length = givenOption.length;
+	return !isNotAlphabet && length == 2;
+};
+
 const hasValidOption = function(option) {
-	return option == '-c' || option == '-n';
+	return isCharacterOption(option);
 };
 
 const hasDash = function(option) {
@@ -15,17 +21,18 @@ const createObject = function(option, count, fileNames) {
 };
 
 const parse = function(args) {
-	let defaultArgs = { option: 'n', count: 10, fileNames: args };
+	if (args[0].startsWith('-') && !isNaN(args[0])) {
+		return createObject('n', Math.abs(args[0]), args.slice(1));
+	}
 	if (hasValidOption(args[0])) {
-		return createObject(args[0][1], parseInt(args[1]), args.slice(2));
+		return createObject(args[0][1], args[1], args.slice(2));
 	}
 	if (hasValidLength(args[0])) {
 		return createObject(args[0].slice(1, 2), args[0].slice(2), args.slice(1));
 	}
-	if (parseInt(args[0])) {
-		return createObject('n', Math.abs(args[0]), args.slice(1));
+	if (!args[0].startsWith('-')) {
+		return { option: 'n', count: 10, fileNames: args };
 	}
-	return defaultArgs;
 };
 
 module.exports = {
