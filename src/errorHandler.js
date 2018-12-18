@@ -28,7 +28,7 @@ const invalidCountError = function(option, count) {
 };
 
 const hasInvalidOption = function(option) {
-	return !['n', 'c', 'n ', 'c '].includes(option);
+	return !['n', 'c'].includes(option);
 };
 
 const validateArguments = function(parameters, operation) {

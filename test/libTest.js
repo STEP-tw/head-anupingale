@@ -252,4 +252,17 @@ describe('fetchContent', function() {
 			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
 		});
 	});
+	describe('file not exist', function() {
+		it('should return file not found error message if file is invalid', function() {
+			inputData = { count: '10', option: 'n', fileNames: ['abc'] };
+			expectedOutput = 'head: abc: No such file or directory';
+			assert.deepEqual(fetchContent(inputData, fs, 'head'), expectedOutput);
+		});
+
+		it('should return file not found error message if file is invalid', function() {
+			inputData = { count: '10', option: 'n', fileNames: ['abc'] };
+			expectedOutput = 'tail: abc: No such file or directory';
+			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+		});
+	});
 });
