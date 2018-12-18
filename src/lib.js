@@ -13,15 +13,15 @@ const generateHeader = function(fileName) {
 	return '==> ' + fileName + ' <==\n';
 };
 
-const seperator = { n: '\n', c: '' };
+const seperators = { n: '\n', c: '' };
 
 const getSpecifiedContent = function(file, option, count, operation) {
 	let ranges = { head: [0, count], tail: [-count] };
 	let range = ranges[operation];
 	return file
-		.split(seperator[option])
+		.split(seperators[option])
 		.slice(range[0], range[1])
-		.join(seperator[option]);
+		.join(seperators[option]);
 };
 
 const getContent = function(parameters, fs, operation) {
