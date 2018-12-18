@@ -72,7 +72,7 @@ describe('hasInvalidOption', function() {
 describe('validateTailArguments', function() {
 	it('should treat zero as valid count', function() {
 		inputData = { option: 'n', count: '0', fileNames: ['numbers'] };
-		assert.deepEqual(validateTailArguments(inputData), '');
+		assert.deepEqual(validateTailArguments(inputData), ' ');
 	});
 
 	it('should return error if count is not a number', function() {

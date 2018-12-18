@@ -230,11 +230,11 @@ describe('tail', function() {
 	});
 
 	it('should return nothing when input is zero', function() {
-		assert.deepEqual(tail(['-n0', 'lines'], fs), '');
+		assert.deepEqual(tail(['-n0', 'lines'], fs), ' ');
 	});
 
 	it('should return nothing when input is -0', function() {
-		assert.deepEqual(tail(['-0', 'lines'], fs), '');
+		assert.deepEqual(tail(['-0', 'lines'], fs), ' ');
 	});
 });
 

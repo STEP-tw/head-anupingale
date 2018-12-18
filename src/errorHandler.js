@@ -45,7 +45,7 @@ const validateHeadArguments = function(parameters) {
 const validateTailArguments = function(parameters) {
 	let { option, count, fileNames } = parameters;
 	if (isZero(count) || fileNames.includes('-0')) {
-		return '';
+		return ' ';
 	}
 
 	if (isNaN(count)) {

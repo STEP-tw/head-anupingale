@@ -22,7 +22,7 @@ const parse = function(args) {
 		return createObject(args[0][1], args[1], args.slice(2));
 	}
 	if (hasValidLength(args[0])) {
-		return createObject(args[0].slice(1, 2), args[0].slice(2), args.slice(1));
+		return createObject(args[0][1], args[0].slice(2), args.slice(1));
 	}
 	return { option: 'n', count: 10, fileNames: args };
 };

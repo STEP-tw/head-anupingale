@@ -56,8 +56,7 @@ const head = function(args, fs) {
 const tail = function(args, fs) {
 	let parameters = parse(args);
 	let error = validateTailArguments(parameters);
-	if (error != undefined) return error;
-	return getContent(parameters, fs, 'tail');
+	return error || getContent(parameters, fs, 'tail');
 };
 
 module.exports = {
