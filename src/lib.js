@@ -34,11 +34,11 @@ const getContent = function(parameters, fs, operation) {
 		return getSpecifiedContent(content, option, count, operation);
 	}
 
-	for (let file of fileNames) {
-		let fileContent = displayFileNotFoundError(file, operation);
-		if (existsSync(file)) {
-			content = readFileSync(file, 'utf8');
-			fileContent = delimeter + generateHeader(file);
+	for (let fileName of fileNames) {
+		let fileContent = displayFileNotFoundError(fileName, operation);
+		if (existsSync(fileName)) {
+			content = readFileSync(fileName, 'utf8');
+			fileContent = delimeter + generateHeader(fileName);
 			fileContent += getSpecifiedContent(content, option, count, operation);
 			delimeter = '\n';
 		}
