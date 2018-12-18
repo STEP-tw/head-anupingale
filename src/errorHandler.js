@@ -34,7 +34,7 @@ const hasInvalidOption = function(option) {
 const validateArguments = function(parameters, operation) {
 	let { option, count, fileNames } = parameters;
 
-	if (operation == 'head' && hasInvalidOption(option)) {
+	if (hasInvalidOption(option)) {
 		return invalidOptionError(option, operation);
 	}
 	if ((operation == 'head' && isZero(count)) || fileNames.includes('-0')) {
@@ -48,19 +48,13 @@ const validateArguments = function(parameters, operation) {
 	if (operation == 'head' && hasInvalidOption(option)) {
 		return invalidOptionError(option.slice(1));
 	}
-	if (operation == 'tail' && isZero(count)) {
+
+	if (operation == 'tail' && (isZero(count) || fileNames.includes('-0'))) {
 		return ' ';
 	}
 
-	if (operation == 'tail' && hasInvalidOption(option)) {
-		return invalidOptionError(option, operation);
-	}
 	if (operation == 'tail' && isNaN(count)) {
 		return 'tail: illegal offset -- ' + count;
-	}
-
-	if (operation == 'tail' && fileNames.includes('-0')) {
-		return ' ';
 	}
 };
 
