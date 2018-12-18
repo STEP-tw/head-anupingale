@@ -3,9 +3,9 @@ const hasValidLength = function(args) {
 };
 
 const hasValidOption = function(givenOption) {
-	let isNotAlphabet = !givenOption[1].match(/[A-z]/);
+	let hasNoAlphabet = !givenOption[1].match(/[A-z]/);
 	let length = givenOption.length;
-	return !isNotAlphabet && length == 2;
+	return !hasNoAlphabet && length == 2;
 };
 
 const hasDash = function(option) {
@@ -17,7 +17,7 @@ const createObject = function(option, count, fileNames) {
 };
 
 const parse = function(args) {
-	if (args[0].startsWith('-') && !isNaN(args[0])) {
+	if (hasDash(args[0]) && !isNaN(args[0])) {
 		return createObject('n', Math.abs(args[0]), args.slice(1));
 	}
 	if (hasValidOption(args[0])) {
