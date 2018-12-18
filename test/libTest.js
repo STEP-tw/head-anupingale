@@ -3,7 +3,7 @@ const {
 	getContent,
 	isValidSingleFile,
 	getSpecifiedContent,
-	fetchContent,
+	getData,
 	generateHeader
 } = require('../src/lib.js');
 
@@ -148,43 +148,40 @@ describe('getSpecifiedContent', function() {
 	});
 });
 
-describe('fetchContent', function() {
+describe('getData', function() {
 	describe('should return specified number of lines or bytes from file depends upon option', function() {
 		it('should return when operation tail is specified with count and option(-n)', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['lines'] };
-			assert.deepEqual(
-				fetchContent(inputData, fs, 'tail'),
-				'Perpendicular Lines.'
-			);
+			assert.deepEqual(getData(inputData, fs, 'tail'), 'Perpendicular Lines.');
 
 			inputData = { count: 3, option: 'n', fileNames: ['numbers'] };
 			expectedOutput = 'Eight\nNine\nTen';
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
 		});
 
 		it('should return lines when operation head is specified with count and option(-n)', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['numbers'] };
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), 'One');
+			assert.deepEqual(getData(inputData, fs, 'head'), 'One');
 
 			inputData = { count: 3, option: 'n', fileNames: ['numbers'] };
 			expectedOutput = 'One\nTwo\nThree';
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'head'), expectedOutput);
 		});
 
 		it('should return characters when option(-c) and count is specified with operation tail', function() {
 			inputData = { count: 1, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), 'n');
+			assert.deepEqual(getData(inputData, fs, 'tail'), 'n');
 
 			inputData = { count: 3, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), 'Ten');
+			assert.deepEqual(getData(inputData, fs, 'tail'), 'Ten');
 		});
 
 		it('should return characters when option(-c) and count is specified with operation head', function() {
 			inputData = { count: 1, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), 'O');
+			assert.deepEqual(getData(inputData, fs, 'head'), 'O');
 
 			inputData = { count: 3, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), 'One');
+			assert.deepEqual(getData(inputData, fs, 'head'), 'One');
 		});
 	});
 
@@ -193,13 +190,13 @@ describe('fetchContent', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['lines', 'numbers'] };
 			expectedOutput =
 				'==> lines <==\nPerpendicular Lines.\n\n==> numbers <==\nTen';
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
 		});
 
 		it('should return when option(-c) and count is specified', function() {
 			inputData = { count: 3, option: 'c', fileNames: ['lines', 'numbers'] };
 			expectedOutput = '==> lines <==\nes.\n\n==> numbers <==\nTen';
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
 		});
 	});
 
@@ -207,13 +204,13 @@ describe('fetchContent', function() {
 		it('should return error if file is not present', function() {
 			inputData = { count: 3, option: 'n', fileNames: ['abc'] };
 			expectedOutput = 'head: abc: No such file or directory';
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'head'), expectedOutput);
 		});
 
 		it('should return error if file is not present', function() {
 			inputData = { count: '3', option: 'n', fileNames: ['abc'] };
 			expectedOutput = 'tail: abc: No such file or directory';
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
 		});
 	});
 
@@ -222,14 +219,14 @@ describe('fetchContent', function() {
 			inputData = { count: '3', option: 'z', fileNames: ['abc'] };
 			expectedOutput =
 				'head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]';
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'head'), expectedOutput);
 		});
 
 		it('should return invalid option error if invalid option is specified', function() {
 			inputData = { count: '3', option: 'z', fileNames: ['abc'] };
 			expectedOutput =
 				'tail: illegal option -- z\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
 		});
 	});
 
@@ -237,32 +234,32 @@ describe('fetchContent', function() {
 		it('should return invalid count error if invalid count is specified', function() {
 			inputData = { count: '-10', option: 'n', fileNames: ['abc'] };
 			expectedOutput = 'head: illegal line count -- -10';
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'head'), expectedOutput);
 		});
 
 		it('should return invalid count error if invalid count is specified', function() {
 			inputData = { count: '-10u', option: 'n', fileNames: ['abc'] };
 			expectedOutput = 'head: illegal line count -- -10u';
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'head'), expectedOutput);
 		});
 
 		it('should return invalid count error if invalid count is specified', function() {
 			inputData = { count: '-10u', option: 'n', fileNames: ['abc'] };
 			expectedOutput = 'tail: illegal offset -- -10u';
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
 		});
 	});
 	describe('file not exist', function() {
 		it('should return file not found error message if file is invalid', function() {
 			inputData = { count: '10', option: 'n', fileNames: ['abc'] };
 			expectedOutput = 'head: abc: No such file or directory';
-			assert.deepEqual(fetchContent(inputData, fs, 'head'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'head'), expectedOutput);
 		});
 
 		it('should return file not found error message if file is invalid', function() {
 			inputData = { count: '10', option: 'n', fileNames: ['abc'] };
 			expectedOutput = 'tail: abc: No such file or directory';
-			assert.deepEqual(fetchContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
 		});
 	});
 });

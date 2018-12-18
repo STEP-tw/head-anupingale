@@ -45,7 +45,7 @@ const getContent = function(parameters, fs, operation) {
 	return contents.join('\n');
 };
 
-const fetchContent = function(parameters, fs, operation) {
+const getData = function(parameters, fs, operation) {
 	if (operation == 'tail' && parameters.count < 0) {
 		parameters.count = Math.abs(parameters.count);
 	}
@@ -54,7 +54,7 @@ const fetchContent = function(parameters, fs, operation) {
 };
 
 module.exports = {
-	fetchContent,
+	getData,
 	getSpecifiedContent,
 	getContent,
 	isValidSingleFile,
