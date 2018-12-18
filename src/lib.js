@@ -15,6 +15,10 @@ const generateHeader = function(fileName) {
 
 const seperators = { n: '\n', c: '' };
 
+const readContent = function(readFileSync, file) {
+	return readFileSync(file, 'utf8');
+};
+
 const getSpecifiedContent = function(file, option, count, operation) {
 	let ranges = { head: [0, count], tail: [-count] };
 	let range = ranges[operation];
@@ -66,5 +70,6 @@ module.exports = {
 	getContent,
 	isValidSingleFile,
 	generateHeader,
-	displayFileNotFoundError
+	displayFileNotFoundError,
+	readContent
 };

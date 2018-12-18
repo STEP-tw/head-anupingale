@@ -1,6 +1,7 @@
 const assert = require('assert');
 const {
 	getContent,
+	readContent,
 	head,
 	isValidSingleFile,
 	getSpecifiedContent,
@@ -354,5 +355,13 @@ describe('getSpecifiedContent', function() {
 			getSpecifiedContent(numbers, 'c', 3, 'head'),
 			expectedOutput
 		);
+	});
+});
+
+describe('readContent', function() {
+	it('should return content of the file', function() {
+		expectedOutput =
+			'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen';
+		assert.deepEqual(readContent(readFileSync, 'numbers'), expectedOutput);
 	});
 });
