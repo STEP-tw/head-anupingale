@@ -30,24 +30,16 @@ const getContent = function(parameters, fs, operation) {
 	let contents = [];
 	let delimeter = '';
 	if (isValidSingleFile(fileNames, existsSync)) {
-		return getSpecifiedContent(
-			readFileSync(fileNames[0], 'utf8'),
-			option,
-			count,
-			operation
-		);
+		let content = readFileSync(fileNames[0], 'utf8');
+		return getSpecifiedContent(content, option, count, operation);
 	}
 
 	for (let file of fileNames) {
 		let fileContent = displayFileNotFoundError(file, operation);
 		if (existsSync(file)) {
+			content = readFileSync(file, 'utf8');
 			fileContent = delimeter + generateHeader(file);
-			fileContent += getSpecifiedContent(
-				readFileSync(file, 'utf8'),
-				option,
-				count,
-				operation
-			);
+			fileContent += getSpecifiedContent(content, option, count, operation);
 			delimeter = '\n';
 		}
 		contents.push(fileContent);
@@ -64,9 +56,7 @@ const head = function(args, fs) {
 const tail = function(args, fs) {
 	let parameters = parse(args);
 	let error = validateTailArguments(parameters);
-	if (error != undefined) {
-		return error;
-	}
+	if (error != undefined) return error;
 	return getContent(parameters, fs, 'tail');
 };
 
