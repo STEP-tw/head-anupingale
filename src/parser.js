@@ -26,9 +26,7 @@ const parse = function(args) {
 	if (hasValidLength(args[0])) {
 		return createObject(args[0].slice(1, 2), args[0].slice(2), args.slice(1));
 	}
-	if (!args[0].startsWith('-')) {
-		return { option: 'n', count: 10, fileNames: args };
-	}
+	return { option: 'n', count: 10, fileNames: args };
 };
 
 module.exports = {
