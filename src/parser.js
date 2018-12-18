@@ -2,14 +2,10 @@ const hasValidLength = function(args) {
 	return args.length > 2 && hasDash(args);
 };
 
-const isCharacterOption = function(givenOption) {
+const hasValidOption = function(givenOption) {
 	let isNotAlphabet = !givenOption[1].match(/[A-z]/);
 	let length = givenOption.length;
 	return !isNotAlphabet && length == 2;
-};
-
-const hasValidOption = function(option) {
-	return isCharacterOption(option);
 };
 
 const hasDash = function(option) {
