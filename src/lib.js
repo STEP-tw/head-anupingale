@@ -1,7 +1,5 @@
-const { parse } = require('./parser.js');
 const {
-	validateHeadArguments,
-	validateTailArguments,
+	validateArguments,
 	displayFileNotFoundError
 } = require('./errorHandler.js');
 
@@ -47,22 +45,17 @@ const getContent = function(parameters, fs, operation) {
 	return contents.join('\n');
 };
 
-const head = function(args, fs) {
-	let parameters = parse(args);
-	let error = validateHeadArguments(parameters);
-	return error || getContent(parameters, fs, 'head');
-};
-
-const tail = function(args, fs) {
-	let parameters = parse(args);
-	let error = validateTailArguments(parameters);
-	return error || getContent(parameters, fs, 'tail');
+const fetchContent = function(parameters, fs, operation) {
+	if (operation == 'tail' && parameters.count < 0) {
+		parameters.count = Math.abs(parameters.count);
+	}
+	let error = validateArguments(parameters, operation);
+	return error || getContent(parameters, fs, operation);
 };
 
 module.exports = {
-	head,
+	fetchContent,
 	getSpecifiedContent,
-	tail,
 	getContent,
 	isValidSingleFile,
 	generateHeader,

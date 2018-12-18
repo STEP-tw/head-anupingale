@@ -7,17 +7,16 @@ const hasInvalidCount = function(count) {
 };
 
 const invalidOptionError = function(option, operation) {
-	let errors = {
-		head:
-			'head: illegal option -- ' +
-			option +
-			'\nusage: head [-n lines | -c bytes] [file ...]',
-		tail:
-			'tail: illegal option -- ' +
-			option +
-			'usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]'
-	};
-	return errors[operation];
+	let head =
+		'head: illegal option -- ' +
+		option +
+		'\nusage: head [-n lines | -c bytes] [file ...]';
+	let tail =
+		'tail: illegal option -- ' +
+		option +
+		'\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
+	operations = { head, tail };
+	return operations[operation];
 };
 
 const invalidCountError = function(option, count) {
@@ -29,37 +28,39 @@ const invalidCountError = function(option, count) {
 };
 
 const hasInvalidOption = function(option) {
-	return !['n', 'c'].includes(option);
+	return !['n', 'c', 'n ', 'c '].includes(option);
 };
 
-const validateHeadArguments = function(parameters) {
+const validateArguments = function(parameters, operation) {
 	let { option, count, fileNames } = parameters;
 
-	if (hasInvalidOption(option)) {
-		return invalidOptionError(option, 'head');
+	if (operation == 'head' && hasInvalidOption(option)) {
+		return invalidOptionError(option, operation);
 	}
-
-	if (isZero(count) || fileNames.includes('-0')) {
+	if ((operation == 'head' && isZero(count)) || fileNames.includes('-0')) {
 		return 'head: illegal line count -- 0';
 	}
 
-	if (hasInvalidCount(count)) {
+	if (operation == 'head' && hasInvalidCount(count)) {
 		return invalidCountError(option, count);
 	}
-};
 
-const validateTailArguments = function(parameters) {
-	let { option, count, fileNames } = parameters;
-	if (isZero(count) || fileNames.includes('-0')) {
+	if (operation == 'head' && hasInvalidOption(option)) {
+		return invalidOptionError(option.slice(1));
+	}
+	if (operation == 'tail' && isZero(count)) {
 		return ' ';
 	}
 
-	if (hasInvalidOption(option)) {
-		return invalidOptionError(option, 'tail');
+	if (operation == 'tail' && hasInvalidOption(option)) {
+		return invalidOptionError(option, operation);
+	}
+	if (operation == 'tail' && isNaN(count)) {
+		return 'tail: illegal offset -- ' + count;
 	}
 
-	if (isNaN(count)) {
-		return 'tail: illegal offset -- ' + count;
+	if (operation == 'tail' && fileNames.includes('-0')) {
+		return ' ';
 	}
 };
 
@@ -68,9 +69,8 @@ const displayFileNotFoundError = function(file, operation) {
 };
 
 module.exports = {
-	validateHeadArguments,
+	validateArguments,
 	displayFileNotFoundError,
-	validateTailArguments,
 	isZero,
 	hasInvalidOption,
 	hasInvalidCount,
