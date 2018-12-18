@@ -2,6 +2,8 @@ const assert = require('assert');
 const {
 	validateArguments,
 	displayFileNotFoundError,
+	checkHeadErrors,
+	checkTailErrors,
 	isZero,
 	hasInvalidOption,
 	invalidCountError,
@@ -145,5 +147,36 @@ describe('displayFileNotFoundError', function() {
 			displayFileNotFoundError('123.txt', 'tail'),
 			'tail: 123.txt: No such file or directory'
 		);
+	});
+});
+
+describe('checkHeadErrors', function() {
+	let expectedOutput;
+	let inputData;
+
+	it('should return error when invalid count is given', function() {
+		expectedOutput = 'head: illegal line count -- -3';
+		assert.deepEqual(checkHeadErrors('n', -3, ['numbers']), expectedOutput);
+	});
+
+	it('should return error when invalid count is given', function() {
+		expectedOutput = 'head: illegal byte count -- -3';
+		assert.deepEqual(checkHeadErrors('c', -3, ['numbers']), expectedOutput);
+	});
+
+	it('should return error when count given is 0', function() {
+		expectedOutput = 'head: illegal line count -- 0';
+		assert.deepEqual(checkHeadErrors('n', '-0', ['numbers']), expectedOutput);
+	});
+});
+
+describe('checkTailErrors', function() {
+	it('should return error when invalid count is given', function() {
+		assert.deepEqual(checkTailErrors('0', ['numbers']), ' ');
+	});
+
+	it('should return error when invalid count is given', function() {
+		expectedOutput = 'tail: illegal offset -- aa3';
+		assert.deepEqual(checkTailErrors('aa3', ['numbers']), expectedOutput);
 	});
 });

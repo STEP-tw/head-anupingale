@@ -185,6 +185,20 @@ describe('getData', function() {
 		});
 	});
 
+	describe('negative counts', function() {
+		it('should return error if option is head amd count is negative', function() {
+			inputData = { count: '-1', option: 'c', fileNames: ['numbers'] };
+			expectedOutput = 'head: illegal byte count -- -1';
+			assert.deepEqual(getData(inputData, fs, 'head'), expectedOutput);
+		});
+
+		it('should return error if option is head amd count is negative', function() {
+			inputData = { count: '-1', option: 'n', fileNames: ['numbers'] };
+			expectedOutput = 'Ten';
+			assert.deepEqual(getData(inputData, fs, 'tail'), expectedOutput);
+		});
+	});
+
 	describe('should return formatted fileNames with their contents for multiple files', function() {
 		it('should return when option(-n) and count is specified', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['lines', 'numbers'] };
