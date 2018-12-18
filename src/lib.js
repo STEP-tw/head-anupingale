@@ -13,7 +13,7 @@ const generateHeader = function(fileName) {
 
 const seperators = { n: '\n', c: '' };
 
-const getSpecifiedContent = function(file, option, count, operation) {
+const fetchRequiredContent = function(file, option, count, operation) {
 	let ranges = { head: [0, count], tail: [-count] };
 	let range = ranges[operation];
 	return file
@@ -29,7 +29,7 @@ const getFilesContent = function(parameters, fs, operation) {
 	let delimeter = '';
 	if (isValidSingleFile(fileNames, existsSync)) {
 		let content = readFileSync(fileNames[0], 'utf8');
-		return getSpecifiedContent(content, option, count, operation);
+		return fetchRequiredContent(content, option, count, operation);
 	}
 
 	for (let fileName of fileNames) {
@@ -37,7 +37,7 @@ const getFilesContent = function(parameters, fs, operation) {
 		if (existsSync(fileName)) {
 			content = readFileSync(fileName, 'utf8');
 			fileContent = delimeter + generateHeader(fileName);
-			fileContent += getSpecifiedContent(content, option, count, operation);
+			fileContent += fetchRequiredContent(content, option, count, operation);
 			delimeter = '\n';
 		}
 		contents.push(fileContent);
@@ -55,7 +55,7 @@ const getData = function(parameters, fs, operation) {
 
 module.exports = {
 	getData,
-	getSpecifiedContent,
+	fetchRequiredContent,
 	getFilesContent,
 	isValidSingleFile,
 	generateHeader,
