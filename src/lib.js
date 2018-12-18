@@ -22,7 +22,7 @@ const getSpecifiedContent = function(file, option, count, operation) {
 		.join(seperators[option]);
 };
 
-const getContent = function(parameters, fs, operation) {
+const getFilesContent = function(parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
 	let contents = [];
@@ -50,13 +50,13 @@ const getData = function(parameters, fs, operation) {
 		parameters.count = Math.abs(parameters.count);
 	}
 	let error = validateArguments(parameters, operation);
-	return error || getContent(parameters, fs, operation);
+	return error || getFilesContent(parameters, fs, operation);
 };
 
 module.exports = {
 	getData,
 	getSpecifiedContent,
-	getContent,
+	getFilesContent,
 	isValidSingleFile,
 	generateHeader,
 	displayFileNotFoundError

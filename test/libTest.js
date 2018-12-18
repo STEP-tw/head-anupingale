@@ -1,6 +1,6 @@
 const assert = require('assert');
 const {
-	getContent,
+	getFilesContent,
 	isValidSingleFile,
 	getSpecifiedContent,
 	getData,
@@ -12,15 +12,13 @@ const readFileSync = function(fileName) {
 		lines:
 			'There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.',
 		numbers: 'One\nTwo\nThree\nFour\nFive\nSix\nSeven\nEight\nNine\nTen',
-		lineData:
-			'There are 5 types of lines:\nHorizontal line.\nVertical line.\nSkew Lines.\nParallel Lines.\nPerpendicular Lines.',
 		digits: '0\n1\n2\n3\n4\n5\n6\n7\n8\n9'
 	};
 	return files[fileName];
 };
 
 const existsSync = function(fileName) {
-	let files = ['lines', 'numbers', 'lineData', 'digits'];
+	let files = ['numbers', 'lines', 'digits'];
 	return files.includes(fileName);
 };
 
@@ -29,43 +27,43 @@ const fs = { existsSync, readFileSync };
 let expectedOutput;
 let inputData;
 
-describe('getContent', function() {
+describe('getFilesContent', function() {
 	describe('should return specified number of lines or bytes from file depends upon option', function() {
 		it('should return when operation tail is specified with count and option(-n)', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['lines'] };
 			assert.deepEqual(
-				getContent(inputData, fs, 'tail'),
+				getFilesContent(inputData, fs, 'tail'),
 				'Perpendicular Lines.'
 			);
 
 			inputData = { count: 3, option: 'n', fileNames: ['numbers'] };
 			expectedOutput = 'Eight\nNine\nTen';
-			assert.deepEqual(getContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getFilesContent(inputData, fs, 'tail'), expectedOutput);
 		});
 
 		it('should return lines when operation head is specified with count and option(-n)', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['numbers'] };
-			assert.deepEqual(getContent(inputData, fs, 'head'), 'One');
+			assert.deepEqual(getFilesContent(inputData, fs, 'head'), 'One');
 
 			inputData = { count: 3, option: 'n', fileNames: ['numbers'] };
 			expectedOutput = 'One\nTwo\nThree';
-			assert.deepEqual(getContent(inputData, fs, 'head'), expectedOutput);
+			assert.deepEqual(getFilesContent(inputData, fs, 'head'), expectedOutput);
 		});
 
 		it('should return characters when option(-c) and count is specified with operation tail', function() {
 			inputData = { count: 1, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(getContent(inputData, fs, 'tail'), 'n');
+			assert.deepEqual(getFilesContent(inputData, fs, 'tail'), 'n');
 
 			inputData = { count: 3, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(getContent(inputData, fs, 'tail'), 'Ten');
+			assert.deepEqual(getFilesContent(inputData, fs, 'tail'), 'Ten');
 		});
 
 		it('should return characters when option(-c) and count is specified with operation head', function() {
 			inputData = { count: 1, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(getContent(inputData, fs, 'head'), 'O');
+			assert.deepEqual(getFilesContent(inputData, fs, 'head'), 'O');
 
 			inputData = { count: 3, option: 'c', fileNames: ['numbers'] };
-			assert.deepEqual(getContent(inputData, fs, 'head'), 'One');
+			assert.deepEqual(getFilesContent(inputData, fs, 'head'), 'One');
 		});
 	});
 
@@ -74,13 +72,13 @@ describe('getContent', function() {
 			inputData = { count: 1, option: 'n', fileNames: ['lines', 'numbers'] };
 			expectedOutput =
 				'==> lines <==\nPerpendicular Lines.\n\n==> numbers <==\nTen';
-			assert.deepEqual(getContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getFilesContent(inputData, fs, 'tail'), expectedOutput);
 		});
 
 		it('should return when option(-c) and count is specified', function() {
 			inputData = { count: 3, option: 'c', fileNames: ['lines', 'numbers'] };
 			expectedOutput = '==> lines <==\nes.\n\n==> numbers <==\nTen';
-			assert.deepEqual(getContent(inputData, fs, 'tail'), expectedOutput);
+			assert.deepEqual(getFilesContent(inputData, fs, 'tail'), expectedOutput);
 		});
 	});
 });
