@@ -6,12 +6,18 @@ const hasInvalidCount = function(count) {
 	return isNaN(count) || count < 1;
 };
 
-const invalidOptionError = function(option) {
-	return (
-		'head: illegal option -- ' +
-		option +
-		'\nusage: head [-n lines | -c bytes] [file ...]'
-	);
+const invalidOptionError = function(option, operation) {
+	let errors = {
+		head:
+			'head: illegal option -- ' +
+			option +
+			'\nusage: head [-n lines | -c bytes] [file ...]',
+		tail:
+			'tail: illegal option -- ' +
+			option +
+			'usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]'
+	};
+	return errors[operation];
 };
 
 const invalidCountError = function(option, count) {
@@ -30,7 +36,7 @@ const validateHeadArguments = function(parameters) {
 	let { option, count, fileNames } = parameters;
 
 	if (hasInvalidOption(option)) {
-		return invalidOptionError(option);
+		return invalidOptionError(option, 'head');
 	}
 
 	if (isZero(count) || fileNames.includes('-0')) {
@@ -48,20 +54,12 @@ const validateTailArguments = function(parameters) {
 		return ' ';
 	}
 
+	if (hasInvalidOption(option)) {
+		return invalidOptionError(option, 'tail');
+	}
+
 	if (isNaN(count)) {
 		return 'tail: illegal offset -- ' + count;
-	}
-
-	if (count < 0) {
-		return 'tail: illegal offset -- ' + count.slice(1);
-	}
-
-	if (hasInvalidOption(option)) {
-		return (
-			'tail: illegal option -- ' +
-			option +
-			'usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]'
-		);
 	}
 };
 

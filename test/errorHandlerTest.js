@@ -61,7 +61,7 @@ describe('invalidCountError', function() {
 });
 describe('hasInvalidOption', function() {
 	it('should return true if has chracters except options', function() {
-		assert.deepEqual(hasInvalidOption('-z'), true);
+		assert.deepEqual(hasInvalidOption('z'), true);
 	});
 
 	it('should return false if has option', function() {
@@ -86,6 +86,13 @@ describe('validateTailArguments', function() {
 		expectedOutput = 'tail: illegal offset -- 10u';
 		assert.deepEqual(validateTailArguments(inputData), expectedOutput);
 	});
+
+	it('should return illegal option error when option is invalid', function() {
+		inputData = { option: 'z', count: '10u', fileNames: ['numbers'] };
+		expectedOutput =
+			'tail: illegal option -- zusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
+		assert.deepEqual(validateTailArguments(inputData), expectedOutput);
+	});
 });
 
 describe('hasInvalidCount', function() {
@@ -103,6 +110,12 @@ describe('invalidOptionError', function() {
 		expectedOutput =
 			'head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]';
 		assert.deepEqual(invalidOptionError('z', 'head'), expectedOutput);
+	});
+
+	it('should return error when invalid option is specified', function() {
+		expectedOutput =
+			'tail: illegal option -- zusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
+		assert.deepEqual(invalidOptionError('z', 'tail'), expectedOutput);
 	});
 });
 
