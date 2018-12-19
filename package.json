@@ -1,0 +1,27 @@
+{
+  "name": "head_tail",
+  "version": "1.0.0",
+  "description": "It can extract head and tail lines or bytes",
+  "main": "head.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "node head.js -n5 head.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STEP-tw/head-anupingale.git"
+  },
+  "author": "Annapurna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STEP-tw/head-anupingale/issues"
+  },
+  "homepage": "https://github.com/STEP-tw/head-anupingale#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
