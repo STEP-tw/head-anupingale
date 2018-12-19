@@ -561,7 +561,7 @@ describe('getMultipleFileData', function() {
 			);
 		});
 
-		it('should return error message for the file if the file is not exist', function() {
+		it('should return error message for the file if file is not exist', function() {
 			inputData = { count: 3, option: 'c', fileNames: ['abc', 'numbers'] };
 			expectedOutput =
 				'head: abc: No such file or directory\n==> numbers <==\nOne';
