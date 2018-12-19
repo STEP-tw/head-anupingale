@@ -24,7 +24,7 @@ const fetchRequiredContent = function(file, option, count, operation) {
 		.join(seperators[option]);
 };
 
-const getContent = function(parameters, fs, operation) {
+const getFileContent = function(parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
 	let contents = [];
@@ -49,20 +49,20 @@ const getContent = function(parameters, fs, operation) {
 
 const head = function(parameters, fs) {
 	let error = validateHeadArguments(parameters);
-	return error || getContent(parameters, fs, 'head');
+	return error || getFileContent(parameters, fs, 'head');
 };
 
 const tail = function(parameters, fs) {
 	let error = validateTailArguments(parameters);
 	parameters.count = Math.abs(parameters.count);
-	return error || getContent(parameters, fs, 'tail');
+	return error || getFileContent(parameters, fs, 'tail');
 };
 
 module.exports = {
 	head,
 	fetchRequiredContent,
 	tail,
-	getContent,
+	getFileContent,
 	isValidFile,
 	generateHeader
 };

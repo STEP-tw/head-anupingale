@@ -9,11 +9,11 @@ const {
 describe('parse', function() {
 	describe('should seperate all arguments', function() {
 		it('should give default option -n and count 10 when both are not specified', function() {
-			inputData = ['typesOfLines', 'numbers'];
+			inputData = ['lines', 'numbers'];
 			expectedOutput = {
 				option: 'n',
 				count: 10,
-				fileNames: ['typesOfLines', 'numbers']
+				fileNames: ['lines', 'numbers']
 			};
 			assert.deepEqual(parse(inputData), expectedOutput);
 		});
