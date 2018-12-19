@@ -63,7 +63,7 @@ const validateArguments = function(parameters, operation) {
 	return checkTailErrors(count, fileNames);
 };
 
-const displayFileNotFoundError = function(file, operation) {
+const fileNotFoundError = function(file, operation) {
 	return operation + ': ' + file + ': No such file or directory';
 };
 
@@ -71,7 +71,7 @@ module.exports = {
 	validateArguments,
 	checkHeadErrors,
 	checkTailErrors,
-	displayFileNotFoundError,
+	fileNotFoundError,
 	isZero,
 	hasInvalidOption,
 	hasInvalidCount,

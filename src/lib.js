@@ -1,6 +1,6 @@
 const {
 	validateArguments,
-	displayFileNotFoundError
+	fileNotFoundError
 } = require('./errorHandler.js');
 
 const isValidSingleFile = function(fileNames, existsSync) {
@@ -33,7 +33,7 @@ const getFilesContent = function(parameters, fs, operation) {
 	}
 
 	for (let fileName of fileNames) {
-		let fileContent = displayFileNotFoundError(fileName, operation);
+		let fileContent = fileNotFoundError(fileName, operation);
 		if (existsSync(fileName)) {
 			content = readFileSync(fileName, 'utf8');
 			fileContent = delimeter + generateHeader(fileName);
@@ -59,5 +59,5 @@ module.exports = {
 	getFilesContent,
 	isValidSingleFile,
 	generateHeader,
-	displayFileNotFoundError
+	fileNotFoundError
 };

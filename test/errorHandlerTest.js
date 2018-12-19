@@ -1,7 +1,7 @@
 const assert = require('assert');
 const {
 	validateArguments,
-	displayFileNotFoundError,
+	fileNotFoundError,
 	checkHeadErrors,
 	checkTailErrors,
 	isZero,
@@ -126,25 +126,25 @@ describe('invalidOptionError', function() {
 	});
 });
 
-describe('displayFileNotFoundError', function() {
+describe('fileNotFoundError', function() {
 	it('should return file not found message with file name', () => {
 		assert.deepEqual(
-			displayFileNotFoundError('myFile.txt', 'head'),
+			fileNotFoundError('myFile.txt', 'head'),
 			'head: myFile.txt: No such file or directory'
 		);
 		assert.deepEqual(
-			displayFileNotFoundError('123.txt', 'head'),
+			fileNotFoundError('123.txt', 'head'),
 			'head: 123.txt: No such file or directory'
 		);
 	});
 
 	it('should return file not found message with file name', () => {
 		assert.deepEqual(
-			displayFileNotFoundError('myFile.txt', 'tail'),
+			fileNotFoundError('myFile.txt', 'tail'),
 			'tail: myFile.txt: No such file or directory'
 		);
 		assert.deepEqual(
-			displayFileNotFoundError('123.txt', 'tail'),
+			fileNotFoundError('123.txt', 'tail'),
 			'tail: 123.txt: No such file or directory'
 		);
 	});
