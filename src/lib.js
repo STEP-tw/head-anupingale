@@ -24,16 +24,11 @@ const fetchRequiredContent = function(file, option, count, operation) {
 		.join(seperators[option]);
 };
 
-const getFileContent = function(parameters, fs, operation) {
-	let { readFileSync, existsSync } = fs;
+const getMultipleFileContent = function(parameters, fs, operation) {
 	let { option, count, fileNames } = parameters;
+	let { readFileSync, existsSync } = fs;
 	let contents = [];
 	let delimeter = '';
-	if (isValidFile(fileNames, existsSync)) {
-		let content = readFileSync(fileNames[0], 'utf8');
-		return fetchRequiredContent(content, option, count, operation);
-	}
-
 	for (let fileName of fileNames) {
 		let fileContent = fileNotFoundError(fileName, operation);
 		if (existsSync(fileName)) {
@@ -45,6 +40,16 @@ const getFileContent = function(parameters, fs, operation) {
 		contents.push(fileContent);
 	}
 	return contents.join('\n');
+};
+
+const getFileContent = function(parameters, fs, operation) {
+	let { readFileSync, existsSync } = fs;
+	let { option, count, fileNames } = parameters;
+	if (isValidFile(fileNames, existsSync)) {
+		let content = readFileSync(fileNames[0], 'utf8');
+		return fetchRequiredContent(content, option, count, operation);
+	}
+	return getMultipleFileContent(parameters, fs, operation);
 };
 
 const head = function(parameters, fs) {
@@ -63,6 +68,7 @@ module.exports = {
 	fetchRequiredContent,
 	tail,
 	getFileContent,
+	getMultipleFileContent,
 	isValidFile,
 	generateHeader
 };

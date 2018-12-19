@@ -2,6 +2,7 @@ const assert = require('assert');
 const {
 	isValidFile,
 	fetchRequiredContent,
+	getMultipleFileContent,
 	getFileContent,
 	head,
 	tail,
@@ -536,5 +537,28 @@ describe('fetchRequiredContent', function() {
 		actualOutput = fetchRequiredContent(numbers, 'c', 3, 'head');
 		expectedOutput = 'One';
 		assert.deepEqual(actualOutput, expectedOutput);
+	});
+});
+
+describe('getMultipleFileData', function() {
+	describe('should return formatted fileNames with their contents for multiple fileNames', function() {
+		it('should return when option(-n) and count is specified', function() {
+			inputData = { count: 1, option: 'n', fileNames: ['lines', 'numbers'] };
+			expectedOutput =
+				'==> lines <==\nPerpendicular Lines.\n\n==> numbers <==\nTen';
+			assert.deepEqual(
+				getMultipleFileContent(inputData, fs, 'tail'),
+				expectedOutput
+			);
+		});
+
+		it('should return when option(-c) and count is specified', function() {
+			inputData = { count: 3, option: 'c', fileNames: ['lines', 'numbers'] };
+			expectedOutput = '==> lines <==\nes.\n\n==> numbers <==\nTen';
+			assert.deepEqual(
+				getMultipleFileContent(inputData, fs, 'tail'),
+				expectedOutput
+			);
+		});
 	});
 });
