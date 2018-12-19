@@ -64,6 +64,5 @@ module.exports = {
 	tail,
 	getContent,
 	isValidFile,
-	generateHeader,
-	fileNotFoundError
+	generateHeader
 };
