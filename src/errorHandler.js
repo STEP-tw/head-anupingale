@@ -7,16 +7,17 @@ const hasInvalidCount = function(count) {
 };
 
 const invalidOptionError = function(option, operation) {
-	let head =
-		'head: illegal option -- ' +
-		option +
-		'\nusage: head [-n lines | -c bytes] [file ...]';
-	let tail =
-		'tail: illegal option -- ' +
-		option +
-		'\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
-	operations = { head, tail };
-	return operations[operation];
+	let errors = {
+		head:
+			'head: illegal option -- ' +
+			option +
+			'\nusage: head [-n lines | -c bytes] [file ...]',
+		tail:
+			'tail: illegal option -- ' +
+			option +
+			'\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]'
+	};
+	return errors[operation];
 };
 
 const invalidCountError = function(option, count) {
@@ -31,7 +32,13 @@ const hasInvalidOption = function(option) {
 	return !['n', 'c'].includes(option);
 };
 
-const checkHeadErrors = function(option, count, fileNames) {
+const validateHeadArguments = function(parameters) {
+	let { option, count, fileNames } = parameters;
+
+	if (hasInvalidOption(option)) {
+		return invalidOptionError(option, 'head');
+	}
+
 	if (isZero(count) || fileNames.includes('-0')) {
 		return 'head: illegal line count -- 0';
 	}
@@ -41,9 +48,14 @@ const checkHeadErrors = function(option, count, fileNames) {
 	}
 };
 
-const checkTailErrors = function(count, fileNames) {
+const validateTailArguments = function(parameters) {
+	let { option, count, fileNames } = parameters;
 	if (isZero(count) || fileNames.includes('-0')) {
 		return ' ';
+	}
+
+	if (hasInvalidOption(option)) {
+		return invalidOptionError(option, 'tail');
 	}
 
 	if (isNaN(count)) {
@@ -51,26 +63,13 @@ const checkTailErrors = function(count, fileNames) {
 	}
 };
 
-const validateArguments = function(parameters, operation) {
-	let { option, count, fileNames } = parameters;
-
-	if (hasInvalidOption(option)) {
-		return invalidOptionError(option, operation);
-	}
-	if (operation == 'head') {
-		return checkHeadErrors(option, count, fileNames);
-	}
-	return checkTailErrors(count, fileNames);
-};
-
 const fileNotFoundError = function(file, operation) {
 	return operation + ': ' + file + ': No such file or directory';
 };
 
 module.exports = {
-	validateArguments,
-	checkHeadErrors,
-	checkTailErrors,
+	validateHeadArguments,
+	validateTailArguments,
 	fileNotFoundError,
 	isZero,
 	hasInvalidOption,

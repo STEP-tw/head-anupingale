@@ -1,6 +1,8 @@
+const { parse } = require('./parser.js');
 const {
-	validateArguments,
-	fileNotFoundError
+	fileNotFoundError,
+	validateHeadArguments,
+	validateTailArguments
 } = require('./errorHandler.js');
 
 const isValidFile = function(fileNames, existsSync) {
@@ -22,7 +24,7 @@ const fetchRequiredContent = function(file, option, count, operation) {
 		.join(seperators[option]);
 };
 
-const getFilesContent = function(parameters, fs, operation) {
+const getContent = function(parameters, fs, operation) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
 	let contents = [];
@@ -45,18 +47,22 @@ const getFilesContent = function(parameters, fs, operation) {
 	return contents.join('\n');
 };
 
-const getData = function(parameters, fs, operation) {
-	if (operation == 'tail' && parameters.count < 0) {
-		parameters.count = Math.abs(parameters.count);
-	}
-	let error = validateArguments(parameters, operation);
-	return error || getFilesContent(parameters, fs, operation);
+const head = function(parameters, fs) {
+	let error = validateHeadArguments(parameters);
+	return error || getContent(parameters, fs, 'head');
+};
+
+const tail = function(parameters, fs) {
+	let error = validateTailArguments(parameters);
+	parameters.count = Math.abs(parameters.count);
+	return error || getContent(parameters, fs, 'tail');
 };
 
 module.exports = {
-	getData,
+	head,
 	fetchRequiredContent,
-	getFilesContent,
+	tail,
+	getContent,
 	isValidFile,
 	generateHeader,
 	fileNotFoundError

@@ -1,9 +1,8 @@
 const assert = require('assert');
 const {
-	validateArguments,
+	validateHeadArguments,
 	fileNotFoundError,
-	checkHeadErrors,
-	checkTailErrors,
+	validateTailArguments,
 	isZero,
 	hasInvalidOption,
 	invalidCountError,
@@ -11,17 +10,14 @@ const {
 	hasInvalidCount
 } = require('../src/errorHandler.js');
 
-describe('validateArguments', function() {
+describe('validateHeadArguments', function() {
 	it('should return false if count is 0', function() {
 		assert.deepEqual(
-			validateArguments(
-				{
-					option: 'n',
-					count: '0',
-					fileNames: ['numbers']
-				},
-				'head'
-			),
+			validateHeadArguments({
+				option: 'n',
+				count: '0',
+				fileNames: ['numbers']
+			}),
 			'head: illegal line count -- 0'
 		);
 	});
@@ -29,17 +25,14 @@ describe('validateArguments', function() {
 	it('should return error if count is invalid', function() {
 		inputData = { option: 'n', count: '-0', fileNames: ['numbers'] };
 		expectedOutput = 'head: illegal line count -- 0';
-		assert.deepEqual(validateArguments(inputData, 'head'), expectedOutput);
+		assert.deepEqual(validateHeadArguments(inputData), expectedOutput);
 	});
 
 	it('should return error when option is invalid', function() {
 		expectedOutput =
 			'head: illegal option -- z\nusage: head [-n lines | -c bytes] [file ...]';
 		assert.deepEqual(
-			validateArguments(
-				{ option: 'z', count: '10', fileNames: ['abc'] },
-				'head'
-			),
+			validateHeadArguments({ option: 'z', count: '10', fileNames: ['abc'] }),
 			expectedOutput
 		);
 	});
@@ -76,29 +69,29 @@ describe('hasInvalidOption', function() {
 	});
 });
 
-describe('validateArguments', function() {
+describe('validateTailArguments', function() {
 	it('should treat zero as valid count', function() {
 		inputData = { option: 'n', count: '0', fileNames: ['numbers'] };
-		assert.deepEqual(validateArguments(inputData, 'tail'), ' ');
+		assert.deepEqual(validateTailArguments(inputData), ' ');
 	});
 
 	it('should return error if count is not a number', function() {
 		inputData = { option: 'n', count: 'a', fileNames: ['numbers'] };
 		expectedOutput = 'tail: illegal offset -- a';
-		assert.deepEqual(validateArguments(inputData, 'tail'), expectedOutput);
+		assert.deepEqual(validateTailArguments(inputData), expectedOutput);
 	});
 
 	it('should return illegal offset error if count is invalid', function() {
 		inputData = { option: 'n', count: '10u', fileNames: ['numbers'] };
 		expectedOutput = 'tail: illegal offset -- 10u';
-		assert.deepEqual(validateArguments(inputData, 'tail'), expectedOutput);
+		assert.deepEqual(validateTailArguments(inputData), expectedOutput);
 	});
 
 	it('should return illegal option error when option is invalid', function() {
 		inputData = { option: 'z', count: '10u', fileNames: ['numbers'] };
 		expectedOutput =
 			'tail: illegal option -- z\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
-		assert.deepEqual(validateArguments(inputData, 'tail'), expectedOutput);
+		assert.deepEqual(validateTailArguments(inputData), expectedOutput);
 	});
 });
 
@@ -150,33 +143,38 @@ describe('fileNotFoundError', function() {
 	});
 });
 
-describe('checkHeadErrors', function() {
+describe('validateHeadArguments', function() {
 	let expectedOutput;
 	let inputData;
 
 	it('should return error when invalid count is given', function() {
 		expectedOutput = 'head: illegal line count -- -3';
-		assert.deepEqual(checkHeadErrors('n', -3, ['numbers']), expectedOutput);
+		inputData = { option: 'n', count: '-3', fileNames: ['numbers'] };
+		assert.deepEqual(validateHeadArguments(inputData), expectedOutput);
 	});
 
 	it('should return error when invalid count is given', function() {
+		inputData = { option: 'c', count: '-3', fileNames: ['numbers'] };
 		expectedOutput = 'head: illegal byte count -- -3';
-		assert.deepEqual(checkHeadErrors('c', -3, ['numbers']), expectedOutput);
+		assert.deepEqual(validateHeadArguments(inputData), expectedOutput);
 	});
 
 	it('should return error when count given is 0', function() {
+		inputData = { option: 'n', count: '-0', fileNames: ['numbers'] };
 		expectedOutput = 'head: illegal line count -- 0';
-		assert.deepEqual(checkHeadErrors('n', '-0', ['numbers']), expectedOutput);
+		assert.deepEqual(validateHeadArguments(inputData), expectedOutput);
 	});
 });
 
-describe('checkTailErrors', function() {
+describe('validateTailArguments', function() {
 	it('should return error when invalid count is given', function() {
-		assert.deepEqual(checkTailErrors('0', ['numbers']), ' ');
+		inputData = { option: 'n', count: '0', fileNames: ['numbers'] };
+		assert.deepEqual(validateTailArguments(inputData), ' ');
 	});
 
 	it('should return error when invalid count is given', function() {
+		inputData = { option: 'n', count: 'aa3', fileNames: ['numbers'] };
 		expectedOutput = 'tail: illegal offset -- aa3';
-		assert.deepEqual(checkTailErrors('aa3', ['numbers']), expectedOutput);
+		assert.deepEqual(validateTailArguments(inputData), expectedOutput);
 	});
 });
