@@ -1,7 +1,7 @@
 const assert = require('assert');
 const {
 	getFilesContent,
-	isValidSingleFile,
+	isValidFile,
 	fetchRequiredContent,
 	getData,
 	generateHeader
@@ -85,11 +85,11 @@ describe('getFilesContent', function() {
 
 describe('singleValidFile', function() {
 	it('should return true if it has a single file', function() {
-		assert.deepEqual(isValidSingleFile(['numbers'], existsSync), true);
+		assert.deepEqual(isValidFile(['numbers'], existsSync), true);
 	});
 
 	it('should return false if it has more than one file', function() {
-		assert.deepEqual(isValidSingleFile(['abc', 'numbers'], existsSync), false);
+		assert.deepEqual(isValidFile(['abc', 'numbers'], existsSync), false);
 	});
 });
 

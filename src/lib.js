@@ -3,7 +3,7 @@ const {
 	fileNotFoundError
 } = require('./errorHandler.js');
 
-const isValidSingleFile = function(fileNames, existsSync) {
+const isValidFile = function(fileNames, existsSync) {
 	return fileNames.length == 1 && existsSync(fileNames[0]);
 };
 
@@ -27,7 +27,7 @@ const getFilesContent = function(parameters, fs, operation) {
 	let { option, count, fileNames } = parameters;
 	let contents = [];
 	let delimeter = '';
-	if (isValidSingleFile(fileNames, existsSync)) {
+	if (isValidFile(fileNames, existsSync)) {
 		let content = readFileSync(fileNames[0], 'utf8');
 		return fetchRequiredContent(content, option, count, operation);
 	}
@@ -57,7 +57,7 @@ module.exports = {
 	getData,
 	fetchRequiredContent,
 	getFilesContent,
-	isValidSingleFile,
+	isValidFile,
 	generateHeader,
 	fileNotFoundError
 };
