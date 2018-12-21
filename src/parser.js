@@ -3,7 +3,7 @@ const hasValidLength = function(args) {
 };
 
 const hasValidOption = function(option) {
-	return hasDash(option) && option[1].match(/[A-z]/) && option.length == 2;
+	return option[1].match(/[A-z]/) && option.length == 2;
 };
 
 const hasDash = function(option) {
@@ -19,7 +19,7 @@ const parse = function(args) {
 	if (hasDash(optionCandidate) && !isNaN(optionCandidate)) {
 		return createArgsObject('n', Math.abs(optionCandidate), args.slice(1));
 	}
-	if (hasValidOption(optionCandidate)) {
+	if (hasDash(optionCandidate) && hasValidOption(optionCandidate)) {
 		return createArgsObject(optionCandidate[1], args[1], args.slice(2));
 	}
 	if (hasValidLength(optionCandidate)) {
