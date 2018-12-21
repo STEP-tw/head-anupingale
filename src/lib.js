@@ -14,26 +14,26 @@ const generateHeader = function(fileName) {
 
 const seperators = { n: '\n', c: '' };
 
-const fetchRequiredContent = function(file, option, count, operation) {
+const fetchRequiredContent = function(file, option, count, utility) {
 	let ranges = { head: [0, count], tail: [-count] };
-	let range = ranges[operation];
+	let range = ranges[utility];
 	return file
 		.split(seperators[option])
 		.slice(range[0], range[1])
 		.join(seperators[option]);
 };
 
-const getMultipleFileContent = function(parameters, fs, operation) {
+const getMultipleFileContent = function(parameters, fs, utility) {
 	let { option, count, fileNames } = parameters;
 	let { readFileSync, existsSync } = fs;
 	let contents = [];
 	let delimeter = '';
 	for (let fileName of fileNames) {
-		let fileContent = fileNotFoundError(fileName, operation);
+		let fileContent = fileNotFoundError(fileName, utility);
 		if (existsSync(fileName)) {
 			content = readFileSync(fileName, 'utf8');
 			fileContent = delimeter + generateHeader(fileName);
-			fileContent += fetchRequiredContent(content, option, count, operation);
+			fileContent += fetchRequiredContent(content, option, count, utility);
 			delimeter = '\n';
 		}
 		contents.push(fileContent);
@@ -41,14 +41,14 @@ const getMultipleFileContent = function(parameters, fs, operation) {
 	return contents.join('\n');
 };
 
-const getFileContent = function(parameters, fs, operation) {
+const getFileContent = function(parameters, fs, utility) {
 	let { readFileSync, existsSync } = fs;
 	let { option, count, fileNames } = parameters;
 	if (isValidFile(fileNames, existsSync)) {
 		let content = readFileSync(fileNames[0], 'utf8');
-		return fetchRequiredContent(content, option, count, operation);
+		return fetchRequiredContent(content, option, count, utility);
 	}
-	return getMultipleFileContent(parameters, fs, operation);
+	return getMultipleFileContent(parameters, fs, utility);
 };
 
 const head = function(parameters, fs) {
