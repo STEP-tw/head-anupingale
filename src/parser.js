@@ -15,14 +15,19 @@ const createObject = function(option, count, fileNames) {
 };
 
 const parse = function(args) {
-	if (hasDash(args[0]) && !isNaN(args[0])) {
-		return createObject('n', Math.abs(args[0]), args.slice(1));
+	let optionCandidate = args[0];
+	if (hasDash(optionCandidate) && !isNaN(optionCandidate)) {
+		return createObject('n', Math.abs(optionCandidate), args.slice(1));
 	}
-	if (hasValidOption(args[0])) {
-		return createObject(args[0][1], args[1], args.slice(2));
+	if (hasValidOption(optionCandidate)) {
+		return createObject(optionCandidate[1], args[1], args.slice(2));
 	}
-	if (hasValidLength(args[0])) {
-		return createObject(args[0][1], args[0].slice(2), args.slice(1));
+	if (hasValidLength(optionCandidate)) {
+		return createObject(
+			optionCandidate[1],
+			optionCandidate.slice(2),
+			args.slice(1)
+		);
 	}
 	return { option: 'n', count: 10, fileNames: args };
 };

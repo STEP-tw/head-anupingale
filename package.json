@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "node head.js -n5 head.js"
+    "start": "node head.js -n5 head.js",
+    "c": "clear"
   },
   "repository": {
     "type": "git",
