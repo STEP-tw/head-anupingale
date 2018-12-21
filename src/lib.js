@@ -1,4 +1,3 @@
-const { parse } = require('./parser.js');
 const {
 	fileNotFoundError,
 	validateHeadArguments,

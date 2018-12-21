@@ -10,20 +10,20 @@ const hasDash = function(option) {
 	return option.startsWith('-');
 };
 
-const createObject = function(option, count, fileNames) {
+const createArgsObject = function(option, count, fileNames) {
 	return { option, count, fileNames };
 };
 
 const parse = function(args) {
 	let optionCandidate = args[0];
 	if (hasDash(optionCandidate) && !isNaN(optionCandidate)) {
-		return createObject('n', Math.abs(optionCandidate), args.slice(1));
+		return createArgsObject('n', Math.abs(optionCandidate), args.slice(1));
 	}
 	if (hasValidOption(optionCandidate)) {
-		return createObject(optionCandidate[1], args[1], args.slice(2));
+		return createArgsObject(optionCandidate[1], args[1], args.slice(2));
 	}
 	if (hasValidLength(optionCandidate)) {
-		return createObject(
+		return createArgsObject(
 			optionCandidate[1],
 			optionCandidate.slice(2),
 			args.slice(1)
@@ -36,5 +36,5 @@ module.exports = {
 	parse,
 	hasValidOption,
 	hasDash,
-	createObject
+	createArgsObject
 };

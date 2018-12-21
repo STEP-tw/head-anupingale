@@ -3,7 +3,7 @@ const {
 	parse,
 	hasValidOption,
 	hasDash,
-	createObject
+	createArgsObject
 } = require('../src/parser.js');
 
 describe('parse', function() {
@@ -87,10 +87,13 @@ describe('hasDash', function() {
 	});
 });
 
-describe('createObject', function() {
+describe('createArgsObject', function() {
 	it('should return object with given parameters', function() {
 		expectedOutput = { option: 'n', count: 3, fileNames: ['file1', 'file2'] };
-		assert.deepEqual(createObject('n', 3, ['file1', 'file2']), expectedOutput);
+		assert.deepEqual(
+			createArgsObject('n', 3, ['file1', 'file2']),
+			expectedOutput
+		);
 	});
 
 	it('should return undefined values of object if values are not specified', function() {
@@ -99,6 +102,6 @@ describe('createObject', function() {
 			count: undefined,
 			fileNames: undefined
 		};
-		assert.deepEqual(createObject(), expectedOutput);
+		assert.deepEqual(createArgsObject(), expectedOutput);
 	});
 });
